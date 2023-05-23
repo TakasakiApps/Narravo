@@ -7,5 +7,6 @@ import (
 var Gin *gin.Engine
 
 func init() {
+	setMode()
 	Gin = gin.Default()
 }
