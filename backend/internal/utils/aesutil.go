@@ -7,6 +7,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"errors"
+	"fmt"
 )
 
 type AesCipher struct {
@@ -44,7 +45,13 @@ func (c *AesCipher) Encrypt(plaintext string) (string, error) {
 	return base64.StdEncoding.EncodeToString(resultBytes), nil
 }
 
-func (c *AesCipher) Decrypt(ciphertext string) (string, error) {
+func (c *AesCipher) Decrypt(ciphertext string) (decrypt string, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			decrypt = ""
+			err = fmt.Errorf("%v", r)
+		}
+	}()
 	ciphertextBytes, err := base64.StdEncoding.DecodeString(ciphertext)
 	if err != nil {
 		return "", err
