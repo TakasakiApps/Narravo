@@ -34,7 +34,7 @@ func verify() gin.HandlerFunc {
 			}
 		}).Deploy()
 
-		verifyBase := func(data string, token string) {
+		verifyBase := func(data string, integrityKey string) {
 			// Store key to decrypt data
 			var dataKey string
 
@@ -48,15 +48,17 @@ func verify() gin.HandlerFunc {
 				aesCipher, _ := utils.NewAesCipher(key)
 
 				// Decrypt the verification data using the cipher
-				decrypt, err := aesCipher.Decrypt(token)
+				decrypt, err := aesCipher.Decrypt(integrityKey)
 				if err != nil {
 					continue
 				}
 
-				slog.Infof("The data sent %v ago is valid", timeStampMilli-i)
+				slog.Infof("The data sent from %vms ago is valid", timeStampMilli-i)
 
 				// If the data was successfully decrypted, store the decryption key
 				dataKey = decrypt
+
+				break
 			}
 
 			// Check if the dataKey is empty
@@ -84,7 +86,6 @@ func verify() gin.HandlerFunc {
 
 			// Set the dataJsonResult map as the value of the "data" key in the context
 			c.Set("data", dataJsonResult)
-
 		}
 
 		switch c.Request.Method {
@@ -95,7 +96,7 @@ func verify() gin.HandlerFunc {
 			err := c.ShouldBindJSON(&verifyData)
 			exceptiongo.QuickThrow[types.JsonUnmarshalFailedException](err)
 
-			verifyBase(verifyData.Data, verifyData.Token)
+			verifyBase(verifyData.Data, verifyData.IntegrityKey)
 		}
 	}
 }
