@@ -41,8 +41,8 @@ func verify() gin.HandlerFunc {
 			// Iterate over a range of timestamps, starting from the current timestamp in milliseconds
 			// and going back by DataExpireTime milliseconds
 			for i := timeStampMilli; i >= timeStampMilli-DataExpireTime; i-- {
-				// Generate a SHA256 key based on the current timestamp
-				key := utils.SHA256(fmt.Sprintf("%v", i))
+				// Generate a MD5 key based on the current timestamp
+				key := utils.MD5(fmt.Sprintf("%v", i))
 
 				// Create a new AES cipher using the key
 				aesCipher, _ := utils.NewAesCipher(key)
