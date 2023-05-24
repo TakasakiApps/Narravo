@@ -9,13 +9,10 @@ import (
 	"github.com/ohanakogo/exceptiongo"
 )
 
-func Registries() {
+func Active(port uint16) {
 	middlewares.Register()
 	routers.Register()
-}
 
-func Run(port uint16) {
-	Registries()
 	err := engine.Gin.Run(fmt.Sprintf(":%v", port))
 	exceptiongo.QuickThrow[types.ServerAbortedException](err)
 }
