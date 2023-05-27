@@ -12,4 +12,7 @@ type (
 	DecryptFailedException any
 
 	JsonUnmarshalFailedException any
+
+	DataBaseConnectFailedException   any
+	DataBaseOperationFailedException any
 )
