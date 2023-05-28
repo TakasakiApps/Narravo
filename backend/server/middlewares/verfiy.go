@@ -20,7 +20,7 @@ import (
 // Therefore, the data will be discarded without any further processing of the request.
 const DataExpireTime = 5000
 
-func verify() gin.HandlerFunc {
+func getVerificationComponent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		timeStampMilli := utils.GetCurrentTimestampMilli()
 		contextUtil := utils.NewContextUtil(c)
@@ -90,7 +90,7 @@ func verify() gin.HandlerFunc {
 
 		switch c.Request.Method {
 		case http.MethodPost:
-			// TODO: verify post
+			// TODO: getVerificationComponent post
 			verifyData := enitity.VerifyData{}
 			// Bind the JSON data from the request body to the verifyData struct
 			err := c.ShouldBindJSON(&verifyData)
