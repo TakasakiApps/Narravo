@@ -5,6 +5,6 @@ import (
 )
 
 func Register() {
-	engine.Gin.Use(exceptionHandler())
-	engine.Gin.Use(verify())
+	engine.Gin.Use(getExceptionHandler())
+	engine.Gin.Use(getVerificationComponent())
 }

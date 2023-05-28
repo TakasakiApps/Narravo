@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func exceptionHandler() gin.HandlerFunc {
+func getExceptionHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer exceptiongo.NewExceptionHandler(func(exception *etype.Exception) {
 			switch exception.Type() {
