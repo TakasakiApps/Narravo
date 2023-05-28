@@ -6,7 +6,11 @@ import (
 
 var Gin *gin.Engine
 
-func init() {
+func setGin() {
 	setMode()
+}
+
+func init() {
+	setGin()
 	Gin = gin.Default()
 }
