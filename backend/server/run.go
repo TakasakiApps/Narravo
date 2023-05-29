@@ -9,7 +9,7 @@ import (
 	"github.com/ohanakogo/exceptiongo"
 )
 
-func Active(port uint16) {
+func Activate(port uint16) {
 	middlewares.Register()
 	routers.Register()
 
