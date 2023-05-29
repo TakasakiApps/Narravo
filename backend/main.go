@@ -30,5 +30,5 @@ func checkArgs() {
 }
 
 func main() {
-	server.Active(ohanakoutilgo.CastToNumber[uint16](Port))
+	server.Activate(ohanakoutilgo.CastToNumber[uint16](Port))
 }
