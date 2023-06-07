@@ -3,7 +3,7 @@ package test
 import (
 	"encoding/json"
 	"github.com/TakasakiApps/Narravo/backend/dao"
-	"github.com/TakasakiApps/Narravo/backend/dao/sqlite"
+	"github.com/TakasakiApps/Narravo/backend/dao/drivers/sqlite"
 	"github.com/TakasakiApps/Narravo/backend/internal/database"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/gookit/goutil/testutil/assert"

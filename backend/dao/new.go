@@ -1,8 +1,7 @@
 package dao
 
 import (
-	"fmt"
-	"github.com/TakasakiApps/Narravo/backend/dao/sqlite"
+	"github.com/TakasakiApps/Narravo/backend/dao/drivers/sqlite"
 	"github.com/TakasakiApps/Narravo/backend/internal/database"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/ohanakogo/exceptiongo"
@@ -20,10 +19,6 @@ func NewDAO[T database.Driver](url string) (dao database.Driver) {
 	case ohanakoutilgo.TypeOf[sqlite.SQLite]():
 		dao = &sqlite.SQLite{DB: db}
 		return
-	default:
-		// If the driver type is not supported, a runtime exception will be thrown
-		exceptiongo.QuickThrowMsg[types.RuntimeException](
-			fmt.Sprintf("Failed to instantiate DAO of type <%v> with the driver", ohanakoutilgo.TypeOf[T]()))
 	}
 
 	// Return nil if no valid driver type is found

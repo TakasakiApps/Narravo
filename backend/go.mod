@@ -8,6 +8,7 @@ require (
 	github.com/gookit/slog v0.5.1
 	github.com/ohanakogo/exceptiongo v0.0.3
 	github.com/ohanakogo/ohanakoutilgo v0.0.3
+	github.com/valyala/bytebufferpool v1.0.0
 	gorm.io/driver/sqlite v1.5.1
 	gorm.io/gorm v1.25.1
 )
@@ -37,7 +38,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.7 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
-	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/crypto v0.9.0 // indirect
