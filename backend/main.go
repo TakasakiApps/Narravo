@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"github.com/TakasakiApps/Narravo/backend/bootstrap"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/server"
 	"github.com/ohanakogo/exceptiongo"
@@ -28,7 +29,7 @@ func checkArgs() {
 		exceptiongo.QuickThrowMsg[types.ArgValueNotValidException]("the port number must be between 0 and 65535")
 	}
 }
-
 func main() {
+	bootstrap.Start()
 	server.Activate(ohanakoutilgo.CastToNumber[uint16](Port))
 }
