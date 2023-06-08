@@ -1,7 +1,8 @@
 package types
 
 type (
-	RuntimeException any
+	RuntimeException    any
+	FileSystemException any
 
 	ArgValueNotValidException any
 	ServerAbortedException    any

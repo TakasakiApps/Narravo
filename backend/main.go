@@ -3,9 +3,11 @@ package main
 import (
 	"flag"
 	"github.com/TakasakiApps/Narravo/backend/bootstrap"
+	"github.com/TakasakiApps/Narravo/backend/internal/global"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/server"
 	"github.com/ohanakogo/exceptiongo"
+	"github.com/ohanakogo/exceptiongo/pkg/etype"
 	"github.com/ohanakogo/ohanakoutilgo"
 	"math"
 )
@@ -30,6 +32,9 @@ func checkArgs() {
 	}
 }
 func main() {
+	defer exceptiongo.NewExceptionHandler(func(exception *etype.Exception) {
+		global.GetLogger().Fatal(exception.GetStackTraceMessage())
+	}).Deploy()
 	bootstrap.Start()
 	server.Activate(ohanakoutilgo.CastToNumber[uint16](Port))
 }
