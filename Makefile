@@ -23,6 +23,7 @@ backend-test:
 	@echo "> Start backend testing"
 	@cd backend && \
 	go test ./internal/utils/test -tags release && \
+	go test ./dao/test -tags release && \
 	go test ./server/routers/test -tags release && \
 	go test ./server/middlewares/test -tags verify
 
