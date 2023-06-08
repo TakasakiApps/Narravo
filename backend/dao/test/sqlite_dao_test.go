@@ -6,6 +6,7 @@ import (
 	"github.com/TakasakiApps/Narravo/backend/dao/drivers/sqlite"
 	"github.com/TakasakiApps/Narravo/backend/internal/database"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
+	"github.com/gookit/goutil/fsutil"
 	"github.com/gookit/goutil/testutil/assert"
 	"github.com/ohanakogo/exceptiongo"
 	"testing"
@@ -22,6 +23,12 @@ type Test struct {
 
 func TestSQLite(t *testing.T) {
 	driver = dao.NewDAO[sqlite.SQLite]("test.db")
+
+	defer func() {
+		db, _ := driver.GetDB().DB()
+		_ = db.Close()
+		fsutil.MustRemove("test.db")
+	}()
 
 	// Test migrate
 	migrate()
