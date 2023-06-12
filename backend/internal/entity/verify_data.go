@@ -1,4 +1,4 @@
-package enitity
+package entity
 
 type VerifyData struct {
 	Data         string `json:"data" binding:"required"`

@@ -5,7 +5,7 @@ package middlewares
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/TakasakiApps/Narravo/backend/internal/enitity"
+	"github.com/TakasakiApps/Narravo/backend/internal/entity"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"github.com/gin-gonic/gin"
@@ -91,7 +91,7 @@ func getVerificationComponent() gin.HandlerFunc {
 		switch c.Request.Method {
 		case http.MethodPost:
 			// TODO: getVerificationComponent post
-			verifyData := enitity.VerifyData{}
+			verifyData := entity.VerifyData{}
 			// Bind the JSON data from the request body to the verifyData struct
 			err := c.ShouldBindJSON(&verifyData)
 			exceptiongo.QuickThrow[types.JsonUnmarshalFailedException](err)
