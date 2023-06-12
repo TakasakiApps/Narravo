@@ -86,6 +86,9 @@ func getVerificationComponent() gin.HandlerFunc {
 
 			// Set the dataJsonResult map as the value of the "data" key in the context
 			c.Set("data", dataJsonResult)
+
+			// Add next() trigger to make data key available
+			c.Next()
 		}
 
 		switch c.Request.Method {
