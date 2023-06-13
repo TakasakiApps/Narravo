@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/TakasakiApps/Narravo/backend/dao/drivers/sqlite"
 	"github.com/TakasakiApps/Narravo/backend/internal/database"
+	"github.com/TakasakiApps/Narravo/backend/internal/entity"
 	"github.com/TakasakiApps/Narravo/backend/internal/global"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/ohanakogo/exceptiongo"
@@ -33,5 +34,5 @@ func DataBaseBootstrap(c *DataBaseBootstrapConfig) {
 	}
 
 	global.GetLogger().Info("Migrating database...")
-	driver.Migrate()
+	driver.Migrate(&entity.User{})
 }
