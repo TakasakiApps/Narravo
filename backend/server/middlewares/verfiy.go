@@ -85,21 +85,22 @@ func getVerificationComponent() gin.HandlerFunc {
 			exceptiongo.QuickThrow[types.JsonUnmarshalFailedException](err)
 
 			// Set the dataJsonResult map as the value of the "data" key in the context
-			c.Set("data", dataJsonResult)
+			utils.PutData(c, dataJsonResult)
 
 			// Add next() trigger to make data key available
 			c.Next()
 		}
 
+		verifyData := entity.VerifyData{}
 		switch c.Request.Method {
 		case http.MethodPost:
-			// TODO: getVerificationComponent post
-			verifyData := entity.VerifyData{}
 			// Bind the JSON data from the request body to the verifyData struct
 			err := c.ShouldBindJSON(&verifyData)
 			exceptiongo.QuickThrow[types.JsonUnmarshalFailedException](err)
-
-			verifyBase(verifyData.Data, verifyData.IntegrityKey)
+		case http.MethodGet:
+			verifyData.Data = c.Query("data")
+			verifyData.IntegrityKey = c.Query("integrityKey")
 		}
+		verifyBase(verifyData.Data, verifyData.IntegrityKey)
 	}
 }

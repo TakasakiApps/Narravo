@@ -5,5 +5,7 @@ import (
 )
 
 func registerAuthApi() {
-	v1.POST("/auth", handlers.Auth)
+	authGroup := v1.Group("/auth")
+	authGroup.POST("/register", handlers.Register)
+	authGroup.POST("/login", handlers.Login)
 }

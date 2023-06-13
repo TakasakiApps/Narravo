@@ -1,6 +1,9 @@
 package database
 
-import "gorm.io/gorm"
+import (
+	"github.com/TakasakiApps/Narravo/backend/internal/entity"
+	"gorm.io/gorm"
+)
 
 type Operation interface {
 	Migrate(dst ...any)
@@ -9,4 +12,12 @@ type Operation interface {
 type Driver interface {
 	GetDB() *gorm.DB
 	Operation
+
+	UserCtrl
+}
+
+// UserCtrl management for User
+type UserCtrl interface {
+	AddUser(user *entity.User) int64
+	QueryUser(username string) *entity.User
 }
