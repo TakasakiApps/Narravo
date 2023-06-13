@@ -10,7 +10,7 @@ type Operation interface {
 }
 
 type Driver interface {
-	GetDB() *gorm.DB
+	GetInstance() *gorm.DB
 	Operation
 
 	UserCtrl

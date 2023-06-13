@@ -9,7 +9,7 @@ import (
 
 type SQLite database.CommonDAO
 
-func (s SQLite) GetDB() *gorm.DB {
+func (s SQLite) GetInstance() *gorm.DB {
 	return s.DB
 }
 

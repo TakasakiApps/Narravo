@@ -25,7 +25,7 @@ func TestSQLite(t *testing.T) {
 	driver = dao.NewDAO[sqlite.SQLite]("test.db")
 
 	defer func() {
-		db, _ := driver.GetDB().DB()
+		db, _ := driver.GetInstance().DB()
 		_ = db.Close()
 		fsutil.MustRemove("test.db")
 	}()
@@ -56,7 +56,7 @@ func migrate() {
 
 func add() {
 	for i := 0; i < 3; i++ {
-		driver.GetDB().Model(&Test{}).Create(&Test{
+		driver.GetInstance().Model(&Test{}).Create(&Test{
 			Param1: "test",
 			Param2: 1 * i,
 			Param3: 3.14 * float64(i),
@@ -65,11 +65,11 @@ func add() {
 }
 
 func remove() {
-	driver.GetDB().Model(&Test{}).Delete(&Test{Id: 1})
+	driver.GetInstance().Model(&Test{}).Delete(&Test{Id: 1})
 }
 
 func update() {
-	driver.GetDB().Model(&Test{}).
+	driver.GetInstance().Model(&Test{}).
 		Select("param1").
 		Where("id = ?", 2).
 		Updates(&Test{
@@ -79,6 +79,6 @@ func update() {
 
 func query() Test {
 	queryTarget := Test{Id: 2}
-	driver.GetDB().Model(&Test{}).First(&queryTarget)
+	driver.GetInstance().Model(&Test{}).First(&queryTarget)
 	return queryTarget
 }
