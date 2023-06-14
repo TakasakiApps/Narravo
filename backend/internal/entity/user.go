@@ -5,7 +5,3 @@ type User struct {
 	Name     string `gorm:"not null" json:"username"`
 	Password string `gorm:"not null" json:"password"`
 }
-
-type UserToken struct {
-	Token string `json:"token"`
-}

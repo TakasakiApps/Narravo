@@ -1,6 +1,7 @@
 package bootstrap
 
 import (
+	"github.com/TakasakiApps/Narravo/backend/config"
 	"github.com/TakasakiApps/Narravo/backend/dao"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/internal/utils"
@@ -8,6 +9,8 @@ import (
 )
 
 func Start() {
+	config.Bootstrap()
+
 	// hardcode database type and path
 	dao.DataBaseBootstrap(&dao.DataBaseBootstrapConfig{
 		DriverType: types.SQLITE,

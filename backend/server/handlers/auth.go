@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/TakasakiApps/Narravo/backend/config"
 	"github.com/TakasakiApps/Narravo/backend/dao"
 	"github.com/TakasakiApps/Narravo/backend/internal/entity"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
@@ -35,7 +36,9 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 
 	queryUser := dao.GetInstance().QueryUser(user.Name)
 	if queryUser.Password == user.Password {
-		c.JSON(http.StatusOK, queryUser)
+		c.JSON(http.StatusOK, entity.UserToken{
+			Token: utils.JWTSign[entity.User](*queryUser, config.GetInstance().Crypto.AesKey, 1296000),
+		})
 	} else {
 		c.JSON(http.StatusUnauthorized, nil)
 	}
