@@ -4,6 +4,8 @@ import vue from '@vitejs/plugin-vue'
 import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
+import Components from 'unplugin-vue-components/vite';
+import { VantResolver } from 'unplugin-vue-components/resolvers';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -16,6 +18,9 @@ export default defineConfig(({ command }) => {
   return {
     plugins: [
       vue(),
+      Components({
+      resolvers: [VantResolver()],
+    }),
       electron([
         {
           // Main-Process entry file of the Electron App.

@@ -1,10 +1,12 @@
 <template>
   <div>
-    创造模式
+    <BookDetail />
   </div>
 </template>
 
 <script lang="ts" setup>
+
+
 
 </script>
 
