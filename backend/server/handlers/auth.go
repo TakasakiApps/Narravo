@@ -15,12 +15,12 @@ var Register gin.HandlerFunc = func(c *gin.Context) {
 	user := &entity.User{}
 	utils.ConvMapToStructure(utils.GetData(c), user)
 
-	queryUser := dao.Get().QueryUser(user.Name)
+	queryUser := dao.GetInstance().QueryUser(user.Name)
 	if queryUser == nil {
 		exceptiongo.QuickThrowMsg[types.RuntimeException](fmt.Sprintf("user%v already existed", *user))
 	}
 
-	effected := dao.Get().AddUser(user)
+	effected := dao.GetInstance().AddUser(user)
 
 	if effected == 1 {
 		c.JSON(http.StatusOK, user)
@@ -33,7 +33,7 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 	user := &entity.User{}
 	utils.ConvMapToStructure(utils.GetData(c), user)
 
-	queryUser := dao.Get().QueryUser(user.Name)
+	queryUser := dao.GetInstance().QueryUser(user.Name)
 	if queryUser.Password == user.Password {
 		c.JSON(http.StatusOK, queryUser)
 	} else {

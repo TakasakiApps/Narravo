@@ -12,7 +12,7 @@ import (
 
 var driver database.Driver
 
-func Get() database.Driver {
+func GetInstance() database.Driver {
 	return driver
 }
 
