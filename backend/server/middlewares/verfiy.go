@@ -6,11 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/TakasakiApps/Narravo/backend/internal/entity"
+	"github.com/TakasakiApps/Narravo/backend/internal/global"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/goutil/strutil"
-	"github.com/gookit/slog"
 	"github.com/ohanakogo/exceptiongo"
 	"github.com/ohanakogo/exceptiongo/pkg/etype"
 	"net/http"
@@ -53,7 +53,7 @@ func getVerificationComponent() gin.HandlerFunc {
 					continue
 				}
 
-				slog.Infof("The data sent from %vms ago is valid", timeStampMilli-i)
+				global.GetLogger().Infof("The data sent from %vms ago is valid", timeStampMilli-i)
 
 				// If the data was successfully decrypted, store the decryption key
 				dataKey = decrypt
