@@ -46,6 +46,10 @@ async function createWindow() {
     icon: join(process.env.PUBLIC, 'favicon.ico'),
     width:1080,
     height:720,
+    frame: false,
+    show:false,
+    backgroundColor:'white',
+    // transparent: true,
     webPreferences: {
       preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
@@ -74,6 +78,17 @@ async function createWindow() {
     if (url.startsWith('https:')) shell.openExternal(url)
     return { action: 'deny' }
   })
+  win.setMinimumSize(1080, 720)
+  win.once('ready-to-show', () => {
+  win.show()
+  //监听窗口大小事件
+  win.on('maximize', () => {
+    win.webContents.send('mainWin-max', true)
+  })
+  win.on('unmaximize', () => {
+    win.webContents.send('mainWin-max', false)
+  })
+})
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 
@@ -117,3 +132,17 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 })
+ipcMain.on('window-close',function(){
+  win.close()
+})
+ipcMain.on('window-main',function(){
+  win.minimize()
+})
+ipcMain.on('window-max',function () {
+  if(win.isMaximized()){ // 为true表示窗口已最大化
+    win.restore();// 将窗口恢复为之前的状态.
+  }else{
+    win.maximize();
+  }
+})
+

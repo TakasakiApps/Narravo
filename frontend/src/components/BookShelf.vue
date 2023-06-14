@@ -1,6 +1,8 @@
 <template>
   <div>
-    这是书架
+    <van-space>
+      书架
+    </van-space>
   </div>
 </template>
 
