@@ -40,7 +40,7 @@ func getVerificationComponent() gin.HandlerFunc {
 
 			// Iterate over a range of timestamps, starting from the current timestamp in milliseconds
 			// and going back by DataExpireTime milliseconds
-			for i := timeStampMilli; i >= timeStampMilli-DataExpireTime; i-- {
+			for i := timeStampMilli - DataExpireTime; i <= timeStampMilli; i++ {
 				// Generate a MD5 key based on the current timestamp
 				key := utils.MD5(fmt.Sprintf("%v", i))
 
