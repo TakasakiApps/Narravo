@@ -28,7 +28,7 @@ var Register gin.HandlerFunc = func(c *gin.Context) {
 	if effected == 1 {
 		c.JSON(http.StatusOK, user)
 	} else {
-		c.JSON(http.StatusBadRequest, nil)
+		exceptiongo.QuickThrowMsg[types.DataBaseOperationFailedException]("register failed")
 	}
 }
 
@@ -44,7 +44,7 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 			Token: utils.JWTSign[entity.User](*queryUser, config.GetInstance().Crypto.AesKey, global.TokenExpireDelay),
 		})
 	} else {
-		c.JSON(http.StatusUnauthorized, nil)
+		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("incorrect password provided")
 	}
 }
 
