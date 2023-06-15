@@ -5,9 +5,10 @@ type (
 	FileSystemException any
 	IOException         any
 
-	ArgValueNotValidException any
-	ServerAbortedException    any
-	ServerMiddleWareException any
+	ArgValueNotValidException   any
+	ServerAbortedException      any
+	ServerMiddleWareException   any
+	ServerUnauthorizedException any
 
 	RequestDataExpiredException any
 
