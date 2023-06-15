@@ -38,6 +38,11 @@ func mJWTParse[T any](tokenString string, key string) (*JWTClaims[T], bool) {
 		return []byte(key), nil
 	})
 
+	// Check if the JWT token and its claims are valid, and throw an exception if not.
+	if token == nil || token.Claims == nil {
+		exceptiongo.QuickThrow[types.JWTParseFailedException](err)
+	}
+
 	// If the claims can be extracted from the token, return them along with the validity of the token.
 	if jwtClaims, ok := token.Claims.(*JWTClaims[T]); ok {
 		return jwtClaims, token.Valid
