@@ -35,4 +35,23 @@ func DataBaseBootstrap(c *DataBaseBootstrapConfig) {
 
 	global.GetLogger().Info("Migrating database...")
 	driver.Migrate(&entity.User{})
+
+	initGuestUser()
+}
+
+// initGuestUser to initialize the guest user
+func initGuestUser() {
+	// Create a guest user with default credentials
+	guest := &entity.User{
+		Name:     "guest",
+		Password: "guest",
+	}
+	// Check if the guest user already exists in the database
+	queryGuest := driver.QueryUser(guest.Name)
+	if queryGuest == nil {
+		// If the guest user does not exist, add it to the database
+		global.GetLogger().Info("Users: Guest user not found")
+		driver.AddUser(guest)
+		global.GetLogger().Infof("Users: Guest user created successfully, user<username: %s, password: %s>", guest.Name, guest.Password)
+	}
 }
