@@ -4,16 +4,16 @@ GOARCH ?= $(shell go env GOARCH)
 .DEFAULT_GOAL := all
 
 prepare:
-	mkdir -p build
+	@busybox mkdir -p build
 
 backend-debug:
-	cd backend && go build -o ../build/narravo-backend-debug.exe \
+	@cd backend && go build -o ../build/narravo-backend-debug.exe \
 		-ldflags="-s -w" \
 		-v \
 		.
 
 backend-release:
-	cd backend && go build -o ../build/narravo-backend-release.exe \
+	@cd backend && go build -o ../build/narravo-backend-release.exe \
 		-ldflags="-s -w" \
 		-tags=release,verify \
 		-v \
@@ -28,14 +28,14 @@ backend-test:
 	go test ./server/middlewares/test -tags verify
 
 clean:
-	rm -rf build
+	@busybox rm -rf build
 
 test: backend-test
 
-release: prepare backend-release
+release: clean prepare backend-release
 
-debug: prepare backend-debug
+debug: clean prepare backend-debug
 
-all: clean release
+all: release
 
 .PHONY: prepare clean
