@@ -2,19 +2,23 @@ package middlewares
 
 import (
 	"github.com/TakasakiApps/Narravo/backend/internal/global"
+	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/ohanakogo/exceptiongo"
 	"github.com/ohanakogo/exceptiongo/pkg/etype"
+	"github.com/ohanakogo/ohanakoutilgo"
 	"net/http"
 )
 
 func getExceptionHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer exceptiongo.NewExceptionHandler(func(exception *etype.Exception) {
+			global.GetLogger().Error(exception.GetStackTraceMessage())
 			switch exception.Type() {
+			case ohanakoutilgo.TypeOf[types.ServerUnauthorizedException]():
+				utils.NewContextUtil(c).JsonException(http.StatusUnauthorized, exception)
 			default:
-				global.GetLogger().Error(exception.GetStackTraceMessage())
 				utils.NewContextUtil(c).JsonException(http.StatusBadRequest, exception)
 			}
 		}).Deploy()
