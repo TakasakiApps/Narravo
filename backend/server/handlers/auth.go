@@ -10,6 +10,7 @@ import (
 	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/ohanakogo/exceptiongo"
+	"github.com/ohanakogo/exceptiongo/pkg/etype"
 	"net/http"
 )
 
@@ -45,4 +46,32 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusUnauthorized, nil)
 	}
+}
+
+var Renew gin.HandlerFunc = func(c *gin.Context) {
+	userToken := &entity.UserToken{}
+	utils.ConvMapToStructure(utils.GetData(c), userToken)
+
+	defer exceptiongo.TryHandle[types.JWTParseFailedException](func(e *etype.Exception) {
+		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](e.Error())
+	})
+
+	utils.JWTParse[entity.User](userToken.Token, config.GetInstance().Crypto.AesKey, func(isValid bool, obj entity.User) {
+		if !isValid {
+			exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("token is invalid")
+		}
+
+		user := dao.GetInstance().QueryUser(obj.Name)
+		if user == nil {
+			exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("token contains invalid data")
+		}
+
+		if user.Password != obj.Password {
+			exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("user password has expired")
+		}
+
+		c.JSON(http.StatusOK, entity.UserToken{
+			Token: utils.JWTSign[entity.User](obj, config.GetInstance().Crypto.AesKey, global.TokenExpireDelay),
+		})
+	})
 }
