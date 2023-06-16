@@ -1,7 +1,9 @@
 package entity
 
+import "gorm.io/gorm"
+
 type User struct {
-	Id       int    `gorm:"primaryKey;autoIncrement" json:"uid"`
+	gorm.Model
 	Name     string `gorm:"not null" json:"username"`
 	Password string `gorm:"not null" json:"password"`
 }
