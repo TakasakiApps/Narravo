@@ -33,10 +33,33 @@ func DataBaseBootstrap(c *DataBaseBootstrapConfig) {
 			fmt.Sprintf("Failed to instantiate DAO of type <%s> with the driver", c.DriverType))
 	}
 
-	global.GetLogger().Info("Migrating database...")
-	driver.Migrate(&entity.User{})
+	migrateDataBase()
 
 	initGuestUser()
+}
+
+// migrateDataBase to migrate structure database
+func migrateDataBase() {
+	global.GetLogger().Info("Start migrating database...")
+
+	migrator := driver.GetInstance().Migrator()
+
+	targets := []types.Pair[any, string]{
+		{&entity.User{}, "users"},
+		{&entity.BookLocalInfo{}, "book_infos"},
+	}
+
+	for _, obj := range targets {
+		if !migrator.HasTable(obj.First) {
+			global.GetLogger().Infof("Migrating dataBase<%s>", obj.Second)
+			err := migrator.CreateTable(obj.First)
+			exceptiongo.QuickThrow[types.DataBaseOperationFailedException](err)
+			if !migrator.HasTable(obj.Second) {
+				err = migrator.RenameTable(obj.First, obj.Second)
+				exceptiongo.QuickThrow[types.DataBaseOperationFailedException](err)
+			}
+		}
+	}
 }
 
 // initGuestUser to initialize the guest user
@@ -47,7 +70,7 @@ func initGuestUser() {
 		Password: "guest",
 	}
 	// Check if the guest user already exists in the database
-	queryGuest := driver.QueryUser(guest.Name)
+	queryGuest := driver.QueryUserByName(guest)
 	if queryGuest == nil {
 		// If the guest user does not exist, add it to the database
 		global.GetLogger().Info("Users: Guest user not found")

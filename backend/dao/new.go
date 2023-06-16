@@ -12,7 +12,9 @@ import (
 
 // NewDAO returns a DAO instance initialized with the provided URL and driver type
 func NewDAO[T database.Driver](url string) (dao database.Driver) {
-	db, err := gorm.Open(SQLiteDriver.Open(url), &gorm.Config{})
+	db, err := gorm.Open(SQLiteDriver.Open(url), &gorm.Config{
+		DisableForeignKeyConstraintWhenMigrating: true,
+	})
 	exceptiongo.QuickThrow[types.DataBaseConnectFailedException](err)
 
 	switch ohanakoutilgo.TypeOf[T]() {

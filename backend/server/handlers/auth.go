@@ -18,7 +18,7 @@ var Register gin.HandlerFunc = func(c *gin.Context) {
 	user := &entity.User{}
 	utils.ConvMapToStructure(utils.GetData(c), user)
 
-	queryUser := dao.GetInstance().QueryUser(user.Name)
+	queryUser := dao.GetInstance().QueryUserByName(user)
 	if queryUser != nil {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user%v already existed", *user))
 	}
@@ -36,7 +36,7 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 	user := &entity.User{}
 	utils.ConvMapToStructure(utils.GetData(c), user)
 
-	queryUser := dao.GetInstance().QueryUser(user.Name)
+	queryUser := dao.GetInstance().QueryUserByName(user)
 	if queryUser == nil {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user%v is not registered", *user))
 	} else if queryUser.Password == user.Password {
@@ -61,7 +61,7 @@ var Renew gin.HandlerFunc = func(c *gin.Context) {
 			exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("token is invalid")
 		}
 
-		user := dao.GetInstance().QueryUser(obj.Name)
+		user := dao.GetInstance().QueryUserByName(&obj)
 		if user == nil {
 			exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("token contains invalid data")
 		}

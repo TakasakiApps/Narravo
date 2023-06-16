@@ -5,13 +5,8 @@ import (
 	"gorm.io/gorm"
 )
 
-type Operation interface {
-	Migrate(dst ...any)
-}
-
 type Driver interface {
 	GetInstance() *gorm.DB
-	Operation
 
 	UserCtrl
 }
@@ -20,6 +15,6 @@ type Driver interface {
 type UserCtrl interface {
 	// AddUser adds a new user to the database and returns the number of rows affected
 	AddUser(user *entity.User) int64
-	// QueryUser searches the database for a user with the given username and returns it if found
-	QueryUser(username string) *entity.User
+	// QueryUserByName QueryUser searches the database for a user with the given username and returns it if found
+	QueryUserByName(user *entity.User) *entity.User
 }

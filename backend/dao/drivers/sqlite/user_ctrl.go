@@ -2,9 +2,9 @@ package sqlite
 
 import "github.com/TakasakiApps/Narravo/backend/internal/entity"
 
-func (s SQLite) QueryUser(username string) *entity.User {
+func (s SQLite) QueryUserByName(user *entity.User) *entity.User {
 	var users []*entity.User
-	s.GetInstance().Model(&entity.User{}).Where("name = ?", username).Find(&users)
+	s.GetInstance().Model(&entity.User{}).Where(user, "name").Find(&users)
 
 	if len(users) == 0 {
 		return nil
