@@ -41,7 +41,7 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user%v is not registered", *user))
 	} else if queryUser.Password == user.Password {
 		c.JSON(http.StatusOK, entity.UserToken{
-			Token: utils.JWTSign[entity.User](*queryUser, config.GetInstance().Crypto.AesKey, global.TokenExpireDelay),
+			Token: utils.JWTSign[entity.User](*queryUser, config.GetInstance().Crypto.TokenAesKey, global.TokenExpireDelay),
 		})
 	} else {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("incorrect password provided")
@@ -56,7 +56,7 @@ var Renew gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](e.Error())
 	})
 
-	utils.JWTParse[entity.User](userToken.Token, config.GetInstance().Crypto.AesKey, func(isValid bool, obj entity.User) {
+	utils.JWTParse[entity.User](userToken.Token, config.GetInstance().Crypto.TokenAesKey, func(isValid bool, obj entity.User) {
 		if !isValid {
 			exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("token is invalid")
 		}
@@ -71,7 +71,7 @@ var Renew gin.HandlerFunc = func(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, entity.UserToken{
-			Token: utils.JWTSign[entity.User](obj, config.GetInstance().Crypto.AesKey, global.TokenExpireDelay),
+			Token: utils.JWTSign[entity.User](obj, config.GetInstance().Crypto.TokenAesKey, global.TokenExpireDelay),
 		})
 	})
 }

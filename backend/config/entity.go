@@ -4,15 +4,15 @@ import "github.com/TakasakiApps/Narravo/backend/internal/utils"
 
 var mConfig = &Config{
 	Crypto: struct {
-		AesKey string `json:"aesKey"`
+		TokenAesKey string `json:"tokenAesKey"`
 	}{
-		AesKey: utils.GenerateAESKey(),
+		TokenAesKey: utils.GenerateAESKey(),
 	},
 }
 
 type Config struct {
 	Crypto struct {
-		AesKey string `json:"aesKey"`
+		TokenAesKey string `json:"tokenAesKey"`
 	} `json:"crypto"`
 }
 

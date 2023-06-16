@@ -9,7 +9,11 @@ import (
 
 // GenerateAESKey generates and returns a new 96-bit AES key encoded in base64 format.
 func GenerateAESKey() string {
-	key := make([]byte, 12)
+	return GenerateKey(16)
+}
+
+func GenerateKey(len int) string {
+	key := make([]byte, len)
 	if _, err := rand.Read(key); err != nil {
 		exceptiongo.QuickThrow[types.RuntimeException](err)
 	}

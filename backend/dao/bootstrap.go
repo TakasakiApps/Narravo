@@ -50,7 +50,7 @@ func migrateDataBase() {
 	}
 
 	for _, obj := range targets {
-		if !migrator.HasTable(obj.First) {
+		if !migrator.HasTable(obj.First) && !migrator.HasTable(obj.Second) {
 			global.GetLogger().Infof("Migrating dataBase<%s>", obj.Second)
 			err := migrator.CreateTable(obj.First)
 			exceptiongo.QuickThrow[types.DataBaseOperationFailedException](err)
