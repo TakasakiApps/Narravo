@@ -17,31 +17,31 @@
 const props = [
   {
     name: "a",
-    url: "../../public/C1.png",
+    url: "/src/assets/C1.png",
     from: '/a',
     id: '1'
   },
   {
     name: "b",
-    url: "../../public/C1.png",
+    url: "/src/assets/C1.png",
     from: '/b',
     id: '2'
   },
   {
     name: "b",
-    url: "../../public/C1.png",
+    url: "/src/assets/C1.png",
     from: '/b',
     id: '2'
   },
   {
     name: "b",
-    url: "../../public/C1.png",
+    url: "/src/assets/C1.png",
     from: '/b',
     id: '2'
   },
   {
     name: "b",
-    url: "../../public/C1.png",
+    url: "/src/assets/C1.png",
     from: '/b',
     id: '2'
   },

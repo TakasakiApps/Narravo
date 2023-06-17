@@ -3,7 +3,7 @@ import SysHomeVue from '../components/SysHome.vue';
 import Commonend from '../components/Commend.vue';
 import BookShelfVue from '../components/BookShelf.vue';
 import CreateVue from '../components/Create.vue';
-
+import SearchLiemVue from '../components/SearchLiem.vue';
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path:'/SysHomeVue',
-    name:'SysHomeVue',
+    name:'SysHomeVue', 
     component:SysHomeVue
   },
   {
@@ -24,6 +24,11 @@ const routes: Array<RouteRecordRaw> = [
     path:'/CreateVue',
     name:'CreateVue',
     component:CreateVue
+  },
+  {
+    path:'/SearchLiem/:search',
+    name:'SearchLiem',
+    component:SearchLiemVue
   }
 ];
 

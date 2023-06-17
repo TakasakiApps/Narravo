@@ -6,6 +6,7 @@ import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
 import Components from 'unplugin-vue-components/vite';
 import { VantResolver } from 'unplugin-vue-components/resolvers';
+import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
@@ -40,6 +41,7 @@ export default defineConfig(({ command }) => {
               rollupOptions: {
                 external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
               },
+              
             },
           },
         },
@@ -56,7 +58,10 @@ export default defineConfig(({ command }) => {
               minify: isBuild,
               outDir: 'dist-electron/preload',
               rollupOptions: {
-                external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
+                // external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
+                external:[
+                  ...Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
+                ]
               },
             },
           },
@@ -65,6 +70,13 @@ export default defineConfig(({ command }) => {
       // Use Node.js API in the Renderer-process
       renderer(),
     ],
+    // css:{
+    //   preprocessorOptions:{
+    //     scss:{
+    //       additionalData:'@import"/src/mixin";'
+    //     }
+    //   }
+    // },
     server: process.env.VSCODE_DEBUG && (() => {
       const url = new URL(pkg.debug.env.VITE_DEV_SERVER_URL)
       return {

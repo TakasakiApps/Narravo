@@ -1,23 +1,23 @@
 <template>
   <div class="group">
     <div class="button" @click="main">
-      <img src="public\24gl-minimization.svg">
+      <img src="../assets/24gl-minimization.svg">
     </div>
     <div  class="button" @click="max" >
-      <img src="public\24gl-minimize2.svg" v-if="win.max">
-      <img src="public\24gl-maxmize.svg" v-else>
+      <img src="../assets/24gl-minimize2.svg" v-if="win.max">
+      <img src="../assets/24gl-maxmize.svg" v-else>
     </div>
     <div  class="button cross" @click="cross">
-      <img src="public\24gl-cross.svg">
+      <img src="../assets/24gl-cross.svg">
     </div>
     <van-config-provider :theme ="win.theme"></van-config-provider>
   </div>
 </template>
-
 <script setup lang="ts">
 import { ipcRenderer } from 'electron'
-import { reactive } from 'vue';
+import { reactive,ref } from 'vue';
 import mitt from '../samples/EventBus'
+
 const win = reactive({
   // 用于改变全局样式以及监视最大最小化按钮
    max:false,

@@ -3,7 +3,7 @@
     <h2 class="book-name">
       {{ bookxq.name }}
     </h2>
-    <img :src=bookxq.img class="bookimg">
+    <img :src="bookxq.url" class="bookimg">
   </div>
 </template>
 
@@ -15,7 +15,7 @@ onMounted(() => {
 
 })
 const bookxq = {
-  img: '/public/C1.png',
+  url: '/src/assets/C1.png',
   name:"天龙八部"
 }
 
