@@ -1,52 +1,30 @@
 <template>
   <div>
-    <!-- 切换主题 -->
-      <van-cell>
-        <!-- 使用 title 插槽来自定义标题 -->
-        <template #title>
-            <span >
-              主题颜色
-            </span>
-        </template>
-        <template #label>
-              <span>
-                切换主题
-              </span>
-          </template>
-        <!-- 使用插槽来自定义右侧图标 -->
-        <template #value>
-          <van-switch v-model="type" @click="checked()" active-color="#1c1c1e" inactive-color="#dcdee0"  />
-        </template>
-      </van-cell>
-      <van-cell>
-        
-      </van-cell>
+    <SysBook  class="container no-select"/>
+    <SysUser  class="container"/>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ipcRenderer } from 'electron';
-import { ref } from 'vue';
-import mitt from '../samples/EventBus';
-
-let type = ref(true)
-function checked(){
-  if(type.value===true){
-    mitt.emit('change')
-
-  }else{
-    mitt.emit('change')
-
-
-  }
-
-  return !type.value
-}
+import SysUser from './System/SysUser.vue';
+import SysBook from './System/SysBook.vue';
 
 </script>
 
-<style scoped>
-.cell-lift{
-  float: left;
+<style>
+.container {
+  display: flex;
+  justify-content: space-between; /* 左右对齐 */
+  align-items: center; /* 垂直居中 */
+  height: 3.125rem; 
+}
+
+.Sys-tag {
+  display: inline-block;
+  
+}
+
+.Sys-main {
+  display: inline-block;
 }
 </style>
