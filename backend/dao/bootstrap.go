@@ -7,6 +7,7 @@ import (
 	"github.com/TakasakiApps/Narravo/backend/internal/entity"
 	"github.com/TakasakiApps/Narravo/backend/internal/global"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
+	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"github.com/ohanakogo/exceptiongo"
 )
 
@@ -73,7 +74,10 @@ func initGuestUser() {
 		Password: "guest",
 	}
 	// Check if the guest user already exists in the database
-	queryGuest := driver.QueryUserByName(guest)
+	queryGuest := driver.QueryUserByName(&entity.User{
+		Name:     guest.Name,
+		Password: utils.MD5(guest.Password),
+	})
 	if queryGuest == nil {
 		// If the guest user does not exist, add it to the database
 		global.GetLogger().Info("Users: Guest user not found")
