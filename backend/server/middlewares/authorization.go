@@ -44,7 +44,7 @@ func getAuthorization(skipRouterSuffix ...string) gin.HandlerFunc {
 					exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("token is invalid")
 				}
 
-				user := dao.GetInstance().QueryUserByName(&obj)
+				user := dao.GetInstance().QueryUserByName(obj.Name)
 				if user == nil {
 					exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("token contains invalid data")
 				}
