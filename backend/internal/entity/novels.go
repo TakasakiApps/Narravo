@@ -8,8 +8,8 @@ import (
 
 type Novel struct {
 	gorm.Model
-	BookId   string `json:"bookId"`
-	AuthorId string `json:"authorId"`
+	ContentId string `json:"contentId"`
+	AuthorId  string `json:"authorId"`
 }
 
 type AuthorInfo struct {

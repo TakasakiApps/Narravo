@@ -15,6 +15,7 @@ type (
 
 	DecryptFailedException any
 
+	JsonMarshalFailedException   any
 	JsonUnmarshalFailedException any
 
 	DataBaseConnectFailedException   any
