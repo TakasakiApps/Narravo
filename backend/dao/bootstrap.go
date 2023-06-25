@@ -45,8 +45,11 @@ func migrateDataBase() {
 	migrator := driver.GetInstance().Migrator()
 
 	targets := []types.Pair[any, string]{
+		{&entity.IdRecord{}, "id_records"},
 		{&entity.User{}, "users"},
-		{&entity.BookLocalInfo{}, "book_infos"},
+		{&entity.Novel{}, "novels"},
+		{&entity.AuthorInfo{}, "author_infos"},
+		{&entity.ContentInfo{}, "content_infos"},
 	}
 
 	for _, obj := range targets {
