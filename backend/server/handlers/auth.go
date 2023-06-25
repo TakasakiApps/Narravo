@@ -23,7 +23,13 @@ var Register gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user%v already existed", *user))
 	}
 
-	effected := dao.GetInstance().AddUser(user)
+	// hashing password
+	user.Password = utils.MD5(user.Password)
+
+	effected := dao.GetInstance().AddUser(&entity.User{
+		Name:     user.Name,
+		Password: utils.MD5(user.Password),
+	})
 
 	if effected == 1 {
 		c.JSON(http.StatusOK, user)
@@ -39,7 +45,7 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 	queryUser := dao.GetInstance().QueryUserByName(user)
 	if queryUser == nil {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user%v is not registered", *user))
-	} else if queryUser.Password == user.Password {
+	} else if queryUser.Password == utils.MD5(user.Password) {
 		c.JSON(http.StatusOK, entity.UserToken{
 			Token: utils.JWTSign[entity.User](*queryUser, config.GetInstance().Crypto.TokenAesKey, global.TokenExpireDelay),
 		})
