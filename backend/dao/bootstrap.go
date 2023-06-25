@@ -74,14 +74,14 @@ func initGuestUser() {
 		Password: "guest",
 	}
 	// Check if the guest user already exists in the database
-	queryGuest := driver.QueryUserByName(&entity.User{
-		Name:     guest.Name,
-		Password: utils.MD5(guest.Password),
-	})
+	queryGuest := driver.QueryUserByName(guest.Name)
 	if queryGuest == nil {
 		// If the guest user does not exist, add it to the database
 		global.GetLogger().Info("Users: Guest user not found")
-		driver.AddUser(guest)
+		driver.AddUser(&entity.User{
+			Name:     guest.Name,
+			Password: utils.MD5(guest.Password),
+		})
 		global.GetLogger().Infof("Users: Guest user created successfully, user<username: %s, password: %s>", guest.Name, guest.Password)
 	}
 }

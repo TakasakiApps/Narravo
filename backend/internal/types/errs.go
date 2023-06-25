@@ -9,6 +9,7 @@ type (
 	ServerAbortedException      any
 	ServerMiddleWareException   any
 	ServerUnauthorizedException any
+	ServerBadRequestException   any
 
 	RequestDataExpiredException any
 

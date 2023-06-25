@@ -7,5 +7,5 @@ import (
 func Register() {
 	engine.Gin.Use(getExceptionHandler())
 	engine.Gin.Use(getVerificationComponent())
-	engine.Gin.Use(getAuthorization("/register", "/login"))
+	engine.Gin.Use(getAuthorization("/register", "/login", "/reset/password"))
 }
