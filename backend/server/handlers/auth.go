@@ -22,9 +22,6 @@ var Register gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user%v already existed", *user))
 	}
 
-	// hashing password
-	user.Password = utils.MD5(user.Password)
-
 	effected := dao.GetInstance().AddUser(&entity.User{
 		Name:     user.Name,
 		Password: utils.MD5(user.Password),
