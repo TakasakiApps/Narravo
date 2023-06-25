@@ -29,7 +29,7 @@ func writeAny[T string | []byte](path string, data T) bool {
 		err := fsutil.Remove(path)
 		exceptiongo.QuickThrow[types.FileSystemException](err)
 	}
-	err := fsutil.WriteFile(path, data, 0755)
+	err := fsutil.WriteFile(path, data, 0644)
 	exceptiongo.QuickThrow[types.FileSystemException](err)
 	return true
 }
