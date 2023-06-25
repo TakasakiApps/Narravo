@@ -1,22 +1,12 @@
 package assets
 
 import (
-	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"path/filepath"
 )
 
-func ensureAssetsDir() string {
-	return utils.EnsureDir(utils.GetAppHomeDir(), "assets")
-}
-
-func ensureAssetsSubDir(subDirs ...string) string {
-	dir := filepath.Join(ensureAssetsDir(), filepath.Join(subDirs...))
-	return utils.EnsureDir(dir)
-}
-
 func readFile(assetType AssetType, filename string) ([]byte, bool) {
-	dir := ensureAssetsSubDir("files", string(assetType))
-	path := filepath.Join(dir, filename)
+	dir := ensureAssetsSubDir("files", string(assetType), filepath.Dir(filename))
+	path := filepath.Join(dir, filepath.Base(filename))
 	read := readBytes(path)
 	if read == nil {
 		return nil, false
@@ -33,8 +23,8 @@ func readFileString(assetType AssetType, filename string) (string, bool) {
 }
 
 func readImage(assetType AssetType, filename string) ([]byte, bool) {
-	dir := ensureAssetsSubDir("images", string(assetType))
-	path := filepath.Join(dir, filename)
+	dir := ensureAssetsSubDir("images", string(assetType), filepath.Dir(filename))
+	path := filepath.Join(dir, filepath.Base(filename))
 	read := readBytes(path)
 	if read == nil {
 		return nil, false
