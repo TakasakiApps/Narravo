@@ -16,4 +16,11 @@ func registerAuthorApi() {
 		handlers.AuthorIdCheckerComponent,
 	)
 	getGroup.GET("/info", handlers.GetAuthorInfo)
+
+	updateGroup := authorGroup.Group(
+		"/update/:authorId",
+		handlers.AuthorIdCheckerComponent,
+		handlers.CheckAdminPermissionComponent,
+	)
+	updateGroup.POST("/info", handlers.UpdateAuthorInfo)
 }
