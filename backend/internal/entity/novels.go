@@ -24,12 +24,16 @@ type Novel struct {
 
 var AuthorTable = "authors"
 
-type Author struct {
-	gorm.Model
-	ID          string `gorm:"primarykey" json:"id"`
+type PostAuthor struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	AvatarId    string `json:"avatarId"`
+}
+
+type Author struct {
+	gorm.Model
+	ID string `gorm:"primarykey" json:"id"`
+	PostAuthor
 }
 
 // Entities to store at local storage
