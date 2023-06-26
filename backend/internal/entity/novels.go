@@ -42,6 +42,10 @@ type CatalogInfo struct {
 	Chapters []ChapterInfo `json:"chapters"`
 }
 
+type PostChapter struct {
+	Content string `json:"content"`
+}
+
 type ChapterInfo struct {
 	Name      string `json:"name"`
 	ChapterId string `json:"chapterId"`

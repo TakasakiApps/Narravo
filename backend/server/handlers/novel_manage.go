@@ -14,6 +14,61 @@ import (
 	"net/http"
 )
 
+func checkPostNovel(postNovel *entity.PostNovel) {
+	_, exists := assets.ReadCover(postNovel.CoverId)
+	if !exists {
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException]("cover not found, you must upload a cover before add novel")
+	}
+
+	author := dao.GetInstance().QueryAuthorById(postNovel.AuthorId)
+	if author == nil {
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException]("author not found, you must select a valid author or create an author before add novel")
+	}
+}
+
+var AddNovel gin.HandlerFunc = func(c *gin.Context) {
+	postNovel := &entity.PostNovel{}
+	utils.ConvMapToStructure(utils.GetData(c), postNovel)
+
+	checkPostNovel(postNovel)
+
+	effected := dao.GetInstance().AddNovel(&entity.Novel{
+		ID:        GenerateUniqueID(),
+		PostNovel: *postNovel,
+	})
+
+	if effected == 1 {
+		c.Status(http.StatusOK)
+	} else {
+		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("add novel failed")
+	}
+}
+
+var UpdateNovelInfo gin.HandlerFunc = func(c *gin.Context) {
+	novelId := c.Param("novelId")
+
+	novel := dao.GetInstance().QueryNovelById(novelId)
+	if novel == nil {
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException](fmt.Sprintf("novel<%s> not found", novelId))
+	}
+
+	postNovel := &entity.PostNovel{}
+	utils.ConvMapToStructure(utils.GetData(c), postNovel)
+
+	checkPostNovel(postNovel)
+
+	effected := dao.GetInstance().UpdateNovel(&entity.Novel{
+		ID:        novelId,
+		PostNovel: *postNovel,
+	})
+
+	if effected == 1 {
+		c.Status(http.StatusOK)
+	} else {
+		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("update novel failed")
+	}
+}
+
 var UpdateNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
 	novelId := c.Param("novelId")
 
@@ -62,22 +117,16 @@ var UpdateNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
 	}
 }
 
-var AddNovel gin.HandlerFunc = func(c *gin.Context) {
-	postNovel := &entity.PostNovel{}
-	utils.ConvMapToStructure(utils.GetData(c), postNovel)
+var UpdateNovelChapter gin.HandlerFunc = func(c *gin.Context) {
+	novelId := c.Param("novelId")
+	chapterId := c.Query("chapterId")
 
-	_, exists := assets.ReadCover(postNovel.CoverId)
-	if !exists {
-		exceptiongo.QuickThrowMsg[types.ServerBadRequestException]("cover not found, you must upload a cover before add novel")
+	postChapter := &entity.PostChapter{}
+	utils.ConvMapToStructure(utils.GetData(c), postChapter)
+
+	if assets.WriteChapter(novelId, chapterId, postChapter.Content) {
+		c.Status(http.StatusOK)
+	} else {
+		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("update chapter failed")
 	}
-
-	author := dao.GetInstance().QueryAuthorById(postNovel.AuthorId)
-	if author == nil {
-		exceptiongo.QuickThrowMsg[types.ServerBadRequestException]("author not found, you must select a valid author or create an author before add novel")
-	}
-
-	dao.GetInstance().AddNovel(&entity.Novel{
-		ID:        GenerateUniqueID(),
-		PostNovel: *postNovel,
-	})
 }

@@ -24,5 +24,7 @@ func registerNovelApi() {
 		handlers.NovelIdCheckerComponent,
 		handlers.CheckAdminPermissionComponent,
 	)
+	updateGroup.POST("/info", handlers.UpdateNovelInfo)
 	updateGroup.POST("/catalog", handlers.UpdateNovelCatalog)
+	updateGroup.POST("/chapter", handlers.UpdateNovelChapter)
 }
