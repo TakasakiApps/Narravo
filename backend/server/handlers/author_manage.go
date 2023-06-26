@@ -8,6 +8,7 @@ import (
 	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/ohanakogo/exceptiongo"
+	"net/http"
 )
 
 var AddAuthor gin.HandlerFunc = func(c *gin.Context) {
@@ -19,8 +20,14 @@ var AddAuthor gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerBadRequestException]("avatar not found, you must upload a avatar before add author")
 	}
 
-	dao.GetInstance().AddAuthor(&entity.Author{
+	effected := dao.GetInstance().AddAuthor(&entity.Author{
 		ID:         GenerateUniqueID(),
 		PostAuthor: *author,
 	})
+
+	if effected == 1 {
+		c.Status(http.StatusOK)
+	} else {
+		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("add author failed")
+	}
 }
