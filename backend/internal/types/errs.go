@@ -10,6 +10,7 @@ type (
 	ServerMiddleWareException   any
 	ServerUnauthorizedException any
 	ServerBadRequestException   any
+	ServerNotModifiedException  any
 
 	RequestDataExpiredException any
 

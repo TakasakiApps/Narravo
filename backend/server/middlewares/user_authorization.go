@@ -13,7 +13,7 @@ import (
 	"github.com/ohanakogo/exceptiongo/pkg/etype"
 )
 
-func getAuthorization(skipRouterSuffix ...string) gin.HandlerFunc {
+func getUserAuthorization(skipRouterSuffix ...string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer exceptiongo.NewExceptionHandler(func(exception *etype.Exception) {
 			// stop context at first
@@ -52,6 +52,7 @@ func getAuthorization(skipRouterSuffix ...string) gin.HandlerFunc {
 					exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("user password has expired")
 				}
 
+				c.Set("isAdmin", user.Name == "admin")
 				c.Next()
 			})
 		}

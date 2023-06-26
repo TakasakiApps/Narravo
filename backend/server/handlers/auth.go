@@ -32,6 +32,15 @@ var LegacyAuthorizationComponent gin.HandlerFunc = func(c *gin.Context) {
 	}
 }
 
+var CheckAdminPermissionComponent gin.HandlerFunc = func(c *gin.Context) {
+	isAdmin := c.GetBool("isAdmin")
+	if !isAdmin {
+		c.Abort()
+		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("only admin user can do this operation")
+	}
+	c.Next()
+}
+
 var Register gin.HandlerFunc = func(c *gin.Context) {
 	user := &entity.User{}
 	utils.ConvMapToStructure(utils.GetData(c), user)
