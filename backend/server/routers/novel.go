@@ -7,8 +7,8 @@ func registerNovelApi() {
 
 	novelGroup.POST("/add", handlers.CheckAdminPermissionComponent, handlers.AddNovel)
 
-	getNovelGroup := novelGroup.Group("/get/:novel_id")
-	getNovelGroup.GET("/info", handlers.GetNovelInfo)
-	getNovelGroup.GET("/catalog", handlers.GetNovelCatalog)
-	getNovelGroup.GET("/chapter", handlers.GetNovelChapter)
+	getGroup := novelGroup.Group("/get/:novel_id")
+	getGroup.GET("/info", handlers.GetNovelInfo)
+	getGroup.GET("/catalog", handlers.GetNovelCatalog)
+	getGroup.GET("/chapter", handlers.GetNovelChapter)
 }
