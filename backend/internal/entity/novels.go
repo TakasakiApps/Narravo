@@ -6,16 +6,20 @@ import (
 
 // Database entities
 
+type PostNovel struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	CoverId     string `json:"coverId"`
+	AuthorId    string `json:"authorId"`
+}
+
 var NovelTable = "novels"
 
 type Novel struct {
 	gorm.Model
-	ID          string `gorm:"primarykey" json:"id"`
-	Name        string `json:"name"`
-	CoverId     string `json:"coverId"`
-	Description string `json:"description"`
-
-	AuthorId string `json:"authorId"`
+	ID string `gorm:"primarykey" json:"id"`
+	PostNovel
+	// TODO: 增加小说审核逻辑
 }
 
 var AuthorTable = "authors"

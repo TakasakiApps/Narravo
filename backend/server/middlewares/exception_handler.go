@@ -15,11 +15,14 @@ func getExceptionHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		defer exceptiongo.NewExceptionHandler(func(exception *etype.Exception) {
 			global.GetLogger().Error(exception.GetStackTraceMessage())
+			contextUtil := utils.NewContextUtil(c)
 			switch exception.Type() {
 			case ohanakoutilgo.TypeOf[types.ServerUnauthorizedException]():
-				utils.NewContextUtil(c).JsonException(http.StatusUnauthorized, exception)
+				contextUtil.JsonException(http.StatusUnauthorized, exception)
+			case ohanakoutilgo.TypeOf[types.ServerNotModifiedException]():
+				contextUtil.JsonException(http.StatusNotModified, exception)
 			default:
-				utils.NewContextUtil(c).JsonException(http.StatusBadRequest, exception)
+				contextUtil.JsonException(http.StatusBadRequest, exception)
 			}
 		}).Deploy()
 
