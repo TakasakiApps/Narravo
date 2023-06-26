@@ -9,15 +9,15 @@ import (
 )
 
 func ReadCover(coverId string) ([]byte, bool) {
-	return readImage(Cover, coverId)
+	return readFile(Cover, coverId, Image)
 }
 
 func ReadAvatar(avatarId string) ([]byte, bool) {
-	return readImage(Cover, avatarId)
+	return readFile(Avatar, avatarId, Image)
 }
 
 func ReadCatalog(novelId string) (*entity.CatalogInfo, bool) {
-	bytes, exists := readFile(Catalog, filepath.Join(novelId, "catalog.json"))
+	bytes, exists := readFile(Catalog, filepath.Join(novelId, "catalog.json"), File)
 	if !exists {
 		return nil, exists
 	}
