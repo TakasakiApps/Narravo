@@ -98,6 +98,7 @@ var UpdateNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
 				continue
 			}
 			assets.DeleteChapter(novelId, chapterInfo.ChapterId)
+			dao.GetInstance().DelIdRecord(chapterInfo.ChapterId)
 		}
 	}
 

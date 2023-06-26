@@ -11,5 +11,6 @@ func GenerateUniqueID() string {
 	if dao.GetInstance().IsIdRecordExist(id) {
 		return GenerateUniqueID()
 	}
+	dao.GetInstance().AddIdRecord(id)
 	return id
 }
