@@ -3,7 +3,6 @@ package utils
 import (
 	"crypto/rand"
 	"encoding/base64"
-	"github.com/TakasakiApps/Narravo/backend/dao"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/ohanakogo/exceptiongo"
 	"math/big"
@@ -21,15 +20,6 @@ func GenerateKey(len int) string {
 		exceptiongo.QuickThrow[types.RuntimeException](err)
 	}
 	return base64.StdEncoding.EncodeToString(key)
-}
-
-// GenerateUniqueID generate a unique ID.
-func GenerateUniqueID() string {
-	id := GenerateStandardID()
-	if dao.GetInstance().IsIdRecordExist(id) {
-		return GenerateUniqueID()
-	}
-	return id
 }
 
 // GenerateStandardID generates a random identifier with length of 32 characters.
