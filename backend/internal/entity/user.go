@@ -2,6 +2,8 @@ package entity
 
 import "gorm.io/gorm"
 
+var UserTable = "users"
+
 type User struct {
 	gorm.Model
 	Name     string `gorm:"not null" json:"username"`
