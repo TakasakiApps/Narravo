@@ -14,7 +14,6 @@ var GetNovelInfo gin.HandlerFunc = func(c *gin.Context) {
 	novelId := c.Param("novel_id")
 
 	novel := dao.GetInstance().QueryNovelById(novelId)
-
 	if novel == nil {
 		exceptiongo.QuickThrowMsg[types.ServerBadRequestException](fmt.Sprintf("novel<%s> not found", novelId))
 	}

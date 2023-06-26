@@ -39,7 +39,7 @@ type Author struct {
 // Entities to store at local storage
 
 type CatalogInfo struct {
-	Chapters []CatalogInfo `json:"chapters"`
+	Chapters []ChapterInfo `json:"chapters"`
 }
 
 type ChapterInfo struct {
