@@ -11,4 +11,7 @@ func registerNovelApi() {
 	getGroup.GET("/info", handlers.GetNovelInfo)
 	getGroup.GET("/catalog", handlers.GetNovelCatalog)
 	getGroup.GET("/chapter", handlers.GetNovelChapter)
+
+	updateGroup := novelGroup.Group("/update/:novel_id", handlers.CheckAdminPermissionComponent)
+	updateGroup.POST("/catalog", handlers.UpdateNovelCatalog)
 }
