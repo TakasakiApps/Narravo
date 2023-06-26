@@ -10,7 +10,7 @@ import (
 )
 
 var GetAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
-	authorId := c.Param("author_id")
+	authorId := c.Param("authorId")
 
 	author := dao.GetInstance().QueryAuthorById(authorId)
 	if author == nil {

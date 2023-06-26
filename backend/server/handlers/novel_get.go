@@ -11,7 +11,7 @@ import (
 )
 
 var GetNovelInfo gin.HandlerFunc = func(c *gin.Context) {
-	novelId := c.Param("novel_id")
+	novelId := c.Param("novelId")
 
 	novel := dao.GetInstance().QueryNovelById(novelId)
 	if novel == nil {
@@ -30,7 +30,7 @@ var GetNovelInfo gin.HandlerFunc = func(c *gin.Context) {
 }
 
 var GetNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
-	novelId := c.Param("novel_id")
+	novelId := c.Param("novelId")
 
 	catalog, exists := assets.ReadCatalog(novelId)
 	if !exists {
@@ -41,7 +41,7 @@ var GetNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
 }
 
 var GetNovelChapter gin.HandlerFunc = func(c *gin.Context) {
-	novelId := c.Param("novel_id")
+	novelId := c.Param("novelId")
 	chapterId := c.Query("chapterId")
 
 	chapterContent, exists := assets.ReadChapter(novelId, chapterId)
