@@ -1,15 +1,23 @@
 package sqlite
 
-import "github.com/TakasakiApps/Narravo/backend/internal/entity"
+import (
+	"github.com/TakasakiApps/Narravo/backend/internal/entity"
+)
 
 func (s SQLite) AddIdRecord(id string) int64 {
-	//TODO implement me
-	panic("implement me")
+	result := s.GetInstance().Table(entity.IdRecordTable).Create(&entity.IdRecord{
+		Value: id,
+	})
+
+	return result.RowsAffected
 }
 
 func (s SQLite) DelIdRecord(id string) int64 {
-	//TODO implement me
-	panic("implement me")
+	result := s.GetInstance().Table(entity.IdRecordTable).Where("value = ?", id).Delete(&entity.IdRecord{
+		Value: id,
+	})
+
+	return result.RowsAffected
 }
 
 func (s SQLite) IsIdRecordExist(id string) bool {
