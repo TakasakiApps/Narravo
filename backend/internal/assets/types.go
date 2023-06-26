@@ -6,5 +6,5 @@ const (
 	Avatar AssetType = "avatar"
 	Cover  AssetType = "cover"
 
-	Catalog AssetType = "catalogs"
+	Catalog AssetType = "content"
 )
