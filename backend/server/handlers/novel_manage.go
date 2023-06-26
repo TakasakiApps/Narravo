@@ -15,7 +15,7 @@ import (
 )
 
 var UpdateNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
-	novelId := c.Param("novel_id")
+	novelId := c.Param("novelId")
 
 	novel := dao.GetInstance().QueryNovelById(novelId)
 	if novel == nil {
