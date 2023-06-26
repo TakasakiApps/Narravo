@@ -5,5 +5,6 @@ func Register() {
 
 	registerVersionApi()
 	registerAuthApi()
+	registerAuthorApi()
 	registerNovelApi()
 }
