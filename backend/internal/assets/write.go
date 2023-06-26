@@ -16,12 +16,12 @@ func WriteAvatar(avatarId string, data []byte) bool {
 	return writeImage(Cover, avatarId, data)
 }
 
-func WriteCatalog(catalogId string, catalogInfo *entity.CatalogInfo) bool {
+func WriteCatalog(novelId string, catalogInfo *entity.CatalogInfo) bool {
 	data, err := json.MarshalIndent(catalogInfo, "", "    ")
 	exceptiongo.QuickThrow[types.JsonMarshalFailedException](err)
-	return writeFile[[]byte](Catalog, filepath.Join(catalogId, "catalog.json"), data)
+	return writeFile[[]byte](Catalog, filepath.Join(novelId, "catalog.json"), data)
 }
 
-func WriteChapter(catalogId string, chapterId string, data string) bool {
-	return writeFile[string](Catalog, filepath.Join(catalogId, chapterId), data)
+func WriteChapter(novelId string, chapterId string, data string) bool {
+	return writeFile[string](Catalog, filepath.Join(novelId, chapterId), data)
 }

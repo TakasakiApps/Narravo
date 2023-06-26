@@ -7,7 +7,6 @@ import (
 	"github.com/gookit/goutil/fsutil"
 	"github.com/gookit/goutil/sysutil"
 	"github.com/ohanakogo/exceptiongo"
-	"os"
 	"path/filepath"
 )
 
@@ -28,7 +27,7 @@ func EnsureDir(dir string, subs ...string) string {
 		}
 	} else {
 		// Create directory if it doesn't exist
-		err := fsutil.MkDirs(os.ModeDir, dir)
+		err := fsutil.MkDirs(0755, dir)
 		exceptiongo.QuickThrow[types.FileSystemException](err)
 	}
 	return dir

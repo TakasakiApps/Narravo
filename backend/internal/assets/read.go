@@ -16,8 +16,8 @@ func ReadAvatar(avatarId string) ([]byte, bool) {
 	return readImage(Cover, avatarId)
 }
 
-func ReadCatalog(catalogId string) (*entity.CatalogInfo, bool) {
-	bytes, exists := readFile(Catalog, filepath.Join(catalogId, "catalog.json"))
+func ReadCatalog(novelId string) (*entity.CatalogInfo, bool) {
+	bytes, exists := readFile(Catalog, filepath.Join(novelId, "catalog.json"))
 	if !exists {
 		return nil, exists
 	}
@@ -27,6 +27,6 @@ func ReadCatalog(catalogId string) (*entity.CatalogInfo, bool) {
 	return &catalogInfo, exists
 }
 
-func ReadChapter(catalogId string, chapterId string) (string, bool) {
-	return readFileString(Catalog, filepath.Join(catalogId, chapterId))
+func ReadChapter(novelId string, chapterId string) (string, bool) {
+	return readFileString(Catalog, filepath.Join(novelId, chapterId))
 }

@@ -15,8 +15,7 @@ type Novel struct {
 	CoverId     string `json:"coverId"`
 	Description string `json:"description"`
 
-	AuthorId  string `json:"authorId"`
-	CatalogId string `json:"catalogId"`
+	AuthorId string `json:"authorId"`
 }
 
 var AuthorTable = "authors"

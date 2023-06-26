@@ -5,8 +5,8 @@ import (
 )
 
 func readFile(assetType AssetType, filename string) ([]byte, bool) {
-	dir := ensureAssetsSubDir("files", string(assetType), filepath.Dir(filename))
-	path := filepath.Join(dir, filepath.Base(filename))
+	dir := ensureAssetsSubDir("files", string(assetType))
+	path := filepath.Join(dir, filename)
 	read := readBytes(path)
 	if read == nil {
 		return nil, false
@@ -23,8 +23,8 @@ func readFileString(assetType AssetType, filename string) (string, bool) {
 }
 
 func readImage(assetType AssetType, filename string) ([]byte, bool) {
-	dir := ensureAssetsSubDir("images", string(assetType), filepath.Dir(filename))
-	path := filepath.Join(dir, filepath.Base(filename))
+	dir := ensureAssetsSubDir("images", string(assetType), filename)
+	path := filepath.Join(dir, filename)
 	read := readBytes(path)
 	if read == nil {
 		return nil, false
