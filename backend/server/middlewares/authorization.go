@@ -1,7 +1,6 @@
 package middlewares
 
 import (
-	"fmt"
 	"github.com/TakasakiApps/Narravo/backend/config"
 	"github.com/TakasakiApps/Narravo/backend/dao"
 	"github.com/TakasakiApps/Narravo/backend/internal/entity"
@@ -30,7 +29,7 @@ func getAuthorization(skipRouterSuffix ...string) gin.HandlerFunc {
 		} else {
 			data := utils.GetData(c)
 			if !maputil.HasKey(data, "token") {
-				exceptiongo.QuickThrow[types.ServerUnauthorizedException](fmt.Errorf("authorization failed! please login before operating"))
+				exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("authorization failed! please login before operating")
 			}
 			userToken := &entity.UserToken{}
 			utils.ConvMapToStructure(utils.GetData(c), userToken)

@@ -22,13 +22,13 @@ var LegacyAuthorizationComponent gin.HandlerFunc = func(c *gin.Context) {
 	queryUser := dao.GetInstance().QueryUserByName(user.Name)
 	// If no matching user is found, throw an unauthorized exception with an error message.
 	if queryUser == nil {
-		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("User %v is not registered", *user))
+		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user<%v> is not registered", *user))
 		// If the user exists and their password matches the provided password, call the next middleware function.
 	} else if queryUser.Password == utils.MD5(user.Password) {
 		c.Next()
 		// If the password is incorrect, throw an unauthorized exception with an error message.
 	} else {
-		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("Incorrect password provided")
+		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException]("incorrect password provided")
 	}
 }
 
@@ -38,7 +38,7 @@ var Register gin.HandlerFunc = func(c *gin.Context) {
 
 	queryUser := dao.GetInstance().QueryUserByName(user.Name)
 	if queryUser != nil {
-		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user%v already existed", *user))
+		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user<%v> already existed", *user))
 	}
 
 	effected := dao.GetInstance().AddUser(&entity.User{
@@ -58,6 +58,11 @@ var Login gin.HandlerFunc = func(c *gin.Context) {
 	utils.ConvMapToStructure(utils.GetData(c), user)
 
 	queryUser := dao.GetInstance().QueryUserByName(user.Name)
+
+	if queryUser == nil {
+		exceptiongo.QuickThrowMsg[types.ServerUnauthorizedException](fmt.Sprintf("user<%s> not found", user.Name))
+	}
+
 	c.JSON(http.StatusOK, entity.UserToken{
 		Token: utils.JWTSign[entity.User](*queryUser, config.GetInstance().Crypto.TokenAesKey, global.TokenExpireDelay),
 	})
@@ -81,7 +86,7 @@ var ResetPassword gin.HandlerFunc = func(c *gin.Context) {
 	// Check if the user's old password matches their new password.
 	if userResetPassword.Password == userResetPassword.NewPassword {
 		// If the passwords are the same, throw a bad request exception with an error message.
-		exceptiongo.QuickThrow[types.ServerBadRequestException](fmt.Errorf("the old password cannot be the same as the new password"))
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException]("the old password cannot be the same as the new password")
 	}
 
 	// Get user information by name from the instance of dao.

@@ -6,25 +6,27 @@ import (
 
 // Database entities
 
+var NovelTable = "novels"
+
 type Novel struct {
 	gorm.Model
-	ContentId string `json:"contentId"`
+	ID          string `gorm:"primarykey" json:"id"`
+	Name        string `json:"name"`
+	CoverId     string `json:"coverId"`
+	Description string `json:"description"`
+
 	AuthorId  string `json:"authorId"`
+	CatalogId string `json:"catalogId"`
 }
 
-type AuthorInfo struct {
+var AuthorTable = "authors"
+
+type Author struct {
 	gorm.Model
+	ID          string `gorm:"primarykey" json:"id"`
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	AvatarId    string `json:"avatarId"`
-}
-
-type ContentInfo struct {
-	gorm.Model
-	Name        string `json:"name"`
-	CatalogId   string `json:"catalogId"`
-	CoverId     string `json:"coverId"`
-	Description string `json:"description"`
 }
 
 // Entities to store at local storage
