@@ -20,7 +20,7 @@ var AddAuthor gin.HandlerFunc = func(c *gin.Context) {
 	}
 
 	dao.GetInstance().AddAuthor(&entity.Author{
-		ID:         utils.GenerateUniqueID(),
+		ID:         GenerateUniqueID(),
 		PostAuthor: *author,
 	})
 }

@@ -25,7 +25,7 @@ var AddNovel gin.HandlerFunc = func(c *gin.Context) {
 	}
 
 	dao.GetInstance().AddNovel(&entity.Novel{
-		ID:        utils.GenerateUniqueID(),
+		ID:        GenerateUniqueID(),
 		PostNovel: *postNovel,
 	})
 }
