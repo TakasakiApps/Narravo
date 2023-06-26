@@ -36,7 +36,20 @@ func DataBaseBootstrap(c *DataBaseBootstrapConfig) {
 
 	migrateDataBase()
 
-	initGuestUser()
+	initUser(
+		"admin",
+		&entity.User{
+			Name:     "admin",
+			Password: utils.GenerateAnyID(12),
+		},
+	)
+	initUser(
+		"guest",
+		&entity.User{
+			Name:     "guest",
+			Password: "guest",
+		},
+	)
 }
 
 // migrateDataBase to migrate structure database
@@ -65,22 +78,17 @@ func migrateDataBase() {
 	}
 }
 
-// initGuestUser to initialize the guest user
-func initGuestUser() {
-	// Create a guest user with default credentials
-	guest := &entity.User{
-		Name:     "guest",
-		Password: "guest",
-	}
+// initUser to initialize the guest user
+func initUser(userType string, user *entity.User) {
 	// Check if the guest user already exists in the database
-	queryGuest := driver.QueryUserByName(guest.Name)
-	if queryGuest == nil {
+	queryUser := driver.QueryUserByName(user.Name)
+	if queryUser == nil {
 		// If the guest user does not exist, add it to the database
-		global.GetLogger().Info("Users: Guest user not found")
+		global.GetLogger().Infof("Users: %s user not found", userType)
 		driver.AddUser(&entity.User{
-			Name:     guest.Name,
-			Password: utils.MD5(guest.Password),
+			Name:     user.Name,
+			Password: utils.MD5(user.Password),
 		})
-		global.GetLogger().Infof("Users: Guest user created successfully, user<username: %s, password: %s>", guest.Name, guest.Password)
+		global.GetLogger().Infof("Users: %s user created successfully, user<username: %s, password: %s>", userType, user.Name, user.Password)
 	}
 }
