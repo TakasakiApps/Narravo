@@ -14,6 +14,7 @@ import (
 	"github.com/ohanakogo/exceptiongo"
 	"github.com/ohanakogo/exceptiongo/pkg/etype"
 	"net/http"
+	"strings"
 )
 
 // DataExpireTime If data is sent for processing, and it takes more than 5000 milliseconds, it will be considered as expired data.
@@ -92,14 +93,14 @@ func getVerificationComponent() gin.HandlerFunc {
 		}
 
 		verifyData := entity.VerifyData{}
-		switch c.Request.Method {
-		case http.MethodPost:
+		switch {
+		case c.Request.Method == http.MethodGet || strings.Contains(c.FullPath(), "/assets/upload"):
+			verifyData.Data = c.Query("data")
+			verifyData.IntegrityKey = c.Query("integrityKey")
+		case c.Request.Method == http.MethodPost:
 			// Bind the JSON data from the request body to the verifyData struct
 			err := c.ShouldBindJSON(&verifyData)
 			exceptiongo.QuickThrow[types.JsonUnmarshalFailedException](err)
-		case http.MethodGet:
-			verifyData.Data = c.Query("data")
-			verifyData.IntegrityKey = c.Query("integrityKey")
 		}
 		verifyBase(verifyData.Data, verifyData.IntegrityKey)
 	}

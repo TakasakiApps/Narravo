@@ -7,18 +7,19 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gookit/goutil/strutil"
 	"net/http"
+	"strings"
 )
 
 func getVerificationComponent() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		data := make(map[string]any)
-		switch c.Request.Method {
-		case http.MethodPost:
-			_ = c.ShouldBindJSON(&data)
-		case http.MethodGet:
+		switch {
+		case c.Request.Method == http.MethodGet || strings.Contains(c.FullPath(), "/assets/upload"):
 			for k, v := range c.Request.URL.Query() {
 				data[k] = strutil.Join("|", v...)
 			}
+		case c.Request.Method == http.MethodPost:
+			_ = c.ShouldBindJSON(&data)
 		}
 		utils.PutData(c, data)
 		// SKIP
