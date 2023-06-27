@@ -8,12 +8,12 @@ import (
 	"path/filepath"
 )
 
-func WriteCover(coverId string, data []byte) bool {
-	return writeFile[[]byte](Cover, coverId, Image, data)
+func GetCoverPath(coverId string) string {
+	return getWriteFilePath(Cover, coverId, Image)
 }
 
-func WriteAvatar(avatarId string, data []byte) bool {
-	return writeFile[[]byte](Avatar, avatarId, Image, data)
+func GetAvatarPath(avatarId string) string {
+	return getWriteFilePath(Avatar, avatarId, Image)
 }
 
 func WriteCatalog(novelId string, catalogInfo *entity.CatalogInfo) bool {

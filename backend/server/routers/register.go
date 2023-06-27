@@ -7,4 +7,5 @@ func Register() {
 	registerAuthApi()
 	registerAuthorApi()
 	registerNovelApi()
+	registerAssetsApi()
 }

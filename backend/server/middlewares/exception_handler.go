@@ -20,7 +20,7 @@ func getExceptionHandler() gin.HandlerFunc {
 			case ohanakoutilgo.TypeOf[types.ServerUnauthorizedException]():
 				contextUtil.JsonException(http.StatusUnauthorized, exception)
 			case ohanakoutilgo.TypeOf[types.ServerNotModifiedException]():
-				contextUtil.JsonException(http.StatusNotModified, exception)
+				contextUtil.JsonException(http.StatusBadRequest, exception)
 			default:
 				contextUtil.JsonException(http.StatusBadRequest, exception)
 			}
