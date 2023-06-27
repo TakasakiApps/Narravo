@@ -37,6 +37,9 @@ type NovelCtrl interface {
 	// UpdateNovel updates the information of a novel in the database and returns the number of affected rows.
 	UpdateNovel(novel *entity.Novel) int64
 
+	// QueryNovelsLimit queries a list of novels from the database with certain range of offset and limit, and returns the list of novel entities.
+	QueryNovelsLimit(offset int, limit int) []*entity.Novel
+
 	// QueryNovelById queries a novel from the database by its ID and returns the novel entity.
 	QueryNovelById(novelId string) *entity.Novel
 
@@ -51,6 +54,9 @@ type AuthorCtrl interface {
 
 	// UpdateAuthor updates the information of an existing author in the database and returns the number of affected rows.
 	UpdateAuthor(author *entity.Author) int64
+
+	// QueryAuthorsLimit retrieves a limited number of authors from the database based on the given offset and limit, and returns a slice of Author objects.
+	QueryAuthorsLimit(offset int, limit int) []*entity.Author
 
 	// QueryAuthorById retrieves the information of an author based on their ID and returns a pointer to an Author object.
 	QueryAuthorById(authorId string) *entity.Author
