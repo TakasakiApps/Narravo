@@ -24,3 +24,8 @@ func (s SQLite) QueryNovelById(novelId string) *entity.Novel {
 
 	return novels[0]
 }
+
+func (s SQLite) CountNovel() (count int64) {
+	s.GetInstance().Table(entity.NovelTable).Count(&count)
+	return
+}

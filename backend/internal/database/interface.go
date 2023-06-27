@@ -16,22 +16,32 @@ type Driver interface {
 
 // UserCtrl management for User
 type UserCtrl interface {
-	// AddUser adds a new user to the database and returns the number of rows affected
+	// AddUser adds a new user to the database and returns the number of rows affected.
 	AddUser(user *entity.User) int64
+
 	// UpdateUser updates the information of a user specified by the input parameter `user`.
 	UpdateUser(user *entity.User) int64
-	// QueryUserByName QueryUser searches the database for a user with the given username and returns it if found
+
+	// QueryUserByName searches the database for a user with the given username and returns it if found.
 	QueryUserByName(username string) *entity.User
+
+	// CountUser counts the number of users in the database and returns the count.
+	CountUser() (count int64)
 }
 
 // NovelCtrl management for Novel
 type NovelCtrl interface {
 	// AddNovel adds a novel to the database.
 	AddNovel(novel *entity.Novel) int64
+
 	// UpdateNovel updates the information of a novel in the database and returns the number of affected rows.
 	UpdateNovel(novel *entity.Novel) int64
+
 	// QueryNovelById queries a novel from the database by its ID and returns the novel entity.
 	QueryNovelById(novelId string) *entity.Novel
+
+	// CountNovel counts the number of novels in the database and returns the count.
+	CountNovel() (count int64)
 }
 
 // AuthorCtrl management for Author
@@ -44,6 +54,9 @@ type AuthorCtrl interface {
 
 	// QueryAuthorById retrieves the information of an author based on their ID and returns a pointer to an Author object.
 	QueryAuthorById(authorId string) *entity.Author
+
+	// CountAuthor counts the number of authors in the database and returns the count.
+	CountAuthor() (count int64)
 }
 
 // IdRecordCtrl management for IdRecord
