@@ -10,6 +10,7 @@ func registerNovelApi() {
 		handlers.CheckAdminPermissionComponent,
 		handlers.AddNovel,
 	)
+	novelGroup.GET("/getAllInfo", handlers.GetAllNovelInfo)
 
 	getGroup := novelGroup.Group(
 		"/get/:novelId",

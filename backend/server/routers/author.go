@@ -10,6 +10,7 @@ func registerAuthorApi() {
 		handlers.CheckAdminPermissionComponent,
 		handlers.AddAuthor,
 	)
+	authorGroup.GET("/getAllInfo", handlers.GetAllAuthorInfo)
 
 	getGroup := authorGroup.Group(
 		"/get/:authorId",

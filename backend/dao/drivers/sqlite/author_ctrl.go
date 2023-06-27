@@ -14,6 +14,13 @@ func (s SQLite) UpdateAuthor(author *entity.Author) int64 {
 	return result.RowsAffected
 }
 
+func (s SQLite) QueryAuthorsLimit(offset int, limit int) []*entity.Author {
+	var authors []*entity.Author
+	s.GetInstance().Table(entity.AuthorTable).Offset(offset).Limit(limit).Find(&authors)
+
+	return authors
+}
+
 func (s SQLite) QueryAuthorById(authorId string) *entity.Author {
 	var authors []*entity.Author
 	s.GetInstance().Table(entity.AuthorTable).Where("id = ?", authorId).Find(&authors)
