@@ -24,3 +24,8 @@ func (s SQLite) QueryUserByName(username string) *entity.User {
 
 	return users[0]
 }
+
+func (s SQLite) CountUser() (count int64) {
+	s.GetInstance().Table(entity.UserTable).Count(&count)
+	return
+}

@@ -24,3 +24,8 @@ func (s SQLite) QueryAuthorById(authorId string) *entity.Author {
 
 	return authors[0]
 }
+
+func (s SQLite) CountAuthor() (count int64) {
+	s.GetInstance().Table(entity.AuthorTable).Count(&count)
+	return
+}
