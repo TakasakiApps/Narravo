@@ -20,10 +20,10 @@ var GetNovelInfo gin.HandlerFunc = func(c *gin.Context) {
 
 	c.JSON(
 		http.StatusOK,
-		map[string]string{
+		map[string]any{
 			"name":        novel.Name,
 			"description": novel.Description,
-			"authorId":    novel.AuthorId,
+			"author":      dao.GetInstance().QueryAuthorById(novel.AuthorId),
 			"coverId":     novel.CoverId,
 		},
 	)
