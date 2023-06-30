@@ -1,6 +1,9 @@
 package sqlite
 
-import "github.com/TakasakiApps/Narravo/backend/internal/entity"
+import (
+	"fmt"
+	"github.com/TakasakiApps/Narravo/backend/internal/entity"
+)
 
 func (s SQLite) AddNovel(novel *entity.Novel) int64 {
 	result := s.GetInstance().Table(entity.NovelTable).Create(novel)
@@ -30,6 +33,15 @@ func (s SQLite) QueryNovelById(novelId string) *entity.Novel {
 	}
 
 	return novels[0]
+}
+
+func (s SQLite) SearchNovelByName(keyword string, offset int, limit int) []*entity.Novel {
+	var novels []*entity.Novel
+	s.GetInstance().Table(entity.NovelTable).
+		Where("name like ?", fmt.Sprintf("%%%s%", keyword)).
+		Offset(offset).Limit(limit).Find(&novels)
+
+	return novels
 }
 
 func (s SQLite) CountNovel() (count int64) {

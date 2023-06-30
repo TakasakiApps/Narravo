@@ -20,7 +20,7 @@ func toResponsibleAuthorInfo(author *entity.Author) map[string]any {
 	}
 }
 
-var GetAllAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
+func doPaginationAuthorQuery(c *gin.Context, fn func(pageInt int, countInt int) []*entity.Author) {
 	page := c.Query("page")
 	pageInt, err := strutil.Int(page)
 	if err != nil {
@@ -38,7 +38,7 @@ var GetAllAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
 	var authorInfoList []map[string]any
 
 	if pageInt <= maxPage {
-		authors := dao.GetInstance().QueryAuthorsLimit((pageInt-1)*countInt, countInt)
+		authors := fn(pageInt, countInt)
 		for _, author := range authors {
 			authorInfoList = append(authorInfoList, toResponsibleAuthorInfo(author))
 		}
@@ -47,6 +47,12 @@ var GetAllAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]any{
 		"maxPage": maxPage,
 		"list":    authorInfoList,
+	})
+}
+
+var GetAllAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
+	doPaginationAuthorQuery(c, func(pageInt int, countInt int) []*entity.Author {
+		return dao.GetInstance().QueryAuthorsLimit((pageInt-1)*countInt, countInt)
 	})
 }
 
@@ -59,4 +65,14 @@ var GetAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, toResponsibleAuthorInfo(author))
+}
+
+var SearchAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
+	keyword := c.Query("keyword")
+	if keyword == "" {
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException](`query argument "keyword" can't be empty'`)
+	}
+	doPaginationAuthorQuery(c, func(pageInt int, countInt int) []*entity.Author {
+		return dao.GetInstance().SearchAuthorByName(keyword, (pageInt-1)*countInt, countInt)
+	})
 }

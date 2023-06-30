@@ -11,6 +11,7 @@ func registerNovelApi() {
 		handlers.AddNovel,
 	)
 	novelGroup.GET("/getAllInfo", handlers.GetAllNovelInfo)
+	novelGroup.GET("/search", handlers.SearchNovelInfo)
 
 	getGroup := novelGroup.Group(
 		"/get/:novelId",

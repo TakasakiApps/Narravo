@@ -22,7 +22,7 @@ func toResponsibleNovelInfo(novel *entity.Novel) map[string]any {
 	}
 }
 
-var GetAllNovelInfo gin.HandlerFunc = func(c *gin.Context) {
+func doPaginationNovelQuery(c *gin.Context, fn func(pageInt int, countInt int) []*entity.Novel) {
 	page := c.Query("page")
 	pageInt, err := strutil.Int(page)
 	if err != nil {
@@ -40,7 +40,7 @@ var GetAllNovelInfo gin.HandlerFunc = func(c *gin.Context) {
 	var novelInfoList []map[string]any
 
 	if pageInt <= maxPage {
-		novels := dao.GetInstance().QueryNovelsLimit((pageInt-1)*countInt, countInt)
+		novels := fn(pageInt, countInt)
 		for _, novel := range novels {
 			novelInfoList = append(novelInfoList, toResponsibleNovelInfo(novel))
 		}
@@ -49,6 +49,12 @@ var GetAllNovelInfo gin.HandlerFunc = func(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]any{
 		"maxPage": maxPage,
 		"list":    novelInfoList,
+	})
+}
+
+var GetAllNovelInfo gin.HandlerFunc = func(c *gin.Context) {
+	doPaginationNovelQuery(c, func(pageInt int, countInt int) []*entity.Novel {
+		return dao.GetInstance().QueryNovelsLimit((pageInt-1)*countInt, countInt)
 	})
 }
 
@@ -64,6 +70,16 @@ var GetNovelInfo gin.HandlerFunc = func(c *gin.Context) {
 		http.StatusOK,
 		toResponsibleNovelInfo(novel),
 	)
+}
+
+var SearchNovelInfo gin.HandlerFunc = func(c *gin.Context) {
+	keyword := c.Query("keyword")
+	if keyword == "" {
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException](`query argument "keyword" can't be empty'`)
+	}
+	doPaginationNovelQuery(c, func(pageInt int, countInt int) []*entity.Novel {
+		return dao.GetInstance().SearchNovelByName(keyword, (pageInt-1)*countInt, countInt)
+	})
 }
 
 var GetNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
