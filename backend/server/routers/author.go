@@ -11,6 +11,7 @@ func registerAuthorApi() {
 		handlers.AddAuthor,
 	)
 	authorGroup.GET("/getAllInfo", handlers.GetAllAuthorInfo)
+	authorGroup.GET("/search", handlers.SearchAuthorInfo)
 
 	getGroup := authorGroup.Group(
 		"/get/:authorId",

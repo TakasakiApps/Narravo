@@ -43,6 +43,9 @@ type NovelCtrl interface {
 	// QueryNovelById queries a novel from the database by its ID and returns the novel entity.
 	QueryNovelById(novelId string) *entity.Novel
 
+	// SearchNovelByName searches for novels in the database by a keyword, with a certain range of offset and limit, and returns the list of novel entities.
+	SearchNovelByName(keyword string, offset int, limit int) []*entity.Novel
+
 	// CountNovel counts the number of novels in the database and returns the count.
 	CountNovel() (count int64)
 }
@@ -60,6 +63,9 @@ type AuthorCtrl interface {
 
 	// QueryAuthorById retrieves the information of an author based on their ID and returns a pointer to an Author object.
 	QueryAuthorById(authorId string) *entity.Author
+
+	// SearchAuthorByName searches for authors in the database by a keyword, with a certain range of offset and limit, and returns a list of Author objects.
+	SearchAuthorByName(keyword string, offset int, limit int) []*entity.Author
 
 	// CountAuthor counts the number of authors in the database and returns the count.
 	CountAuthor() (count int64)
