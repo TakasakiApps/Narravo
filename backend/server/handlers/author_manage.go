@@ -61,3 +61,15 @@ var UpdateAuthorInfo gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("update author failed")
 	}
 }
+
+var DeleteAuthor gin.HandlerFunc = func(c *gin.Context) {
+	authorId := c.Param("authorId")
+
+	effected := dao.GetInstance().DeleteAuthorById(authorId)
+
+	if effected == -1 {
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException](fmt.Sprintf("author<%s> not found", authorId))
+	}
+
+	c.Status(http.StatusOK)
+}

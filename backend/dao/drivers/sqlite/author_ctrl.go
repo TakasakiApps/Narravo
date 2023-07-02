@@ -48,3 +48,13 @@ func (s SQLite) CountAuthor() (count int64) {
 	s.GetInstance().Table(entity.AuthorTable).Count(&count)
 	return
 }
+
+func (s SQLite) DeleteAuthorById(id string) int64 {
+	author := s.QueryAuthorById(id)
+	if author == nil {
+		return -1
+	}
+	result := s.GetInstance().Table(entity.AuthorTable).Delete(author)
+
+	return result.RowsAffected
+}

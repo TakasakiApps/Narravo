@@ -48,3 +48,13 @@ func (s SQLite) CountNovel() (count int64) {
 	s.GetInstance().Table(entity.NovelTable).Count(&count)
 	return
 }
+
+func (s SQLite) DeleteNovelById(id string) int64 {
+	novel := s.QueryNovelById(id)
+	if novel == nil {
+		return -1
+	}
+	result := s.GetInstance().Table(entity.NovelTable).Delete(novel)
+
+	return result.RowsAffected
+}

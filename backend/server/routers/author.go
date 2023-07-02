@@ -10,14 +10,20 @@ func registerAuthorApi() {
 		handlers.CheckAdminPermissionComponent,
 		handlers.AddAuthor,
 	)
-	authorGroup.GET("/getAllInfo", handlers.GetAllAuthorInfo)
 	authorGroup.GET("/search", handlers.SearchAuthorInfo)
+
+	deleteGroup := authorGroup.Group(
+		"delete/:authorId",
+		handlers.AuthorIdCheckerComponent,
+	)
+	deleteGroup.GET("/", handlers.DeleteAuthor)
 
 	getGroup := authorGroup.Group(
 		"/get/:authorId",
 		handlers.AuthorIdCheckerComponent,
 	)
 	getGroup.GET("/info", handlers.GetAuthorInfo)
+	getGroup.GET("/allInfo", handlers.GetAllAuthorInfo)
 
 	updateGroup := authorGroup.Group(
 		"/update/:authorId",
