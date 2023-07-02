@@ -10,14 +10,20 @@ func registerNovelApi() {
 		handlers.CheckAdminPermissionComponent,
 		handlers.AddNovel,
 	)
-	novelGroup.GET("/getAllInfo", handlers.GetAllNovelInfo)
 	novelGroup.GET("/search", handlers.SearchNovelInfo)
+
+	deleteGroup := novelGroup.Group(
+		"/delete/:novelId",
+		handlers.NovelIdCheckerComponent,
+	)
+	deleteGroup.GET("/", handlers.DeleteNovel)
 
 	getGroup := novelGroup.Group(
 		"/get/:novelId",
 		handlers.NovelIdCheckerComponent,
 	)
 	getGroup.GET("/info", handlers.GetNovelInfo)
+	getGroup.GET("/allInfo", handlers.GetAllNovelInfo)
 	getGroup.GET("/catalog", handlers.GetNovelCatalog)
 	getGroup.GET("/chapter", handlers.GetNovelChapter)
 

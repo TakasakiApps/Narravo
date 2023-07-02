@@ -131,3 +131,14 @@ var UpdateNovelChapter gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("update chapter failed")
 	}
 }
+
+var DeleteNovel gin.HandlerFunc = func(c *gin.Context) {
+	novelId := c.Param("novelId")
+
+	effected := dao.GetInstance().DeleteNovelById(novelId)
+	if effected == -1 {
+		exceptiongo.QuickThrowMsg[types.ServerBadRequestException](fmt.Sprintf("novel<%s> not found", novelId))
+	}
+
+	c.Status(http.StatusOK)
+}

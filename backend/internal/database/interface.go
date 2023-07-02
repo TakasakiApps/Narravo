@@ -48,6 +48,9 @@ type NovelCtrl interface {
 
 	// CountNovel counts the number of novels in the database and returns the count.
 	CountNovel() (count int64)
+
+	// DeleteNovelById deletes a novel from the database based on its ID and returns the number of affected rows.
+	DeleteNovelById(id string) int64
 }
 
 // AuthorCtrl management for Author
@@ -69,6 +72,9 @@ type AuthorCtrl interface {
 
 	// CountAuthor counts the number of authors in the database and returns the count.
 	CountAuthor() (count int64)
+
+	// DeleteAuthorById deletes an author from the database based on their ID and returns the number of affected rows.
+	DeleteAuthorById(id string) int64
 }
 
 // IdRecordCtrl management for IdRecord
