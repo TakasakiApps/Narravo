@@ -11,6 +11,7 @@ func registerNovelApi() {
 		handlers.AddNovel,
 	)
 	novelGroup.GET("/search", handlers.SearchNovelInfo)
+	novelGroup.GET("/getAllInfo", handlers.GetAllNovelInfo)
 
 	deleteGroup := novelGroup.Group(
 		"/delete/:novelId",
@@ -23,7 +24,6 @@ func registerNovelApi() {
 		handlers.NovelIdCheckerComponent,
 	)
 	getGroup.GET("/info", handlers.GetNovelInfo)
-	getGroup.GET("/allInfo", handlers.GetAllNovelInfo)
 	getGroup.GET("/catalog", handlers.GetNovelCatalog)
 	getGroup.GET("/chapter", handlers.GetNovelChapter)
 

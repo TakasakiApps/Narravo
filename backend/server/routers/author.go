@@ -11,6 +11,7 @@ func registerAuthorApi() {
 		handlers.AddAuthor,
 	)
 	authorGroup.GET("/search", handlers.SearchAuthorInfo)
+	authorGroup.GET("/getAllInfo", handlers.GetAllAuthorInfo)
 
 	deleteGroup := authorGroup.Group(
 		"delete/:authorId",
@@ -23,7 +24,6 @@ func registerAuthorApi() {
 		handlers.AuthorIdCheckerComponent,
 	)
 	getGroup.GET("/info", handlers.GetAuthorInfo)
-	getGroup.GET("/allInfo", handlers.GetAllAuthorInfo)
 
 	updateGroup := authorGroup.Group(
 		"/update/:authorId",
