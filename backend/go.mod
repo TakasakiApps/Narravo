@@ -7,6 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v4 v4.5.0
 	github.com/gookit/goutil v0.6.8
 	github.com/gookit/slog v0.5.1
+	github.com/mergermarket/go-pkcs7 v0.0.0-20170926155232-153b18ea13c9
 	github.com/ohanakogo/exceptiongo v0.0.3
 	github.com/ohanakogo/ohanakoutilgo v0.0.3
 	github.com/valyala/bytebufferpool v1.0.0

@@ -10,16 +10,18 @@ import (
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/internal/utils"
 	"github.com/gin-gonic/gin"
-	"github.com/gookit/goutil/strutil"
 	"github.com/ohanakogo/exceptiongo"
 	"github.com/ohanakogo/exceptiongo/pkg/etype"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 // DataExpireTime If data is sent for processing, and it takes more than 5000 milliseconds, it will be considered as expired data.
 // Therefore, the data will be discarded without any further processing of the request.
-const DataExpireTime = 5000
+const DataExpireTime = 10000
+
+const KeyDict = "abcdefghijklmnopqrstuvwxyz0123456789"
 
 func getVerificationComponent() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -35,46 +37,36 @@ func getVerificationComponent() gin.HandlerFunc {
 			}
 		}).Deploy()
 
-		verifyBase := func(data string, integrityKey string) {
-			// Store key to decrypt data
-			var dataKey string
-
-			// Iterate over a range of timestamps, starting from the current timestamp in milliseconds
-			// and going back by DataExpireTime milliseconds
-			for i := timeStampMilli - DataExpireTime; i <= timeStampMilli; i++ {
-				// Generate a MD5 key based on the current timestamp
-				key := utils.MD5(fmt.Sprintf("%v", i))
-
-				// Create a new AES cipher using the key
-				aesCipher, _ := utils.NewAesCipher(key)
-
-				// Decrypt the verification data using the cipher
-				decrypt, err := aesCipher.Decrypt(integrityKey)
-				if err != nil {
-					continue
-				}
-
-				global.GetLogger().Infof("The data sent from %vms ago is valid", timeStampMilli-i)
-
-				// If the data was successfully decrypted, store the decryption key
-				dataKey = decrypt
-
-				break
-			}
-
-			// Check if the dataKey is empty
-			if strutil.IsEmpty(dataKey) {
-				// If it's empty, create a new RequestDataExpiredException and return error response to client
+		verifyBase := func(data string, integrityKey string, requestTimestamp string) {
+			requestTimestampInt, _ := strconv.ParseInt(requestTimestamp, 10, 64)
+			if timeStampMilli-requestTimestampInt > DataExpireTime {
 				exceptiongo.QuickThrowMsg[types.RequestDataExpiredException](
 					fmt.Sprintf("Request data expired %v milliseconds ago and has been discarded", DataExpireTime),
 				)
 			}
 
+			requestTimestampKey := utils.MD5(requestTimestamp)
+			aesCipher, _ := utils.NewAesCipher(requestTimestampKey)
+
+			dataKey, err := aesCipher.Decrypt(integrityKey)
+			if err != nil || !func() bool {
+				for _, char := range dataKey {
+					if !strings.Contains(KeyDict, string(char)) {
+						return false
+					}
+				}
+				return true
+			}() {
+				exceptiongo.QuickThrowMsg[types.RuntimeException]("failed to decrypt data, request may sent by unofficial client")
+			}
+
+			global.GetLogger().Infof("The data sent from %vms ago is valid", timeStampMilli-requestTimestampInt)
+
 			// Initialize an empty map for dataJsonResult
 			dataJsonResult := make(map[string]any)
 
 			// Create a new AES cipher using the provided dataKey
-			aesCipher, err := utils.NewAesCipher(dataKey)
+			aesCipher, err = utils.NewAesCipher(dataKey)
 			exceptiongo.QuickThrow[types.RuntimeException](err)
 
 			// Decrypt the data using the created cipher
@@ -97,11 +89,12 @@ func getVerificationComponent() gin.HandlerFunc {
 		case c.Request.Method == http.MethodGet || strings.Contains(c.FullPath(), "/assets/upload"):
 			verifyData.Data = c.Query("data")
 			verifyData.IntegrityKey = c.Query("integrityKey")
+			verifyData.Timestamp = c.Query("timestamp")
 		case c.Request.Method == http.MethodPost:
 			// Bind the JSON data from the request body to the verifyData struct
 			err := c.ShouldBindJSON(&verifyData)
 			exceptiongo.QuickThrow[types.JsonUnmarshalFailedException](err)
 		}
-		verifyBase(verifyData.Data, verifyData.IntegrityKey)
+		verifyBase(verifyData.Data, verifyData.IntegrityKey, verifyData.Timestamp)
 	}
 }
