@@ -1,13 +1,14 @@
 package utils
 
 import (
-	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
-	"encoding/base64"
+	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/mergermarket/go-pkcs7"
+	"io"
 )
 
 type AesCipher struct {
@@ -21,71 +22,55 @@ func NewAesCipher(key string) (*AesCipher, error) {
 	return &AesCipher{[]byte(key)}, nil
 }
 
-func (c *AesCipher) Encrypt(plaintext string) (string, error) {
-	block, err := aes.NewCipher(c.key)
+// Encrypt encrypts plain text string into cipher text string
+func (ac AesCipher) Encrypt(unencrypted string) (string, error) {
+	plainText := []byte(unencrypted)
+	plainText, err := pkcs7.Pad(plainText, aes.BlockSize)
+	if err != nil {
+		return "", fmt.Errorf(`plainText: "%s" has error`, plainText)
+	}
+	if len(plainText)%aes.BlockSize != 0 {
+		err := fmt.Errorf(`plainText: "%s" has the wrong block size`, plainText)
+		return "", err
+	}
+
+	block, err := aes.NewCipher(ac.key)
 	if err != nil {
 		return "", err
 	}
 
-	blockSize := block.BlockSize()
-	plaintextBytes := PKCS5Padding([]byte(plaintext), blockSize)
-
-	iv := make([]byte, blockSize)
-	if _, err = rand.Read(iv); err != nil {
+	cipherText := make([]byte, aes.BlockSize+len(plainText))
+	iv := cipherText[:aes.BlockSize]
+	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 		return "", err
 	}
 
 	mode := cipher.NewCBCEncrypter(block, iv)
-	ciphertextBytes := make([]byte, len(plaintextBytes))
-	mode.CryptBlocks(ciphertextBytes, plaintextBytes)
+	mode.CryptBlocks(cipherText[aes.BlockSize:], plainText)
 
-	resultBytes := make([]byte, len(ciphertextBytes)+blockSize)
-	copy(resultBytes[:blockSize], iv)
-	copy(resultBytes[blockSize:], ciphertextBytes)
-	return base64.StdEncoding.EncodeToString(resultBytes), nil
+	return fmt.Sprintf("%x", cipherText), nil
 }
 
-func (c *AesCipher) Decrypt(ciphertext string) (decrypt string, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			decrypt = ""
-			err = fmt.Errorf("%v", r)
-		}
-	}()
-	ciphertextBytes, err := base64.StdEncoding.DecodeString(ciphertext)
+func (ac AesCipher) Decrypt(encrypted string) (string, error) {
+	cipherText, _ := hex.DecodeString(encrypted)
+
+	block, err := aes.NewCipher(ac.key)
 	if err != nil {
-		return "", err
+		panic(err)
 	}
 
-	blockSize := aes.BlockSize
-	if len(ciphertextBytes) < 2*blockSize {
-		return "", errors.New("ciphertext too short")
+	if len(cipherText) < aes.BlockSize {
+		panic("cipherText too short")
 	}
-
-	iv := ciphertextBytes[:blockSize]
-	ciphertextBytes = ciphertextBytes[blockSize:]
-
-	block, err := aes.NewCipher(c.key)
-	if err != nil {
-		return "", err
+	iv := cipherText[:aes.BlockSize]
+	cipherText = cipherText[aes.BlockSize:]
+	if len(cipherText)%aes.BlockSize != 0 {
+		panic("cipherText is not a multiple of the block size")
 	}
 
 	mode := cipher.NewCBCDecrypter(block, iv)
-	plaintextBytes := make([]byte, len(ciphertextBytes))
-	mode.CryptBlocks(plaintextBytes, ciphertextBytes)
+	mode.CryptBlocks(cipherText, cipherText)
 
-	plaintextBytes = PKCS5UnPadding(plaintextBytes)
-	return string(plaintextBytes), nil
-}
-
-func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
-	padding := blockSize - len(ciphertext)%blockSize
-	padText := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(ciphertext, padText...)
-}
-
-func PKCS5UnPadding(plaintext []byte) []byte {
-	length := len(plaintext)
-	unPadding := int(plaintext[length-1])
-	return plaintext[:(length - unPadding)]
+	cipherText, _ = pkcs7.Unpad(cipherText, aes.BlockSize)
+	return fmt.Sprintf("%s", cipherText), nil
 }
