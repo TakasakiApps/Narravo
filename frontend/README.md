@@ -1,73 +1,75 @@
-# electron-vite-vue
+<div align="center"> 
 
-🥳 Really simple `Electron` + `Vue` + `Vite` boilerplate.
+# Electron Vue Template
+  
+<img width="794" alt="image" src="https://user-images.githubusercontent.com/32544586/222748627-ee10c9a6-70d2-4e21-b23f-001dd8ec7238.png">
 
-<!-- [![awesome-vite](https://awesome.re/mentioned-badge.svg)](https://github.com/vitejs/awesome-vite) -->
-<!-- [![Netlify Status](https://api.netlify.com/api/v1/badges/ae3863e3-1aec-4eb1-8f9f-1890af56929d/deploy-status)](https://app.netlify.com/sites/electron-vite/deploys) -->
-<!-- [![GitHub license](https://img.shields.io/github/license/caoxiemeihao/electron-vite-vue)](https://github.com/electron-vite/electron-vite-vue/blob/main/LICENSE) -->
-<!-- [![GitHub stars](https://img.shields.io/github/stars/caoxiemeihao/electron-vite-vue?color=fa6470)](https://github.com/electron-vite/electron-vite-vue) -->
-<!-- [![GitHub forks](https://img.shields.io/github/forks/caoxiemeihao/electron-vite-vue)](https://github.com/electron-vite/electron-vite-vue) -->
-[![GitHub Build](https://github.com/electron-vite/electron-vite-vue/actions/workflows/build.yml/badge.svg)](https://github.com/electron-vite/electron-vite-vue/actions/workflows/build.yml)
-[![GitHub Discord](https://img.shields.io/badge/chat-discord-blue?logo=discord)](https://discord.gg/sRqjYpEAUK)
+A simple starter template for a **Vue3** + **Electron** TypeScript based application, including **ViteJS** and **Electron Builder**.
+</div>
 
-## Features
+## About
 
-📦 Out of the box  
-🎯 Based on the official [template-vue-ts](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts), less invasive  
-🌱 Extensible, really simple directory structure  
-💪 Support using Node.js API in Electron-Renderer  
-🔩 Support C/C++ native addons  
-🖥 It's easy to implement multiple windows  
+This template utilizes [ViteJS](https://vitejs.dev) for building and serving your (Vue powered) front-end process, it provides Hot Reloads (HMR) to make development fast and easy ⚡ 
 
-## Quick Start
+Building the Electron (main) process is done with [Electron Builder](https://www.electron.build/), which makes your application easily distributable and supports cross-platform compilation 😎
 
-```sh
-npm create electron-vite
+## Getting started
+
+Click the green **Use this template** button on top of the repository, and clone your own newly created repository.
+
+**Or..**
+
+Clone this repository: `git clone git@github.com:Deluze/electron-vue-template.git`
+
+
+### Install dependencies ⏬
+
+```bash
+npm install
 ```
 
-<!-- [![quick-start](https://asciinema.org/a/483731.svg)](https://asciinema.org/a/483731) -->
+### Start developing ⚒️
 
-![electron-vite-vue.gif](/electron-vite-vue.gif)
-
-## Debug
-
-![electron-vite-react-debug.gif](https://github.com/electron-vite/electron-vite-react/blob/main/electron-vite-react-debug.gif?raw=true)
-
-## Directory
-
-```diff
-+ ├─┬ electron
-+ │ ├─┬ main
-+ │ │ └── index.ts    entry of Electron-Main
-+ │ └─┬ preload
-+ │   └── index.ts    entry of Preload-Scripts
-  ├─┬ src
-  │ └── main.ts       entry of Electron-Renderer
-  ├── index.html
-  ├── package.json
-  └── vite.config.ts
+```bash
+npm run dev
 ```
 
-<!--
-## Be aware
+## Additional Commands
 
-🚨 By default, this template integrates Node.js in the Renderer process. If you don't need it, you just remove the option below. [Because it will modify the default config of Vite](https://github.com/electron-vite/vite-plugin-electron-renderer#config-presets-opinionated).
+```bash
+npm run dev # starts application with hot reload
+npm run build # builds application, distributable files can be found in "dist" folder
 
-```diff
-# vite.config.ts
+# OR
 
-export default {
-  plugins: [
--   // Use Node.js API in the Renderer-process
--   renderer({
--     nodeIntegration: true,
--   }),
-  ],
-}
+npm run build:win # uses windows as build target
+npm run build:mac # uses mac as build target
+npm run build:linux # uses linux as build target
 ```
--->
 
-## FAQ
+Optional configuration options can be found in the [Electron Builder CLI docs](https://www.electron.build/cli.html).
+## Project Structure
 
-- [C/C++ addons, Node.js modules - Pre-Bundling](https://github.com/electron-vite/vite-plugin-electron-renderer#dependency-pre-bundling)
-- [dependencies vs devDependencies](https://github.com/electron-vite/vite-plugin-electron-renderer#dependencies-vs-devdependencies)
+```bash
+- scripts/ # all the scripts used to build or serve your application, change as you like.
+- src/
+  - main/ # Main thread (Electron application source)
+  - renderer/ # Renderer thread (VueJS application source)
+```
+
+## Using static files
+
+If you have any files that you want to copy over to the app directory after installation, you will need to add those files in your `src/main/static` directory.
+
+#### Referencing static files from your main process
+
+```ts
+/* Assumes src/main/static/myFile.txt exists */
+
+import {app} from 'electron';
+import {join} from 'path';
+import {readFileSync} from 'fs';
+
+const path = join(app.getAppPath(), 'static', 'myFile.txt');
+const buffer = readFileSync(path);
+```
