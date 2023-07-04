@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import './style.css';
 import App from './App.vue'
 import router from './router'
+//axios全局配置文件
+import '../network/axios.config'
 // 右键插件
 import contextmenu from "v-contextmenu"
 import "v-contextmenu/dist/themes/default.css"

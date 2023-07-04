@@ -1,5 +1,5 @@
 <template>
-  <div class="book-liem-main ">
+  <div class="book-liem-main "  v-contextmenu:bookshelf>
     <div class="book-img box-margin">
       <img src="../../assets/猫猫.png" alt="" class="book-img-main 
       shadow-effect 
@@ -20,23 +20,22 @@
           </el-tag>
         </div>
       </div>
-      
-
-
     </div>
-    <el-tooltip content="加入书架" placement="bottom">
+    <!-- <el-tooltip content="加入书架" placement="bottom">
       <el-button class="book-liem-Brief">
         <el-icon size="25"><Plus /></el-icon>
       </el-button>
-    </el-tooltip>
-    
+    </el-tooltip> -->
   </div>
+  <v-contextmenu ref="bookshelf" class="bookshelf">
+    <v-contextmenu-item><span>加入书架</span></v-contextmenu-item>
+  </v-contextmenu>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
-import {Plus} from '@element-plus/icons-vue'
+// import {Plus} from '@element-plus/icons-vue'
 const router: any = useRouter()
 const props = defineProps({
   id: Number,
@@ -66,6 +65,8 @@ const props = defineProps({
 </script>
 
 <style scoped>
+
+
 .box-margin {
   margin-top: 1.25rem;
   margin-left: 3rem;
@@ -74,16 +75,17 @@ const props = defineProps({
 .book-liem-main {
   display: block;
   height: 200px;
-  border-bottom: 1px solid black;
+  /* border-bottom: 1px solid black; */
   max-width: 900px;
   margin: 10px auto;
   transition: box-shadow 0.5s ease-in-out;
+  border-radius: 25px;
 }
 
 .book-liem-main:hover {
   box-shadow: 1px 1px 6px 8px #ccc;
   /* border: 1px solid black; */
-  
+
 }
 
 .tag-box {
@@ -96,11 +98,13 @@ const props = defineProps({
   display: inline-flex;
   float: left;
   max-height: 200px;
-  box-shadow: 1px 1px 5px 5px #ccc;
+  /* box-shadow: 1px 1px 5px 5px #ccc; */
+  
+  
 }
 
 .book-img-main {
-  width: 150px;
+  width: 150px;border-radius: 25px;
 }
 
 .book-main {
@@ -117,14 +121,16 @@ const props = defineProps({
 .book-liem-inln {
   display: inline;
 }
-.book-liem-Brief{
-  background-color: rgba(255,255,255,0);
+
+.book-liem-Brief {
+  background-color: rgba(255, 255, 255, 0);
   border: none;
   float: right;
   display: block;
-  
+
 }
-.el-icon:hover{
+
+.el-icon:hover {
   animation: up 1s;
 }
 
@@ -138,13 +144,17 @@ const props = defineProps({
   margin-right: 1rem;
 }
 
-h5{
+h5 {
   opacity: 0.5;
 }
 
 @keyframes up {
-  from {transform: rotate(0deg);}
+  from {
+    transform: rotate(0deg);
+  }
 
-  to {transform: rotate(360deg);}
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

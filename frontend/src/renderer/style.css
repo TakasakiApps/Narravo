@@ -4,7 +4,7 @@ body {
   padding: auto;
   margin: 0;
   height: 100%;
-  
+  user-select: none;
   
 }
 #app{
@@ -14,7 +14,7 @@ body {
 /* :root {
   color-scheme: light dark;
 } */
-html.dark .el-aside,.titles{
+html.dark .el-aside .titles{
   background-color: rgb(39, 34, 34) !important;
 }
 
