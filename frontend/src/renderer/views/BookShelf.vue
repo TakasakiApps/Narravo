@@ -28,7 +28,7 @@
       </el-card>
     </div>
   </div>
-  <v-contextmenu ref="contextmenu">
+  <v-contextmenu ref="contextmenu" class="caidan1">
     <v-contextmenu-item><span>菜单1</span></v-contextmenu-item>
     <v-contextmenu-item><span>菜单2</span></v-contextmenu-item>
     <v-contextmenu-item><span>菜单3</span></v-contextmenu-item>
@@ -101,23 +101,22 @@ const props = {
 }
 </script>
     
-<style>
-/* 菜单淡入淡出动画 */
+<style >
 .v-contextmenu {
-  height: 200px;
-  width: 150px;
+  /* height: 200px; */
+  width: 100px;
   animation: tanchu 0.2s;
 }
-
+/* 菜单淡入淡出动画 */
 @keyframes tanchu {
   from {
     width: 0;
-    height: 0;
+    
   }
 
   to {
-    height: 200px;
-    width: 150px;
+    
+    width: 100px;
   }
 }
 </style>
@@ -208,4 +207,5 @@ div.item-card{
 .time {
   margin-top: -20px;
 }
+
 </style>
