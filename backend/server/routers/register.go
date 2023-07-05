@@ -8,4 +8,5 @@ func Register() {
 	registerAuthorApi()
 	registerNovelApi()
 	registerAssetsApi()
+	registerSensitiveApi()
 }
