@@ -17,3 +17,4 @@ app.use(router)
 .use(contextmenu)
 .use(VueMasonryPlugin)
 .mount('#app');
+// .$nextTick(() => postMessage({ payload: 'removeLoading' }, '*'))

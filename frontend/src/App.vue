@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="common-layout">
     <el-container>
       <el-aside width="80px">
@@ -153,4 +153,18 @@ $icon-color: #ccc;
   to{width: 68px; height: 68px;}
 }
 </style>
+ -->
 
+
+
+ <template>
+    <h1>hello world</h1>
+ </template>
+  
+ <script setup lang='ts'>
+  
+ </script>
+  
+ <style>
+  
+ </style>
