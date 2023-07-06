@@ -90,7 +90,20 @@ var GetNovelCatalog gin.HandlerFunc = func(c *gin.Context) {
 		exceptiongo.QuickThrowMsg[types.ServerBadRequestException](fmt.Sprintf("assets error: catalog not found"))
 	}
 
-	c.JSON(http.StatusOK, catalog)
+	var chapters []map[string]any
+	for _, chapter := range catalog.Chapters {
+		chapterContent, _ := assets.ReadChapter(novelId, chapter.ChapterId)
+		chapterName := strutil.FirstLine(chapterContent)
+		chapters = append(chapters, map[string]any{
+			"name":        chapter.Name,
+			"chapterId":   chapter.ChapterId,
+			"chapterName": chapterName,
+		})
+	}
+
+	c.JSON(http.StatusOK, map[string]any{
+		"chapters": chapters,
+	})
 }
 
 var GetNovelChapter gin.HandlerFunc = func(c *gin.Context) {
