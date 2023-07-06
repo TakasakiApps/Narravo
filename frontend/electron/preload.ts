@@ -88,9 +88,5 @@ domReady().then(appendLoading)
 window.onmessage = ev => {
   ev.data.payload === 'removeLoading' && removeLoading()
 }
-import { contextBridge, ipcRenderer } from "electron";
 
-contextBridge.exposeInMainWorld("electron", {
-  ipcRenderer,
-});
 setTimeout(removeLoading, 4999)

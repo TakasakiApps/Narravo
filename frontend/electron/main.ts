@@ -1,4 +1,4 @@
-import { app, BrowserWindow, nativeTheme , ipcMain} from 'electron'
+import { app, BrowserWindow,ipcMain,nativeTheme } from 'electron'
 import path from 'node:path'
 
 // The built directory structure
@@ -20,25 +20,35 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
   win = new BrowserWindow({
+    width:800,
+    height:700,
+    minHeight:600,
     icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-        nodeIntegration: true,
+      nodeIntegration: true,
         contextIsolation:false
     },
   })
-  ipcMain.handle('dark-mode:toggle', () => {
-    if (nativeTheme.shouldUseDarkColors) {
-      nativeTheme.themeSource = 'light'
-    } else {
-      nativeTheme.themeSource = 'dark'
-    }
-    return nativeTheme.shouldUseDarkColors
+  ipcMain.handle("dark", () => {
     
+      nativeTheme.themeSource = 'dark'
+    
+
+    return nativeTheme.themeSource;
+  });
+  ipcMain.handle('light',()=>{
+    nativeTheme.themeSource = 'light'
+    return nativeTheme.themeSource
   })
-  ipcMain.handle('dark-mode:system', () => {
-    nativeTheme.themeSource = 'system'
-  })
+  // 设置APP主题模式
+  // ipcMain.handle("dark-mode:change", (_, type: "system" | "light" | "dark") => {
+  //   nativeTheme.themeSource = type;
+  //   return nativeTheme.themeSource;
+    
+  // });
+  
+ 
   // Test active push message to Renderer-process.
   win.webContents.on('did-finish-load', () => {
     win?.webContents.send('main-process-message', (new Date).toLocaleString())

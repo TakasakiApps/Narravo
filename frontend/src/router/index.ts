@@ -11,6 +11,8 @@ import BookShelf from '../views/BookShelf.vue'
 import Writer from '../views/Writer.vue'
 import Setting from '../views/Setting.vue'
 import Search from '../views/Search.vue'
+import Bookinfo from '../views/Bookinfo.vue'
+import Addrole from '../views/Addrole.vue'
 //2.
 const routes = [
     {
@@ -28,6 +30,14 @@ const routes = [
     {
         path:'/search',
         component: Search
+    },
+    {
+        path:'/info',
+        component:Bookinfo
+    },
+    {
+        path:'/role',
+        component:Addrole
     }
     
 

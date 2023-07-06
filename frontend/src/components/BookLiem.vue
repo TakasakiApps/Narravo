@@ -1,7 +1,7 @@
 <template>
   <div class="book-liem-main "  v-contextmenu:bookshelf>
     <div class="book-img box-margin">
-      <img src="../../assets/猫猫.png" alt="" class="book-img-main 
+      <img src="../assets/猫猫.png" alt="" class="book-img-main 
       shadow-effect 
       no-select 
       no-drag
@@ -34,6 +34,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+
 import { ref } from 'vue'
 // import {Plus} from '@element-plus/icons-vue'
 const router: any = useRouter()

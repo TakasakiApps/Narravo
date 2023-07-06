@@ -7,7 +7,7 @@
     </div>
     <el-button round type="danger" size="large">导入</el-button>
   </div>
-  <div  v-masonry transition-duration="0.3s" item-selector=".item-card" class="body" fit-width="true" gutter="20" >
+  <div  v-masonry transition-duration="0.3s" item-selector=".item-card"  fit-width="true" gutter="20" class="body">
     <div v-masonry-tile class="item-card"  v-for="item in 6" >
       <el-card :body-style="{ padding: '0px' }" v-contextmenu:contextmenu shadow="hover" >
         <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
@@ -28,10 +28,10 @@
       </el-card>
     </div>
   </div>
-  <v-contextmenu ref="contextmenu" class="caidan1">
-    <v-contextmenu-item><span>菜单1</span></v-contextmenu-item>
+  <v-contextmenu ref="contextmenu" >
+    <v-contextmenu-item><span>书籍详情</span></v-contextmenu-item>
     <v-contextmenu-item><span>菜单2</span></v-contextmenu-item>
-    <v-contextmenu-item><span>菜单3</span></v-contextmenu-item>
+    
   </v-contextmenu>
 </template>
     
@@ -93,6 +93,28 @@ const options = [
         label: '有线'
       }
     ]
+  },
+  {
+    value:'',
+    label:'类型',
+    children:[
+      {
+        value:'',
+        label:'玄幻'
+      },
+      {
+        value:'',
+        label:'修仙'
+      },
+      {
+        value:'',
+        label:'武侠'
+      },
+      {
+        value:'',
+        label:'都市'
+      },
+    ]
   }
 ]
 //设置多选
@@ -111,11 +133,9 @@ const props = {
 @keyframes tanchu {
   from {
     width: 0;
-    
   }
 
   to {
-    
     width: 100px;
   }
 }
@@ -149,6 +169,9 @@ const props = {
 
   :deep(.el-input__wrapper:focus) {
     box-shadow: none;
+  }
+  :deep(.el-cascader__tags){
+    flex-wrap: nowrap !important;
   }
 }
 
