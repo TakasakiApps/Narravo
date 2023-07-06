@@ -24,4 +24,8 @@ type (
 
 	JWTSignFailedException  any
 	JWTParseFailedException any
+
+	TencentCloudApiKeyOrSecretInvalidException any
+	TTSModelNotFoundException                  any
+	TencentCloudSDKErrorException              any
 )
