@@ -5,11 +5,16 @@ go 1.20
 require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
+	github.com/google/uuid v1.3.0
 	github.com/gookit/goutil v0.6.8
 	github.com/gookit/slog v0.5.1
+	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b
+	github.com/joho/godotenv v1.5.1
 	github.com/mergermarket/go-pkcs7 v0.0.0-20170926155232-153b18ea13c9
 	github.com/ohanakogo/exceptiongo v0.0.3
 	github.com/ohanakogo/ohanakoutilgo v0.0.3
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.695
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tts v1.0.695
 	github.com/valyala/bytebufferpool v1.0.0
 	gorm.io/driver/sqlite v1.5.1
 	gorm.io/gorm v1.25.1
@@ -25,13 +30,10 @@ require (
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/google/uuid v1.3.0 // indirect
 	github.com/gookit/color v1.5.3 // indirect
 	github.com/gookit/gsr v0.0.8 // indirect
-	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/joho/godotenv v1.5.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect
@@ -41,8 +43,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/ohanakogo/errhandlergo v0.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.7 // indirect
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.695 // indirect
-	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tts v1.0.695 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
