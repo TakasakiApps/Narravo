@@ -7,8 +7,10 @@
     </div>
     <el-button round type="danger" size="large">导入</el-button>
   </div>
-  <div  v-masonry transition-duration="0.3s" item-selector=".item-card"  fit-width="true" gutter="20" class="body">
-    <div v-masonry-tile class="item-card"  v-for="item in 6" >
+  <div style="height:640px">
+    <el-scrollbar height="600px">
+    <div  v-masonry transition-duration="0.3s" item-selector=".item-card"  fit-width="true" gutter="20" class="body">
+    <div v-masonry-tile class="item-card"  v-for="item in 12" >
       <el-card :body-style="{ padding: '0px' }" v-contextmenu:contextmenu shadow="hover" >
         <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
           class="image" />
@@ -28,6 +30,11 @@
       </el-card>
     </div>
   </div>
+  </el-scrollbar>
+  </div>
+
+  
+  
   <v-contextmenu ref="contextmenu" >
     <v-contextmenu-item><span>书籍详情</span></v-contextmenu-item>
     <v-contextmenu-item><span>菜单2</span></v-contextmenu-item>
@@ -230,5 +237,9 @@ div.item-card{
 .time {
   margin-top: -20px;
 }
-
+html.dark .titles{
+  
+  animation: asideBackground 1.5s ;
+  background-color: rgb(67, 63, 63);
+}
 </style>

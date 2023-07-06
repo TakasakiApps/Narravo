@@ -15,13 +15,9 @@ body {
   color-scheme: light dark;
 } */
 
-html.dark body  .titles{
-  
-  animation: asideBackground 1.5s ;
-  background-color: rgb(18,18,18);
-}
+
 html.dark{
-  animation: asideBackground 1.5s 
+  animation: Darks 1.5s 
 }
 html.light{
   animation: lightBackground 1.5s;
@@ -52,9 +48,13 @@ html.light{
   from{width: 130px;}
   to{width: 150px;}
 }
-@keyframes asideBackground {
+@keyframes Darks{
   from{background:#eeecec ;}
   to{background:rgb(18,18,18)}
+}
+@keyframes asideBackground {
+  from{background:#eeecec ;}
+  to{background:rgb(67, 63, 63)}
 }
 @keyframes lightBackground{
   from{background:rgb(18,18,18)}

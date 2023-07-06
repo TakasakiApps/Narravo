@@ -13,10 +13,10 @@
         </el-form-item>
 
     </el-form> -->
-    <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']" >
+    <!-- <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']" >
         <span class="sun"><font-awesome-icon :icon="['fas', 'sun']" /></span>
         <span class="moon"><font-awesome-icon :icon="['fas', 'moon']" /></span>
-    </div>
+    </div> -->
 </template>
     
 <script setup lang='ts'>
@@ -25,12 +25,12 @@ import { ipcRenderer } from 'electron'
 import { useColorMode } from "@vueuse/core";
 // import { useElementPlusTheme } from "../hooks/useElementPlusTheme";
 
-const mode = useColorMode({
-    // 如果模式为auto也需要回显回auto
-    emitAuto: true,
-    // 默认模式先默认auto,后续通过Electorn拿到当前App主题
-    initialValue: "auto",
-});
+// const mode = useColorMode({
+//     // 如果模式为auto也需要回显回auto
+//     emitAuto: true,
+//     // 默认模式先默认auto,后续通过Electorn拿到当前App主题
+//     initialValue: "auto",
+// });
 
 
 //修改颜色主题
