@@ -30,11 +30,21 @@
           </button>
         </div>
         <div class="iconBox">
-          <button class="icon" :class="[btnmenu == 3 ? 'btn' : '']" @click="btnmenuClick(3,'/role')">
-            <el-icon size="36"><Stamp /></el-icon>
+          <button class="icon" :class="[btnmenu == 3 ? 'btn' : '']" @click="btnmenuClick(3, '/role')">
+            <el-icon size="36">
+              <Stamp />
+            </el-icon>
           </button>
         </div>
+        <div class="iconBox">
+          
+        </div>
+<div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']">
+            <span class="sun"><font-awesome-icon :icon="['fas', 'sun']" /></span>
+            <span class="moon"><font-awesome-icon :icon="['fas', 'moon']" /></span>
+          </div>
         <div class="setBox">
+          
           <button class="set" :class="[btnmenu == 4 ? 'btn' : '']" @click="btnmenuClick(4, '/setting')">
             <el-icon size="36">
               <Setting />
@@ -64,7 +74,7 @@ const btnmenu = ref(0)
 const btnmenuClick = (id, path) => {
   btnmenu.value = id
   router.push({ path })
- 
+
 
 }
 
@@ -75,6 +85,11 @@ $background-color: rgb(239, 122, 122);
 $icon-color: #ccc;
 
 
+.btn {
+
+  background-color: rgb(239, 122, 122) !important;
+  animation: big 0.2s;
+}
 
 .common-layout,
 .el-container {
@@ -127,7 +142,7 @@ $icon-color: #ccc;
     .set:hover {
       width: 68px;
       height: 68px;
-      background-color: $background-color;
+      background-color: $background-color !important;
     }
 
     .setBox {
@@ -150,6 +165,24 @@ $icon-color: #ccc;
 
     }
   }
+}
+
+html.dark .el-aside {
+  animation: asideBackground 1.5s;
+  background-color: rgb(67, 63, 63);
+
+}
+
+html.light .el-aside {
+  animation: lightBackground 1.5s;
+}
+
+html.dark .icon {
+  background-color: #706f6f !important;
+}
+
+html.dark .btn {
+  background-color: rgb(239, 122, 122) !important;
 }
 </style>
 

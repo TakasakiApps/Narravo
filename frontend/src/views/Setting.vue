@@ -13,10 +13,9 @@
         </el-form-item>
 
     </el-form> -->
-    <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']">
+    <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']" >
         <span class="sun"><font-awesome-icon :icon="['fas', 'sun']" /></span>
         <span class="moon"><font-awesome-icon :icon="['fas', 'moon']" /></span>
-
     </div>
 </template>
     
@@ -44,11 +43,11 @@ const btnSwitch = () => {
     isDark.value = !isDark.value
     if (isDark.value == true) {
         ipcRenderer.invoke("dark")
-        console.log(isDark.value);
+       
 
     } else {
         ipcRenderer.invoke('light')
-        console.log('light');
+      
 
     }
 
@@ -83,7 +82,7 @@ const btnSwitch = () => {
 
     left: 45px;
     transition: 0.2s ease-out;
-    animation: switchDark 0.2s;
+    /* animation: switchDark 0.2s; */
 
 }
 

@@ -17,4 +17,7 @@
         align-items: center;
         justify-content: space-around;
     }
+    button{
+        
+    }
 </style>

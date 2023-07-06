@@ -14,9 +14,7 @@ body {
 /* :root {
   color-scheme: light dark;
 } */
-html.dark body .el-aside {
-  background-color: rgb(18,18,18);
-}
+
 html.dark body  .titles{
   
   animation: asideBackground 1.5s ;
@@ -25,17 +23,16 @@ html.dark body  .titles{
 html.dark{
   animation: asideBackground 1.5s 
 }
+html.light{
+  animation: lightBackground 1.5s;
+}
 /* html.dark svg{
   color: #e84118;
   
 } */
 /* 去除滚动条 */
 /*  */
-.btn {
-  
-  background-color: rgb(239, 122, 122) !important;
-  animation: big 0.2s;
-}
+
 @keyframes big{
   from{width: 60px; height: 60px;}
   to{width: 68px; height: 68px;}
@@ -51,4 +48,8 @@ html.dark{
 @keyframes asideBackground {
   from{background:#eeecec ;}
   to{background:rgb(18,18,18)}
+}
+@keyframes lightBackground{
+  from{background:rgb(18,18,18)}
+  to{background:#ffffff ;}
 }
