@@ -36,7 +36,16 @@ var CheckAdminPermissionComponent gin.HandlerFunc = func(c *gin.Context) {
 	isAdmin := c.GetBool("isAdmin")
 	if !isAdmin {
 		c.Abort()
-		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("only admin user can do this operation")
+		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("only admin users can perform this operation")
+	}
+	c.Next()
+}
+
+var MustNotGuestComponent gin.HandlerFunc = func(c *gin.Context) {
+	isGuest := c.GetBool("isGuest")
+	if isGuest {
+		c.Abort()
+		exceptiongo.QuickThrowMsg[types.ServerNotModifiedException]("only non-guest users can perform this operation")
 	}
 	c.Next()
 }

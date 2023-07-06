@@ -9,4 +9,5 @@ func Register() {
 	registerNovelApi()
 	registerAssetsApi()
 	registerSensitiveApi()
+	registerTTSApi()
 }

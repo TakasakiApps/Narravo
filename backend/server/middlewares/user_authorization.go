@@ -53,6 +53,7 @@ func getUserAuthorization(skipRouterSuffix ...string) gin.HandlerFunc {
 				}
 
 				c.Set("isAdmin", user.Name == "admin")
+				c.Set("isGuest", user.Name == "guest")
 				c.Next()
 			})
 		}

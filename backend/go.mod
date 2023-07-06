@@ -25,6 +25,7 @@ require (
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
 	github.com/goccy/go-json v0.10.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/gookit/color v1.5.3 // indirect
 	github.com/gookit/gsr v0.0.8 // indirect
 	github.com/importcjj/sensitive v0.0.0-20200106142752-42d1c505be7b // indirect
@@ -39,6 +40,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/ohanakogo/errhandlergo v0.0.2 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.7 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/common v1.0.695 // indirect
+	github.com/tencentcloud/tencentcloud-sdk-go/tencentcloud/tts v1.0.695 // indirect
 	github.com/twitchyliquid64/golang-asm v0.15.1 // indirect
 	github.com/ugorji/go/codec v1.2.11 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
