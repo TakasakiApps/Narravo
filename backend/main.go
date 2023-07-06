@@ -6,6 +6,7 @@ import (
 	"github.com/TakasakiApps/Narravo/backend/internal/global"
 	"github.com/TakasakiApps/Narravo/backend/internal/types"
 	"github.com/TakasakiApps/Narravo/backend/server"
+	"github.com/gookit/goutil/fsutil"
 	"github.com/ohanakogo/exceptiongo"
 	"github.com/ohanakogo/exceptiongo/pkg/etype"
 	"github.com/ohanakogo/ohanakoutilgo"
@@ -13,11 +14,13 @@ import (
 )
 
 var (
-	Port uint
+	Port       uint
+	DotEnvFile string
 )
 
 func init() {
 	flag.UintVar(&Port, "p", 8080, "set the port number for the server")
+	flag.StringVar(&DotEnvFile, "e", global.DotEnvFile, "use .env file")
 
 	flag.Parse()
 
@@ -29,6 +32,10 @@ func checkArgs() {
 	if Port > math.MaxUint16 {
 		// If not valid, throw an exception with corresponding error message.
 		exceptiongo.QuickThrowMsg[types.ArgValueNotValidException]("the port number must be between 0 and 65535")
+	}
+
+	if fsutil.FileExists(DotEnvFile) {
+		global.DotEnvFile = DotEnvFile
 	}
 }
 func main() {
