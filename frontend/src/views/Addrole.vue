@@ -1,12 +1,9 @@
 <template>
-        
-        制作角色卡
+        角色卡管理
 </template>
     
 <script setup lang='ts'>
-    
+
 </script>
     
-<style>
-    
-</style>
+<style></style>
