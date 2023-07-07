@@ -63,6 +63,11 @@ func NewTTSTask(ttsTaskId string, ttsTaskInfo *entity.TTSTaskInfo) {
 	request.Codec = common.StringPtr(ttsTaskInfo.Codec)
 	request.EnableSubtitle = common.BoolPtr(true)
 
+	if ttsTaskInfo.TTSEmotion.Enabled {
+		request.EmotionCategory = common.StringPtr(ttsTaskInfo.TTSEmotion.Category)
+		request.EmotionIntensity = common.Int64Ptr(ttsTaskInfo.TTSEmotion.Intensity)
+	}
+
 	response, err := client.TextToVoice(request)
 	if _, ok := err.(*errors.TencentCloudSDKError); ok {
 		global.TTSResults[ttsTaskId] = entity.TTSResult{
