@@ -1,4 +1,4 @@
-import { app, BrowserWindow,ipcMain,nativeTheme } from 'electron'
+import { app, BrowserWindow,ipcMain,nativeTheme,Menu } from 'electron'
 import path from 'node:path'
 
 // The built directory structure
@@ -23,6 +23,7 @@ function createWindow() {
     width:800,
     height:700,
     minHeight:600,
+    minWidth:1080,
     icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -30,6 +31,7 @@ function createWindow() {
         contextIsolation:false
     },
   })
+  Menu.setApplicationMenu(null)
   ipcMain.handle("dark", () => {
     
       nativeTheme.themeSource = 'dark'
