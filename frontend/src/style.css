@@ -14,7 +14,9 @@ body {
 /* :root {
   color-scheme: light dark;
 } */
-
+.el-main{
+  padding:  0 0 0 20px !important;
+}
 
 html.dark{
   animation: Darks 1.5s 

@@ -1,7 +1,7 @@
 <template>
-    <div style="overflow-y:hidden; margin: auto; ">
+    <div style="overflow-y:hidden;  ">
         <div v-masonry transition-duration="0.3s" item-selector=".item-card" fit-width="true" gutter="20" class="body">
-            <div v-masonry-tile class="item-card" v-for="item in 12">
+            <div v-masonry-tile class="item-card"  >
                 <el-card :body-style="{ padding: '0px' }" v-contextmenu:contextmenu shadow="hover">
                     <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
                         class="image" />
@@ -15,7 +15,7 @@
 
                         <div class="bottom">
                             <time class="time">最新章节</time>
-                            <el-button text class="button">作者</el-button>
+                            <p text class="author">作者</p>
                         </div>
                     </div>
                 </el-card>
@@ -58,7 +58,7 @@ const getInfo = (path: any) => {
     align-items: center;
 }
 
-.button {
+.author {
     padding: 0;
     min-height: auto;
     font-family: 'Roboto';
@@ -73,9 +73,9 @@ const getInfo = (path: any) => {
 
 .body {
     display: flex;
-    justify-content: center;
+    
     align-items: center;
-    margin: 20px auto;
+    margin: 20px 20px;
 }
 
 .el-card {

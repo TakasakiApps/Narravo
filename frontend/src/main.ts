@@ -27,6 +27,7 @@ router.beforeResolve(to =>{
     }else if(to.path == '/read'){
         globalVars.isHidden = true
         globalVars.isInfo = true
+        globalVars.isRight = 1
     }
     else{
         globalVars.isInfo = false;

@@ -70,7 +70,7 @@
         <div class="user">
           <div v-if="!isAvatar">
             <el-popover popper-style="display:flex; width:300px;height:130px;" placement="right" trigger="hover"
-              :visible="false">
+              >
               <div style="width: 64px; margin-right: 15px;
              display: flex; align-items: center; justify-content: center;">
                 <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
@@ -97,7 +97,7 @@
           </div>
           <div v-if="isAvatar">
             <el-popover popper-style="display:flex; width:300px;height:130px;" placement="right" trigger="hover"
-              visible="false">
+              >
               <div style="width: 64px; margin-right: 15px;
              display: flex; align-items: center; justify-content: center;">
                 <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
@@ -168,7 +168,7 @@
             </el-dialog>
           </div>
           <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']">
-            <div class="sun" show="isDark == false">
+            <div class="sun" v-show="isDark == false">
               <svg fill="currentColor" t="1688632390516" viewBox="0 0 1024 1024" version="1.1"
                 xmlns="http://www.w3.org/2000/svg" p-id="30668" width="26.25" height="26.25">
                 <path
@@ -176,7 +176,7 @@
                   p-id="30669"></path>
               </svg>
             </div>
-            <div class="moon" show="isDark == true">
+            <div class="moon" v-show="isDark == true">
               <svg fill="currentColor" t="1688632491243" viewBox="0 0 1024 1024" version="1.1"
                 xmlns="http://www.w3.org/2000/svg" p-id="31690" width="30" height="30">
                 <path
@@ -271,7 +271,7 @@ const getDate = () => {
 }
 //检查本地是否存的有登录信息，有就显示（已登录），没有则显示（未登录）
 onBeforeMount(() => {
-  if(localStorage.username){
+  if(localStorage.token){
     isAvatar.value = false
     userinfo.logintime = localStorage.logintime
     userinfo.username = localStorage.username
@@ -432,7 +432,7 @@ $icon-color: #ccc;
     display: flex;
     flex-direction: column;
     background: #F2F2F2;
-
+    transition: 0.5s;
     border-radius: 0 8px 8px 0;
     width: 77px;
     align-items: center;
@@ -538,7 +538,7 @@ $icon-color: #ccc;
 
 
 .open {
-  width: 1px !important;
+  width: 0 !important;
   // animation: close 1.5s !important;
 }
 
