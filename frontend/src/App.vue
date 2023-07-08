@@ -2,9 +2,17 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="80px">
+      <el-aside width="80px" :class="[globalVars.isRight == 1 ? 'close' : '', globalVars.isRight == 2 ? 'open' : '']">
         <div class="iconBox">
-          <div class="asideIcon" :class="[btnmenu==0 ? 'btn' : '']" @click="btnmenuClick(0, '/')">
+          <div class="asideIcon" v-if="show" @click="back">
+            <svg fill="currentColor" t="1688701539082" class="icon" viewBox="0 0 1025 1024" version="1.1"
+              xmlns="http://www.w3.org/2000/svg" p-id="3294" width="28" height="28">
+              <path
+                d="M533.353412 682.285176c0-0.030118 0.060235-0.060235 0.060235-0.090353C533.172706 682.194824 533.142588 682.224941 533.353412 682.285176zM40.176941 555.008l314.398118 314.398118c27.045647 27.045647 70.927059 27.045647 97.942588 0 27.045647-26.985412 27.045647-70.866824 0-97.912471l-196.186353-196.216471 665.630118 0c38.249412 0 69.240471-31.021176 69.240471-69.240471 0-38.279529-31.021176-69.270588-69.240471-69.270588L256.361412 436.766118l196.186353-196.186353c27.045647-27.015529 27.045647-70.927059 0-97.942588C439.024941 129.114353 421.285647 122.337882 403.546353 122.337882c-17.709176 0-35.448471 6.776471-48.941176 20.299294L40.176941 457.065412C13.101176 484.111059 13.101176 527.932235 40.176941 555.008z"
+                p-id="3295"></path>
+            </svg>
+          </div>
+          <div class="asideIcon" :class="[btnmenu == 0 ? 'btn' : '']" @click="btnmenuClick(0, '/')">
             <svg fill="currentColor" t="1688650000398" viewBox="0 0 1152 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="43658" xmlns:xlink="http://www.w3.org/1999/xlink" width="32"
               height="32">
@@ -22,7 +30,7 @@
             </svg>
             <p class="asideFont">书架</p>
           </div>
-          <div class="asideIcon" :class="[btnmenu==1 ? 'btn' : '']" @click="btnmenuClick(1, '/writer')">
+          <div class="asideIcon" :class="[btnmenu == 1 ? 'btn' : '']" @click="btnmenuClick(1, '/writer')">
             <svg fill="currentColor" t="1688650152027" viewBox="0 0 1024 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="44797" xmlns:xlink="http://www.w3.org/1999/xlink" width="32"
               height="32">
@@ -35,7 +43,7 @@
             </svg>
             <p class="asideFont">制作</p>
           </div>
-          <div class="asideIcon" :class="[btnmenu==3 ? 'btn' : '']" @click="btnmenuClick(3, '/role')">
+          <div class="asideIcon" :class="[btnmenu == 3 ? 'btn' : '']" @click="btnmenuClick(3, '/role')">
             <svg fill="currentColor" t="1688631768366" viewBox="0 0 1024 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="25773" width="32" height="32">
               <path
@@ -47,7 +55,7 @@
             </svg>
             <p class="asideFont">角色</p>
           </div>
-          <div class="asideIcon" :class="[btnmenu==2 ? 'btn' : '']" @click="btnmenuClick(2, '/search')">
+          <div class="asideIcon" :class="[btnmenu == 2 ? 'btn' : '']" @click="btnmenuClick(2, '/search')">
             <svg fill="currentColor" t="1688650220888" class="icon" viewBox="0 0 1024 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="47861" xmlns:xlink="http://www.w3.org/1999/xlink" width="32"
               height="32">
@@ -93,16 +101,20 @@
                 <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
               </div>
               <div style=" width: 225px;">
-                <h3 style="font-size: 22px; margin: 0; color:#333333;">kmou424</h3>
+                <h3 style="font-size: 22px; margin: 0; color:#333333;">{{ userinfo.username }}</h3>
                 <div style="margin: 6px 0;">
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F;">上次同步时间:</p>
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F;;">登录后启用云同步功能</p>
                 </div>
                 <div style="display: flex; margin-left: 36px;">
-                  <button style="margin-left:90px; background-color: #EC808D; 
+                  <button style="background-color: #EC808D; 
+                color: #F2F2F2; border-radius: 5px; border: none; height: 28px; width: 64px; "
+                    @click="isSign = true">注册</button>
+                  <button style="margin-left:30px; background-color: #EC808D; 
                 color: #F2F2F2; border-radius: 5px; border: none; height: 28px; width: 64px;" @click="isLogin = true">
                     登录
                   </button>
+
                 </div>
               </div>
               <template #reference>
@@ -111,23 +123,44 @@
             </el-popover>
           </div>
           <div class="login">
-            <el-dialog v-model="isLogin" align-center center
-            :show-close="false" lock-scroll 
-              style="width:448px; height:320px; box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
+            <el-dialog v-model="isLogin" align-center center :show-close="false" lock-scroll style="width:448px;  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
               background:#F9F9F9; border-radius:15px;">
               <div style="display:flex; flex-direction:column; align-items:center
            ">
-          
                 <h2>Welcome</h2>
+                <input type="text" placeholder="账号" v-model="login.username" style="padding-left: 10px;" />
+                <input type="password" placeholder="密码" v-model="login.password"
+                  style="padding-left: 10px; margin-bottom:8px" />
+                <div style="height:20px;width:290px; margin-bottom:8px">
+                  <a style="font-size: 12px; margin-top: 5px; color: #797979; font-family: '更纱黑体'; float:right"
+                    @click="setPwd" href="#">更改密码</a>
+                </div>
+                <button @click="loginUp">登录</button>
+                <a style="font-size: 12px; margin-top: 5px; color: #797979; font-family: '更纱黑体'; margin-top:10px"
+                  @click="guest" href="#">游客登录</a>
+              </div>
+            </el-dialog>
+          </div>
+          <div>
+            <el-dialog v-model="isSetPwd">
 
-                <input type="text" placeholder="账号" />
-                <input type="password" placeholder="密码"/>
-                <button>登录</button>
+            </el-dialog>
+          </div>
+          <div class="Sign">
+            <el-dialog v-model="isSign" align-center center :show-close="false" lock-scroll style="width:448px;  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
+              background:#F9F9F9; border-radius:15px;">
+              <div style="display:flex; flex-direction:column; align-items:center
+           ">
+
+                <h2>Sign up</h2>
+
+                <input type="text" placeholder="账号" v-model="sign.username" style="padding-left: 10px;" />
+                <input type="password" placeholder="密码" v-model="sign.password" style="padding-left: 10px;" />
+                <button @click="signUp">注册</button>
               </div>
 
             </el-dialog>
           </div>
-
           <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']">
             <div class="sun" v-show="isDark == false">
               <svg fill="currentColor" t="1688632390516" viewBox="0 0 1024 1024" version="1.1"
@@ -146,7 +179,7 @@
               </svg>
             </div>
           </div>
-          <div class="asideIcon" :class="[btnmenu==4 ? 'btn' : '']" @click="btnmenuClick(4, '/setting')">
+          <div class="asideIcon" :class="[btnmenu == 4 ? 'btn' : '']" @click="btnmenuClick(4, '/setting')">
             <svg fill="currentColor" t="1688633582143" viewBox="0 0 1024 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="35296" width="30" height="30">
               <path
@@ -156,6 +189,18 @@
           </div>
         </div>
       </el-aside>
+      <!-- 添加控制箭头是否显示 -->
+      <div class="left" @click="checkRight" v-if="globalVars.isHidden">
+        <svg t="1688729279262" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          p-id="2586" width="20" height="20" v-if="globalVars.isRight == 2">
+          <path d="M610.88 512L192 93.12 285.12 0l512 512-512 512L192 930.88z" fill="#262626" p-id="2587"></path>
+        </svg>
+        <svg t="1688729212223" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
+          p-id="1610" width="20" height="20" v-if="globalVars.isRight == 1">
+          <path d="M378.24 512l418.88 418.88L704 1024 192 512l512-512 93.12 93.12z" fill="#262626" p-id="1611"></path>
+        </svg>
+      </div>
+
       <el-main>
         <router-view></router-view>
       </el-main>
@@ -163,21 +208,23 @@
   </div>
 </template>
 <script setup lang='ts'>
-import { ref } from 'vue'
-
+import { ref, inject, watch, reactive } from 'vue'
+import { client } from './http/client'
 import { useColorMode } from '@vueuse/core'
 import router from './router'
 import { ipcRenderer } from 'electron'
+
+
 const circleUrl = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 //图片点击高亮显示
-const btnmenu = ref(0)
-const btnmenuClick = (id, path) => {
+const btnmenu = ref(10)
+const btnmenuClick = (id: any, path: any) => {
   btnmenu.value = id
   router.push({ path })
 }
 //切换暗——亮模式
 const isDark = ref(false)
-const mode = useColorMode({
+useColorMode({
   // 如果模式为auto也需要回显回auto
   emitAuto: true,
   // 默认模式先默认auto,后续通过Electorn拿到当前App主题
@@ -191,21 +238,114 @@ const btnSwitch = () => {
     ipcRenderer.invoke('light')
   }
 }
+//用户信息
+const userinfo = reactive({
+  username:'未登录'
+})
 //切换头像弹出窗是否显示
 const isAvatar = ref(true)
-//显示登录按钮
+//显示登录,注册按钮
 const isLogin = ref(false)
+const isSign = ref(false)
+//登录，注册功能实现
+//1.注册
+const sign = reactive({
+  username: '',
+  password: ''
+})
+const signUp = () => {
+  //需要转成字符串发送数据
+  client.post('/api/v1/auth/register', JSON.stringify(sign)).then(res => {
+    ElNotification.success({ title: '注册成功!', message: '恭喜你注册成功' })
+    isSign.value = false
+    console.log(res);
 
+  }).catch(err => {
+    console.log(err);
+  })
+  client.post('/api/v1/auth/login', JSON.stringify(sign)).then(res => {
+    localStorage.token = res.data.token
+  }).catch(err => {
+    console.log(err);
+
+  })
+}
+//2.登录
+const login = reactive({
+  username: '',
+  password: ''
+})
+const loginUp = () => {
+  if (login.username != '' && login.password != '') {
+    client.post('/api/v1/auth/login', JSON.stringify(login)).then(res => {
+      ElNotification({ title: '登录成功！', message: '欢迎您', type: 'success' })
+      localStorage.token = res.data.token
+    })
+  }
+}
+//3.游客登录
+const guest = () => {
+  const guests = {
+    username: 'guest',
+    password: 'guest'
+  }
+  client.post('/api/v1/auth/login', JSON.stringify(guests)).then(res => {
+    ElNotification({ title: '游客登录成功！', message: '你当前使用的是游客账号', type: 'success' })
+    console.log(res);
+    localStorage.token = res.data.token
+  }).catch(err => {
+    console.log(err);
+  })
+}
+//4.更改密码功能
+const isSetPwd = ref(false) //控制更改密码页面是否显示
+const setPwd = () => {
+  const setPwd = reactive({
+    username: '',
+    password: '',
+    newPassword: ''
+  })
+
+}
+//监听全局变量
+const globalVars = inject('globalVars')
+//控制返回图标是否出现
+const show = ref(false)
+//点击时返回上级目录
+const back = () => {
+  router.back()
+}
+watch(() => globalVars.isInfo, (newValue) => {
+  console.log('收到变化值：', newValue);
+  if (newValue) {
+    show.value = true
+  } else {
+    show.value = false
+  }
+})
+//点击箭头改变箭头样式
+const checkRight = () => {
+  if (globalVars.isRight == 1) {
+    globalVars.isRight = 2
+  } else if (globalVars.isRight == 2) {
+    globalVars.isRight = 1
+  } else
+    globalVars.isRight = !globalVars.isRight
+}
 </script>
   
 <style scoped lang="scss">
 $background-color: rgb(239, 122, 122);
 $icon-color: #ccc;
-.btn{
-  svg,.asideFont {
-        color: rgba(191, 70, 113) !important;
-      }
+
+.btn {
+
+  svg,
+  .asideFont {
+    color: rgba(191, 70, 113) !important;
+  }
 }
+
 .common-layout,
 .el-container {
   height: 100%;
@@ -215,13 +355,13 @@ $icon-color: #ccc;
 
     display: flex;
     flex-direction: column;
-    background: #eeecec;
+    background: #F2F2F2;
 
     border-radius: 0 8px 8px 0;
     width: 77px;
     align-items: center;
     justify-content: space-between;
-    overflow: auto;
+
 
 
 
@@ -244,6 +384,7 @@ $icon-color: #ccc;
         justify-content: center;
         border: none;
         margin-bottom: 18px;
+
       }
 
       .asideFont {
@@ -251,7 +392,7 @@ $icon-color: #ccc;
         height: 16px;
         font-size: 12px;
         color: #797979;
-        font-family: '更正黑砂';
+        font-family: '更纱黑体';
         margin: 0 auto;
       }
     }
@@ -261,8 +402,10 @@ $icon-color: #ccc;
       svg,
       .asideFont {
         color: rgba(191, 70, 113) !important;
+
       }
     }
+
 
     .user {
       width: 70px;
@@ -299,33 +442,101 @@ $icon-color: #ccc;
       color: rgba(97, 102, 109);
     }
   }
+
+  .left {
+    margin: 340px 0 0 0;
+    background-color: #F2F2F2;
+    width: 20px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    border-radius: 0 15px 15px 0;
+  }
+
+  .left:hover {
+    background-color: #b7b7b7;
+  }
+
+
 }
 
+
+.open {
+  width: 1px !important;
+  // animation: close 1.5s !important;
+}
+
+//动画无效
+// @keyframes close{
+//   from{width:77px;}
+//   to{width: 1px;}
+// }
+.close {
+  width: 77px !important;
+  // animation: open 1.5s !important; 
+
+}
+
+//动画无效
+// @keyframes open{
+//   from{width:1px;}
+//   to{width:77px;}
+// }
 .login {
-  h2{
-    font-size:24px;
-    color:#333333;
-    margin-bottom:37px;
+  h2 {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 37px;
+    font-family: 'Arial';
   }
-  input{
-    margin-bottom:18px;
-    border:2px solid #EC808D;
-    box-shadow:none;
-    width:274px;
-    height:34px;
-    border-radius:10px;
+
+  input {
+    margin-bottom: 18px;
+    border: 2px solid #EC808D;
+    box-shadow: none;
+    width: 274px;
+    height: 34px;
+    border-radius: 10px;
   }
-  
-  button{
-    width:80px;
-    height:30px;
-    color:#F2F2F2;
-    border:none;
-    background-color:#EC808D;
-    border-radius:5px;
+
+  button {
+    width: 80px;
+    height: 30px;
+    color: #F2F2F2;
+    border: none;
+    background-color: #EC808D;
+    border-radius: 5px;
+    font-family: '更纱黑体';
   }
 }
 
+.Sign {
+  h2 {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 37px;
+    font-family: 'Arial';
+  }
+
+  input {
+    margin-bottom: 18px;
+    border: 2px solid #EC808D;
+    box-shadow: none;
+    width: 274px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  button {
+    width: 80px;
+    height: 30px;
+    color: #F2F2F2;
+    border: none;
+    background-color: #EC808D;
+    border-radius: 5px;
+    font-family: '更纱黑体';
+  }
+}
 
 .switch {
   width: 68px;
@@ -344,3 +555,4 @@ html.dark svg {
 }
 </style>
 
+./network/axios

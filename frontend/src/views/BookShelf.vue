@@ -9,41 +9,43 @@
   </div>
   <div style="height:640px">
     <el-scrollbar height="600px">
-    <div  v-masonry transition-duration="0.3s" item-selector=".item-card"  fit-width="true" gutter="20" class="body">
-    <div v-masonry-tile class="item-card"  v-for="item in 12" >
-      <el-card :body-style="{ padding: '0px' }" v-contextmenu:contextmenu shadow="hover" >
-        <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-          class="image" />
-        <div style="padding: 5px">
-          <div class="title">
-            <h1>标题</h1>
-            <el-icon size="25">
-              <Service />
-            </el-icon>
-          </div>
+      <div v-masonry transition-duration="0.3s" item-selector=".item-card" fit-width="true" gutter="20" class="body">
+        <div v-masonry-tile class="item-card" v-for="item in 12">
+          <el-card :body-style="{ padding: '0px' }" v-contextmenu:contextmenu shadow="hover">
+            <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+              class="image" />
+            <div style="padding: 5px">
+              <div class="title">
+                <h1>标题</h1>
+                <el-icon size="25">
+                  <Service />
+                </el-icon>
+              </div>
 
-          <div class="bottom">
-            <time class="time">最新章节</time>
-            <el-button text class="button">作者</el-button>
-          </div>
+              <div class="bottom">
+                <time class="time">最新章节</time>
+                <el-button text class="button">作者</el-button>
+              </div>
+            </div>
+          </el-card>
         </div>
-      </el-card>
-    </div>
-  </div>
-  </el-scrollbar>
+      </div>
+      <!-- <Story /> -->
+    </el-scrollbar>
   </div>
 
-  
-  
-  <v-contextmenu ref="contextmenu" >
-    <v-contextmenu-item><span>书籍详情</span></v-contextmenu-item>
-    <v-contextmenu-item><span>菜单2</span></v-contextmenu-item>
-    
+
+
+  <v-contextmenu ref="contextmenu">
+    <v-contextmenu-item @click="goinfo('/info')"><span>书籍详情</span></v-contextmenu-item>
+    <v-contextmenu-item><span>移出书架</span></v-contextmenu-item>
+
   </v-contextmenu>
 </template>
     
 <script setup lang='ts'>
 import { Service } from '@element-plus/icons-vue'
+import router from '../router'
 //选择器值
 const options = [
   {
@@ -102,24 +104,24 @@ const options = [
     ]
   },
   {
-    value:'',
-    label:'类型',
-    children:[
+    value: '',
+    label: '类型',
+    children: [
       {
-        value:'',
-        label:'玄幻'
+        value: '',
+        label: '玄幻'
       },
       {
-        value:'',
-        label:'修仙'
+        value: '',
+        label: '修仙'
       },
       {
-        value:'',
-        label:'武侠'
+        value: '',
+        label: '武侠'
       },
       {
-        value:'',
-        label:'都市'
+        value: '',
+        label: '都市'
       },
     ]
   }
@@ -127,6 +129,9 @@ const options = [
 //设置多选
 const props = {
   multiple: true,
+}
+const goinfo = (path)=> {
+  router.push(path)
 }
 </script>
     
@@ -136,6 +141,7 @@ const props = {
   width: 100px;
   animation: tanchu 0.2s;
 }
+
 /* 菜单淡入淡出动画 */
 @keyframes tanchu {
   from {
@@ -177,7 +183,8 @@ const props = {
   :deep(.el-input__wrapper:focus) {
     box-shadow: none;
   }
-  :deep(.el-cascader__tags){
+
+  :deep(.el-cascader__tags) {
     flex-wrap: nowrap !important;
   }
 }
@@ -205,25 +212,28 @@ const props = {
   height: 202px;
   display: block;
 }
-.body{
+
+.body {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin:20px auto;
+  margin: 20px auto;
 }
 
 .el-card {
   width: 176px;
   border-radius: 10px;
-  margin-left:10px;
+  margin-left: 10px;
   margin-right: 10px;
-  
+
 }
-div.item-card{
+
+div.item-card {
   margin: 10px auto;
 }
+
 .title {
-  
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -237,9 +247,10 @@ div.item-card{
 .time {
   margin-top: -20px;
 }
-html.dark .titles{
-  
-  animation: asideBackground 1.5s ;
+
+html.dark .titles {
+
+  animation: asideBackground 1.5s;
   background-color: rgb(67, 63, 63);
 }
 </style>

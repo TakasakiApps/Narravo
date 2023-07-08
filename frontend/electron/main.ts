@@ -1,4 +1,4 @@
-import { app, BrowserWindow,ipcMain,nativeTheme,Menu } from 'electron'
+import { app, BrowserWindow,ipcMain,nativeTheme } from 'electron'
 import path from 'node:path'
 
 // The built directory structure
@@ -13,6 +13,7 @@ import path from 'node:path'
 process.env.DIST = path.join(__dirname, '../dist')
 process.env.PUBLIC = app.isPackaged ? process.env.DIST : path.join(process.env.DIST, '../public')
 
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
 
 let win: BrowserWindow | null
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
@@ -20,18 +21,17 @@ const VITE_DEV_SERVER_URL = process.env['VITE_DEV_SERVER_URL']
 
 function createWindow() {
   win = new BrowserWindow({
-    width:800,
+    width:1130,
     height:700,
     minHeight:600,
-    minWidth:1080,
     icon: path.join(process.env.PUBLIC, 'electron-vite.svg'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
-        contextIsolation:false
+      contextIsolation: false,
+      webSecurity: false
     },
   })
-  Menu.setApplicationMenu(null)
   ipcMain.handle("dark", () => {
     
       nativeTheme.themeSource = 'dark'
@@ -67,5 +67,5 @@ function createWindow() {
 app.on('window-all-closed', () => {
   win = null
 })
-
+// Menu.setApplicationMenu(null) 
 app.whenReady().then(createWindow)

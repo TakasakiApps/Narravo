@@ -1,7 +1,7 @@
 html,
 body {
   box-sizing: border-box;
-  padding: auto;
+  padding: 0;
   margin: 0;
   height: 100%;
   user-select: none;
@@ -36,18 +36,15 @@ html.light{
   width: 0 !important;
   height: 0;
 }
-@keyframes big{
-  from{width: 60px; height: 60px;}
-  to{width: 68px; height: 68px;}
-}
+
 .btns{
   background-color: rgb(239, 122, 122) !important;
-  animation: bigs 0.2s;
+  
 }
-@keyframes bigs{
-  from{width: 130px;}
-  to{width: 150px;}
+button:hover{
+background-color: rgba(191, 70, 113) !important;
 }
+
 @keyframes Darks{
   from{background:#eeecec ;}
   to{background:rgb(18,18,18)}

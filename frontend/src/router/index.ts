@@ -7,12 +7,14 @@
 //1.导入模块只有一个时不加括号
 import { createRouter, createWebHistory } from 'vue-router'
 
+
 import BookShelf from '../views/BookShelf.vue'
 import Writer from '../views/Writer.vue'
 import Setting from '../views/Setting.vue'
 import Search from '../views/Search.vue'
 import Bookinfo from '../views/Bookinfo.vue'
 import Addrole from '../views/Addrole.vue'
+import Reading from '../views/Reading.vue'
 //2.
 const routes = [
     {
@@ -24,22 +26,30 @@ const routes = [
         component: Writer
     },
     {
-        path:'/setting',
+        path: '/setting',
         component: Setting
     },
     {
-        path:'/search',
+        path: '/search',
         component: Search
     },
     {
-        path:'/info',
-        component:Bookinfo
+        path: '/info',
+        component: Bookinfo,
+        children: [
+
+        ]
     },
     {
-        path:'/role',
-        component:Addrole
+        path: '/read',
+        name: 'read',
+        component: Reading
+    },
+    {
+        path: '/role',
+        component: Addrole
     }
-    
+
 
 ]
 
@@ -48,6 +58,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes,
 })
+//路由守卫
 
 //4.
 export default router

@@ -1,35 +1,38 @@
 <template>
     <div class="header">
-        <div class="titles">
-            <p style="width: 100px; margin-left: 10px;">作品分类:</p>
-            <el-cascader :options="options" :show-all-levels="false" :props="props" collapse-tags-tooltip collapse-tags
-                clearable />
+        <div class="saixvan">
+            <div class="titles">
+                <p style="  ">分类:</p>
+                <el-select v-model="value">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+            </div>
+            <div class="biaoqian">
+                <p style=" margin-left: 10px;">筛选:</p>
+                <el-select v-model="values">
+                    <el-option v-for="item in type" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+            </div>
         </div>
-        <div class="biaoqian">
-           
 
-        </div>
 
         <div class="search-box">
-            <input type="text" class="search-txt" placeholder="想搜啥？" @blur="rmFouce" :class="[searchInput == true ? 'searchInput' : '']">
-            <a class="search-btn" @click="toggleInput" >
-                <svg fill="currentColor" t="1688636529593" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg"
-                    p-id="38228" width="32" height="32">
+            <input type="text" class="search-txt" placeholder="想搜啥？" @blur="rmFouce"
+                :class="[searchInput == true ? 'searchInput' : '']">
+            <a class="search-btn" @click="toggleInput">
+                <svg fill="currentColor" t="1688636529593" class="icon" viewBox="0 0 1024 1024" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" p-id="38228" width="32" height="32">
                     <path
                         d="M192 480a256 256 0 1 1 512 0 256 256 0 0 1-512 0m631.776 362.496l-143.2-143.168A318.464 318.464 0 0 0 768 480c0-176.736-143.264-320-320-320S128 303.264 128 480s143.264 320 320 320a318.016 318.016 0 0 0 184.16-58.592l146.336 146.368c12.512 12.48 32.768 12.48 45.28 0 12.48-12.512 12.48-32.768 0-45.28"
-                         p-id="38229"></path>
+                        p-id="38229"></path>
                 </svg>
             </a>
         </div>
-
-
-
-
     </div>
     <ul class="box" v-infinite-scroll="load" infinite-scroll-immediate="false" style="overflow: auto; ">
         <el-scrollbar height="600px">
             <div class="box-item">
-                <div >
+                <div>
                     <Story />
                 </div>
             </div>
@@ -49,95 +52,35 @@ const load = () => {
 //选择器值
 const options = [
     {
-        value: 'guide',
-        label: '完结状态',
-        children: [
-            {
-                value: 'disciplines',
-                label: '已完结',
+        value: 'Option1',
+        label: '玄幻',
+    },
+    {
+        value: 'Option2',
+        label: '修仙',
+    },
 
-            },
-            {
-                value: '11',
-                label: '未完结'
-            }
-        ]
+]
+const value = ref('')
+const values = ref('')
+const type = [
+    {
+        values: '有声',
+        label: '有声'
     },
     {
-        value: '',
-        label: '年份',
-        children: [
-            {
-                value: '2023',
-                label: '2023'
-            },
-            {
-                value: '2022',
-                label: '2022'
-            },
-            {
-                value: '2021',
-                label: '2021'
-            },
-            {
-                value: '2020',
-                label: '2020'
-            },
-            {
-                value: '2019',
-                label: '2019'
-            },
-        ]
-    },
-    {
-        value: '',
-        label: '状态',
-        children: [
-            {
-                value: '',
-                label: '本地'
-            },
-            {
-                value: '',
-                label: '有线'
-            }
-        ]
-    },
-    {
-        value: '',
-        label: '类型',
-        children: [
-            {
-                value: '',
-                label: '玄幻'
-            },
-            {
-                value: '',
-                label: '修仙'
-            },
-            {
-                value: '',
-                label: '武侠'
-            },
-            {
-                value: '',
-                label: '都市'
-            },
-        ]
+        values: '全部',
+        label: '全部'
     }
 ]
-//设置多选
-const props = {
-    multiple: true,
-}
 
 
 //点击搜索按钮，文本框变化
 const searchInput = ref(false)
 const toggleInput = () => {
     searchInput.value = !searchInput.value
-    
-    
+
+
 }
 const rmFouce = () => {
     searchInput.value = !searchInput.value
@@ -151,8 +94,14 @@ const rmFouce = () => {
     align-items: center;
     justify-content: space-between;
 
+    .saixvan{
+        width: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
     .titles {
-        width: 250px;
+        width: 150px;
         height: 51px;
         background-color: #eeecec;
 
@@ -162,37 +111,32 @@ const rmFouce = () => {
         justify-content: center;
 
         p {
-            font-size: 16px;
+            font-size: 18px;
+            font-family: '更纱黑体 UI SC';
+        }
+
+        .el-select {
+            width: 76px;
         }
     }
 
     .biaoqian {
-        width: 400px;
-        // margin-right: 100px;
+        width: 150px;
+        height: 51px;
+        background-color: #eeecec;
 
+        border-radius: 5%;
         display: flex;
-        justify-content: space-around;
+        align-items: center;
+        justify-content: center;
 
-        .labelBtn {
-            width: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        p {
+            font-size: 18px;
+            font-family: '更纱黑体 UI SC';
         }
 
-        button {
-            width: 130px;
-            // background-color: rgb(239, 122, 122);
-            background-color: #eeecec;
-
-            height: 51px;
-            border-radius: 5px;
-            border: none;
-            // margin-left: 10px;
-        }
-
-        button:hover {
-            width: 150px;
+        .el-select {
+            width: 76px;
         }
     }
 
@@ -275,5 +219,4 @@ html.dark .search-box {
 .search-box:hover .search-btn {
     background: #fff;
 }
-
 </style>

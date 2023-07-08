@@ -22,26 +22,32 @@
             </div>
         </div>
     </div>
-    <v-contextmenu ref="contextmenu" >
-    <v-contextmenu-item><span @click="getInfo('/info')">书籍详情</span></v-contextmenu-item>
-    <v-contextmenu-item><span>加入书架</span></v-contextmenu-item>
-    
-  </v-contextmenu>
+    <v-contextmenu ref="contextmenu">
+        <v-contextmenu-item><span @click="getInfo('/info')">书籍详情</span></v-contextmenu-item>
+        <v-contextmenu-item><span>加入书架</span></v-contextmenu-item>
+    </v-contextmenu>
 </template>
     
 <script setup lang='ts'>
 import { Service } from '@element-plus/icons-vue'
+import { inject } from 'vue'
 import router from '../router'
-
-const getInfo = (path) => {
-router.push({path})
+const globalVars = inject('globalVars')
+const getInfo = (path: any) => {
+    
+    globalVars.isInfo = true;
+    console.log('值：',globalVars.isInfo);
+    router.push(path)
 }
+
 </script>
     
 <style scoped>
 .time {
-    font-size: 12px;
+    font-size: 13px;
     color: #888686;
+    font-family: '更纱黑体 SC';
+    margin-top: -40px;
 }
 
 .bottom {
@@ -55,6 +61,8 @@ router.push({path})
 .button {
     padding: 0;
     min-height: auto;
+    font-family: 'Roboto';
+    font-size: 12px;
 }
 
 .image {
@@ -92,9 +100,13 @@ div.item-card {
     .el-icon {
         float: right;
     }
+
 }
 
-.time {
-    margin-top: -20px;
+h1 {
+    font-size: 20px;
+    font-family: '更纱黑体 SC';
+
+    color: #333333;
 }
 </style>
