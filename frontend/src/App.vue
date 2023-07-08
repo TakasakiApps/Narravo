@@ -76,16 +76,18 @@
                 <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
               </div>
               <div style=" width: 225px;">
-                <h3 style="font-size: 22px; margin: 0; color:#333333">kmou424</h3>
+                <h3 style="font-size: 22px; margin: 0; color:#333333">{{ userinfo.username }}</h3>
                 <div style="margin: 6px 0;">
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F ;">上次同步时间:</p>
-                  <p style="margin: 0; font-size: 12px; color: #7F7F7F;">2023-01-01 xx:xx:xx</p>
+                  <p style="margin: 0; font-size: 12px; color: #7F7F7F;">{{ userinfo.logintime }}</p>
                 </div>
                 <div style="display: flex; margin-left: 36px;">
                   <button style="margin:0 auto; background-color: #EC808D; 
-                color: #F2F2F2; border-radius: 5px; border: none; height: 28px; width: 84px;">立即同步</button>
+                color: #F2F2F2; border-radius: 5px; border: none; height: 28px; width: 84px;"
+                    @click="isSetPwd = true">更改密码</button>
                   <button style="margin:0 auto;background-color: #EC808D; 
-                color: #F2F2F2; border-radius: 5px; border: none; height: 28px; width: 64px;">注销</button>
+                color: #F2F2F2; border-radius: 5px; border: none; height: 28px; width: 64px;"
+                    @click="loginOut">退出</button>
                 </div>
               </div>
               <template #reference>
@@ -101,7 +103,7 @@
                 <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
               </div>
               <div style=" width: 225px;">
-                <h3 style="font-size: 22px; margin: 0; color:#333333;">{{ userinfo.username }}</h3>
+                <h3 style="font-size: 22px; margin: 0; color:#333333;">未登录</h3>
                 <div style="margin: 6px 0;">
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F;">上次同步时间:</p>
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F;;">登录后启用云同步功能</p>
@@ -114,7 +116,6 @@
                 color: #F2F2F2; border-radius: 5px; border: none; height: 28px; width: 64px;" @click="isLogin = true">
                     登录
                   </button>
-
                 </div>
               </div>
               <template #reference>
@@ -131,19 +132,25 @@
                 <input type="text" placeholder="账号" v-model="login.username" style="padding-left: 10px;" />
                 <input type="password" placeholder="密码" v-model="login.password"
                   style="padding-left: 10px; margin-bottom:8px" />
-                <div style="height:20px;width:290px; margin-bottom:8px">
-                  <a style="font-size: 12px; margin-top: 5px; color: #797979; font-family: '更纱黑体'; float:right"
-                    @click="setPwd" href="#">更改密码</a>
-                </div>
+
                 <button @click="loginUp">登录</button>
                 <a style="font-size: 12px; margin-top: 5px; color: #797979; font-family: '更纱黑体'; margin-top:10px"
                   @click="guest" href="#">游客登录</a>
               </div>
             </el-dialog>
           </div>
-          <div>
-            <el-dialog v-model="isSetPwd">
+          <div class="setPwd">
+            <el-dialog v-model="isSetPwd" align-center center :show-close="false" lock-scroll style="width:448px;  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
+              background:#F9F9F9; border-radius:15px;">
+<div style="display:flex; flex-direction:column; align-items:center
+           ">
+                <h2>设置新密码</h2>
 
+                <input type="text" placeholder="账号" v-model="sign.username" style="padding-left: 10px;" />
+                <input type="password" placeholder="旧密码" v-model="sign.password" style="padding-left: 10px;" />
+                <input type="password" placeholder="新密码" v-model="sign.password" style="padding-left: 10px;" />
+                <button @click="setPwdUp">确认</button>
+              </div>
             </el-dialog>
           </div>
           <div class="Sign">
@@ -151,7 +158,6 @@
               background:#F9F9F9; border-radius:15px;">
               <div style="display:flex; flex-direction:column; align-items:center
            ">
-
                 <h2>Sign up</h2>
 
                 <input type="text" placeholder="账号" v-model="sign.username" style="padding-left: 10px;" />
@@ -162,7 +168,7 @@
             </el-dialog>
           </div>
           <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']">
-            <div class="sun" v-show="isDark == false">
+            <div class="sun" show="isDark == false">
               <svg fill="currentColor" t="1688632390516" viewBox="0 0 1024 1024" version="1.1"
                 xmlns="http://www.w3.org/2000/svg" p-id="30668" width="26.25" height="26.25">
                 <path
@@ -170,7 +176,7 @@
                   p-id="30669"></path>
               </svg>
             </div>
-            <div class="moon" v-show="isDark == true">
+            <div class="moon" show="isDark == true">
               <svg fill="currentColor" t="1688632491243" viewBox="0 0 1024 1024" version="1.1"
                 xmlns="http://www.w3.org/2000/svg" p-id="31690" width="30" height="30">
                 <path
@@ -208,13 +214,15 @@
   </div>
 </template>
 <script setup lang='ts'>
-import { ref, inject, watch, reactive } from 'vue'
+
+import { ref, inject, watch, reactive, onBeforeMount } from 'vue'
 import { client } from './http/client'
 import { useColorMode } from '@vueuse/core'
 import router from './router'
 import { ipcRenderer } from 'electron'
 
 
+//用户头像
 const circleUrl = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
 //图片点击高亮显示
 const btnmenu = ref(10)
@@ -240,13 +248,35 @@ const btnSwitch = () => {
 }
 //用户信息
 const userinfo = reactive({
-  username:'未登录'
+  username: localStorage.username,
+  logintime: '',
+
 })
-//切换头像弹出窗是否显示
+//切换头像弹出窗是否显示 true:未登录,false:已登录
 const isAvatar = ref(true)
 //显示登录,注册按钮
 const isLogin = ref(false)
 const isSign = ref(false)
+
+//获取时间的函数
+const addZero = (v) => {
+  if (v < 10)
+    return '0' + v;
+  return v.toString();
+}
+const getDate = () => {
+  var d = new Date();
+  var str = d.getFullYear().toString() + '-' + addZero(d.getMonth() + 1) + '-' + addZero(d.getDate()) + ' ' + addZero(d.getHours()) + ':' + addZero(d.getMinutes()) + ':' + addZero(d.getSeconds());
+  return str
+}
+//检查本地是否存的有登录信息，有就显示（已登录），没有则显示（未登录）
+onBeforeMount(() => {
+  if(localStorage.username){
+    isAvatar.value = false
+    userinfo.logintime = localStorage.logintime
+    userinfo.username = localStorage.username
+  }
+})
 //登录，注册功能实现
 //1.注册
 const sign = reactive({
@@ -256,19 +286,37 @@ const sign = reactive({
 const signUp = () => {
   //需要转成字符串发送数据
   client.post('/api/v1/auth/register', JSON.stringify(sign)).then(res => {
-    ElNotification.success({ title: '注册成功!', message: '恭喜你注册成功' })
-    isSign.value = false
-    console.log(res);
+    if (res.status == 200) {
+      ElNotification.success({ title: '注册成功!', message: '恭喜你注册成功' })
+      //拿到token
+      client.post('/api/v1/auth/login', JSON.stringify(sign)).then(res => {
+        //注册成功后去获取token
+        localStorage.token = res.data.token,
+          //保存用户的账号
+          localStorage.username = sign.username
+        userinfo.username = localStorage.username
+        //获取登录时间
+        userinfo.logintime = getDate()
+        localStorage.logintime = getDate()
+        //关闭注册框
+        isSign.value = false
+      }).catch(err => {
+        console.log(err);
+      })
+      console.log(res);
+      //显示登录头像
+      isAvatar.value = false
+    }
+    else if (res.status == 401) {
+      ElNotification.error({ title: '错误', message: '该用户已被注册' })
+    }
+    else
+      ElNotification.error({ title: '注册失败' })
 
   }).catch(err => {
     console.log(err);
   })
-  client.post('/api/v1/auth/login', JSON.stringify(sign)).then(res => {
-    localStorage.token = res.data.token
-  }).catch(err => {
-    console.log(err);
 
-  })
 }
 //2.登录
 const login = reactive({
@@ -280,7 +328,16 @@ const loginUp = () => {
     client.post('/api/v1/auth/login', JSON.stringify(login)).then(res => {
       ElNotification({ title: '登录成功！', message: '欢迎您', type: 'success' })
       localStorage.token = res.data.token
+      localStorage.username = sign.username
+        userinfo.username = localStorage.username
+        //获取登录时间
+        userinfo.logintime = getDate()
+        localStorage.logintime = getDate()
+        //关闭登录框
+        isLogin.value = false
     })
+  } else {
+    ElNotification({ message: '账号或密码不能为空！', type: 'warning' })
   }
 }
 //3.游客登录
@@ -291,21 +348,40 @@ const guest = () => {
   }
   client.post('/api/v1/auth/login', JSON.stringify(guests)).then(res => {
     ElNotification({ title: '游客登录成功！', message: '你当前使用的是游客账号', type: 'success' })
-    console.log(res);
     localStorage.token = res.data.token
+    localStorage.username = '游客'
+    userinfo.username = localStorage.username
+    localStorage.logintime = getDate()
+    userinfo.logintime = localStorage.logintime
+    isLogin.value = false
   }).catch(err => {
     console.log(err);
   })
 }
 //4.更改密码功能
 const isSetPwd = ref(false) //控制更改密码页面是否显示
-const setPwd = () => {
+
   const setPwd = reactive({
     username: '',
     password: '',
     newPassword: ''
   })
-
+const setPwdUp = () => {
+  client.post('/api/v1/auth/reset/password',JSON.stringify(setPwd)).then(res => {
+    if(res.status == 200){
+      ElNotification.success({title:'密码修改成功'})
+    }else{
+      ElNotification.success({title:'密码修改失败'})
+    }
+  }).catch(err => {
+    console.log(err);
+  })
+}
+//5.退出账号
+const loginOut = () => {
+  ElNotification.success({ title: '退出账号成功' })
+  localStorage.clear()
+  isAvatar.value = true
 }
 //监听全局变量
 const globalVars = inject('globalVars')
@@ -316,7 +392,7 @@ const back = () => {
   router.back()
 }
 watch(() => globalVars.isInfo, (newValue) => {
-  console.log('收到变化值：', newValue);
+
   if (newValue) {
     show.value = true
   } else {
@@ -537,7 +613,33 @@ $icon-color: #ccc;
     font-family: '更纱黑体';
   }
 }
+.setPwd{
+  h2 {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 37px;
+    font-family: 'Arial';
+  }
 
+  input {
+    margin-bottom: 18px;
+    border: 2px solid #EC808D;
+    box-shadow: none;
+    width: 274px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  button {
+    width: 80px;
+    height: 30px;
+    color: #F2F2F2;
+    border: none;
+    background-color: #EC808D;
+    border-radius: 5px;
+    font-family: '更纱黑体';
+  }
+}
 .switch {
   width: 68px;
   height: 68px;
@@ -555,4 +657,3 @@ html.dark svg {
 }
 </style>
 
-./network/axios
