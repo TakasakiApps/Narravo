@@ -3,14 +3,17 @@
 		<el-carousel height="93vh" direction="horizontal" :autoplay="false" arrow="never" indicator-position="none"
 			ref="carousel">
 			<el-carousel-item :key="1" class="mian">
-				<div v-if="true">
+				<div v-if="false">
 					<h1 class="mian-text">
 						暂无角色
 						<div>点击右下角按钮以创建
 						</div>
 					</h1>
 				</div>
-				<sel-affix position="bottom" :offset="50" class="fixed-element" @click="addRoleCard" v-show="button[0]">
+				<div v-else>
+					<RolaCard name="111" :gender=1 Reader="成男1号级" />
+				</div>
+				<sel-affix position="bottom" :offset="0" class="fixed-element" @click="addRoleCard" v-show="button[0]">
 					<svg height="48" viewBox="-250 -1200 1460 1460" width="48" class="btns radiusBtn">
 						<g>
 							<path
@@ -44,7 +47,7 @@
 							</transition>
 						</div>
 						<el-card class="box-card-main">
-							<el-carousel height="65vh" direction="vertical" :autoplay="false" arrow="never" ref="card"
+							<el-carousel height="65vh" direction="vertical" :autoplay="false" arrow="never" ref="roleCards"
 								indicator-position="none">
 								<el-carousel-item :key="2 - 1">
 									<el-avatar :size="160" class="avatar" />
@@ -58,31 +61,37 @@
 								</el-carousel-item>
 								<el-carousel-item :key="2 - 2">
 									<div class="carValue">
-										<div class="cardValue-title">语言模型</div>
-										<el-select v-model="Card.Reader" class="cardInput" placeholder="Select" size="default">
-											<el-option label="成男1号姬" value="成男1" />
-										</el-select>
+										<div class="carValue-main">
+											<div class="cardValue-title">语言模型</div>
+											<el-select v-model="Card.Reader" class="cardInput" placeholder="选择基本模型" size="default">
+												<el-option :label="item[1].name" :value="item[1].name" v-for="item of axgIlem" :key="item[0]"
+													@click="readMod(item)" />
+											</el-select>
+										</div>
+										<div class="carValue-main">
+											<div class="cardValue-title">默认情感</div>
+											<el-select v-model="Card.useemot" class="cardInput" placeholder="选择情绪" size="default">
+												<el-option label="不支持" value="no" v-if="!Card.isemotion" />
+												<el-option v-for="emotion of Card.emotions" :key="emotion.category" :label="emotion.name"
+													:value="emotion.category" v-else />
+											</el-select>
+										</div>
+										<div class="carValue-main">
+											<div class="cardValue-title">情感等级</div>
+											<el-slider v-model="Card.emotionlv" class="cardInput" :step="1" size="small" show-stops :max="200"
+												:disabled="!canEmotion" />
+										</div>
+										<div class="carValue-main">
+											<div class="cardValue-title">语速</div>
+											<el-slider v-model="Card.speed" :step="0.5" class="cardInput" size="small" show-stops :max="2.5"
+												:min="-2" />
+										</div>
+										<div class="carValue-main">
+											<div class="cardValue-title">音量</div>
+											<el-slider v-model="Card.tone" :step="1" class="cardInput" size="small" show-stops :max="10" />
+										</div>
 									</div>
-									<div>
-										<div class="cardValue-title">默认情感</div>
-										<el-select v-model="Card" class="cardInput" placeholder="Select" size="default">
-											<el-option label="不支持" value="no" />
-										</el-select>
-									</div>
-									<div>
-										<div class="cardValue-title">情感等级</div>
-										<el-slider v-model="Card.emotion" class="cardInput" :step="1" size="small" show-stops :max="200"
-											:disabled="canEmotion" />
-									</div>
-									<div>
-										<div class="cardValue-title">语速</div>
-										<el-slider v-model="Card.speed" :step="0.5" class="cardInput" size="small" show-stops :max="2.5"
-											:min="-2" />
-									</div>
-									<div>
-										<div class="cardValue-title">音量</div>
-										<el-slider v-model="Card.tone" :step="1" class="cardInput" size="small" show-stops :max="10" />
-									</div>
+									<el-button class="btns try-listen" @click="tryListen">试听</el-button>
 								</el-carousel-item>
 							</el-carousel>
 						</el-card>
@@ -104,28 +113,26 @@
 								</g>
 							</svg>
 						</div>
-						<div v-show="addTxtIndex">
+						<div v-show="addTxtIndex" @click="makeRoleCard">
 							<svg height="48" viewBox="-30 -750 600 900" width="48" class="btns radiusBtn fsBtn">
 								<g transform="scale(0.6)">
-									<path v-show="!addTxtIndex" d="M378-246 154-470l43-43 181 181 384-384 43 43-427 427Z"
-										fill="currentColor" />
+									<path d="M378-246 154-470l43-43 181 181 384-384 43 43-427 427Z" fill="currentColor" />
 								</g>
 							</svg>
 						</div>
-
 					</div>
 				</div>
 			</el-carousel-item>
-
 		</el-carousel>
 	</div>
 </template>
     
 <script setup lang='ts'>
-// import RoleCard from '../components/roleCards/RoleCard.vue';
-import readRoledir from '../components/roleCards/node-api'
+import RolaCard from '../components/roleCards/RolaCard.vue';
+// import readRoledir from '../components/roleCards/node-api'
 import { onMounted, reactive, ref } from 'vue';
 import { StarFilled, Plus } from '@element-plus/icons-vue'
+import { client as axios } from '../http/client'
 
 onMounted(() => {
 	// const e = ReadDir()
@@ -143,26 +150,60 @@ onMounted(() => {
 	// 	// 对其他类型进行处理（例如字符串或布尔值）
 	// 	console.log('出现意料之外的错误')
 	// }
+	//获取全部角色卡
+	const token = localStorage.token
+	console.log(token)
+	if (token) {
+		axios.get('/api/v1/tts/models', {
+			params: {
+				token: token
+			}
+		})
+			.then(
+				(e: any) => {
+					axgIlem.value = Object.entries(e.data)
+					console.log(axgIlem.value)
+				}
+			)
+
+	}
 })
+const axgIlem: any = ref([])
 const Card = reactive({
 	name: '',
-	rgb: '111',
-	Reader: '小帅',
+	Reader: '',
+	sex: 0,
 	speed: 0,
 	tone: 5,
-	emotion: 100
+	isemotion: false,
+	useemot: '',
+	emotions: [],
+	emotionlv: 100,
+	modelId: ''
 })
 const button = reactive([
 	true,
 	false,
 ])
+const addTxtIndex = ref(false)
+//判断是否可以由情绪
 const canEmotion = ref('')
 const carousel = ref<HTMLFormElement>()
+const roleCards = ref<HTMLFormElement>()
 function buttonShow() {
 	button[0] = !button[0];
 
 }
-
+//根据模型设定值
+const readMod = (e: any) => {
+	Card.isemotion = e[1].isEmotionSupported;
+	Card.sex = e[1].gender;
+	Card.emotions = e[1].emotions
+	canEmotion.value = e[1].isEmotionSupported
+	Card.modelId = e[0]
+	console.log(Card)
+}
+//切换到添加角色
 function addRoleCard() {
 	if (carousel.value) {
 		setTimeout(buttonShow, 500)
@@ -170,17 +211,83 @@ function addRoleCard() {
 	}
 
 }
+//判断当前进度返回到上一级
 function backBtn() {
-	if (carousel.value) {
-		buttonShow()
-		carousel.value.prev()
+	if (addTxtIndex.value == true) {
+		// console.log('返回2-1级')
+		if (roleCards.value) {
+			addTxtIndex.value = false
+			roleCards.value.prev()
+		}
+	} else {
+		// console.log('返回第一级')
+		if (carousel.value) {
+			buttonShow()
+			carousel.value.prev()
+		}
 	}
 }
+//返回到上一级
 function alterChild() {
-	addTxtIndex.value = true
-	console.log(addTxtIndex.value)
+	if (Card.name !== '') {
+		if (roleCards.value) {
+			addTxtIndex.value = true
+			roleCards.value.next()
+			console.log(addTxtIndex.value)
+		}
+	} else {
+		ElNotification({ message: '名字不能为空！', type: 'warning' })
+	}
 }
-const addTxtIndex = ref(false)
+const makeRoleCard = () => {
+	if (Card.useemot !== '') {
+		console.log('1')
+		//重置数据
+		Card.name = '';
+		Card.Reader = '';
+		Card.sex = 0;
+		Card.speed = 0;
+		Card.tone = 5;
+		Card.isemotion = false;
+		Card.useemot = '';
+		Card.emotions = [];
+		Card.emotionlv = 100;
+		Card.modelId = ''
+	} else {
+		ElNotification({ message: '请选择一个模型', type: 'warning' })
+	}
+}
+//试听
+const tryListen = () => {
+
+	const data = {
+		token: localStorage.token,
+		modelId: Card.modelId,
+		text: '我超，op！',
+		//音量
+		volume: Card.tone,
+		//语速
+		speed: Card.speed,
+		codec: 'mp3',
+		//使用那种模型
+		module: Card.useemot,
+		ttsEmotion: {
+			enabled: Card.isemotion,
+			category: Card.useemot,
+			intensity: Card.emotionlv,
+		}
+	}
+	console.log(JSON.stringify(data))
+	axios.post('/api/v1/tts/createTask', JSON.stringify(data)).then(
+		(e: any) => {
+			console.log(e)
+		}
+	).catch(
+		(err: any) => {
+			console.log(err)
+		}
+	)
+}
 </script>
     
 <style scoped>
@@ -199,6 +306,7 @@ const addTxtIndex = ref(false)
 	margin-top: auto;
 	margin-left: auto;
 	margin-right: 5px;
+	margin-bottom: 4vh;
 	/* transform: translateX(50%); */
 }
 
@@ -235,7 +343,6 @@ const addTxtIndex = ref(false)
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-	align-items: flex-end;
 }
 
 /*  */
@@ -255,7 +362,7 @@ const addTxtIndex = ref(false)
 	position: absolute;
 	/* margin: auto; */
 	right: 20px;
-
+	top: 2.5vh;
 }
 
 /* 引导文字 */
@@ -296,16 +403,33 @@ const addTxtIndex = ref(false)
 	font-size: 55%;
 }
 
+/* 第二部分设置框 */
+.carValue {
+	height: calc(52vh - 20px);
+}
+
 .cardInput {
 	/* display: inline; */
 	width: 20vw;
 }
 
-.cardValue-title {
-	font-size: 12px;
+.carValue-main {
+	position: relative;
+	left: 20px;
+	top: 20px
 }
 
-.cardInput {}
+.cardValue-title {
+	font-size: 14px;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+}
+
+.cardInput {
+
+	width: 19vw;
+
+}
 
 /* 动画 */
 
@@ -323,6 +447,7 @@ const addTxtIndex = ref(false)
 }
 
 .guideSed-enter-active {
+	animation: guideSed-in 1s;
 	transition: all 0.8s;
 }
 
@@ -332,5 +457,60 @@ const addTxtIndex = ref(false)
 
 .guideSed-enter-to {
 	opacity: 1;
+}
+
+/* 试听按钮样式 */
+.try-listen {
+	position: relative;
+	left: calc(70% - 10px);
+	color: white;
+	border-radius: 10px;
+	font-weight: bold;
+}
+
+::v-deep .el-card__body {
+	padding: 0px;
+
+}
+
+:deep(.el-input__wrapper) {
+	background-color: #f0f0f0;
+	border-radius: 10px;
+}
+
+/* 取消边缘线 */
+::v-deep .el-input__wrapper {
+	box-shadow: none !important;
+}
+
+::v-deep .el-select .el-input.is-focus .el-input__wrapper {
+	box-shadow: none !important;
+}
+
+::v-deep .el-select .el-input__wrapper.is-focus {
+	box-shadow: none !important;
+}
+
+::v-deep .el-select:hover:not(.el-select--disabled) .el-input__wrapper {
+	box-shadow: none !important;
+}
+
+::v-deep .el-select {
+	--el-select-input-focus-border-color: none !important;
+}
+
+/* 淡入淡出关键帧 */
+@keyframes guideSed-in {
+	0% {
+		opacity: 0;
+	}
+
+	50% {
+		opacity: 0;
+	}
+
+	100% {
+		opacity: 1;
+	}
 }
 </style>
