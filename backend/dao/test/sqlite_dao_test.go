@@ -51,7 +51,8 @@ func TestSQLite(t *testing.T) {
 }
 
 func migrate() {
-	driver.Migrate(&Test{})
+	migrator := driver.GetInstance().Migrator()
+	_ = migrator.CreateTable(&Test{})
 }
 
 func add() {
