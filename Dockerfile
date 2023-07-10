@@ -22,7 +22,7 @@ WORKDIR /app
 
 # COPY --from=build /app/main /app/main
 RUN ls -al
-COPY ./main .
+COPY ./backend/main .
 
 EXPOSE 8080
 
