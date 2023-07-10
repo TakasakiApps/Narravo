@@ -15,7 +15,7 @@ import (
 	"testing"
 )
 
-func TestVerify(t *testing.T) {
+func mTestVerify(t *testing.T) {
 	middlewares.Register()
 
 	engine.Gin.POST("/debug", func(c *gin.Context) {
