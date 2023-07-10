@@ -21,7 +21,8 @@ FROM alpine
 WORKDIR /app
 
 # COPY --from=build /app/main /app/main
-COPY ./main /app/
+RUN ls -al
+COPY ./main .
 
 EXPOSE 8080
 
