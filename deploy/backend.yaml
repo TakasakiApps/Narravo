@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: narravo-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: narravo-backend
+  template:
+    metadata:
+      labels:
+        k8s-app: narravo-backend
+    spec:
+      containers:
+        - env:
+            - name: TENCENT_CLOUD_SECRET_ID
+              value: #{TENCENT_CLOUD_SECRET_ID}#
+            - name: TENCENT_CLOUD_SECRET_KEY
+              value: #{TENCENT_CLOUD_SECRET_KEY}#
+          image: aysnine/narravo-backend:latest
+          name: narravo-backend
+          volumeMounts:
+            - name: data-volume
+              mountPath: /app/.narravo
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+      imagePullSecrets:
+        - name: private-docker-hub-narravo
+      volumes:
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: narravo-backend-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: narravo-backend-pvc
+  namespace: default
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: narravo-backend
+spec:
+  type: ClusterIP
+  ports:
+    - name: entry
+      port: 80
+      targetPort: 8080
+  selector:
+    k8s-app: narravo-backend
+  sessionAffinity: ClientIP
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: narravo-backend
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`narravo.kmou424.moe`)
+      kind: Rule
+      services:
+        - name: narravo-backend
+          port: entry
+      middlewares:
+        - name: narravo-backend-https-redirect-middleware
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: narravo-backend-https-redirect-middleware
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: narravo-backend-tls
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`narravo.kmou424.moe`)
+      kind: Rule
+      services:
+        - name: narravo-backend
+          port: entry
+  tls:
+    certResolver: default
