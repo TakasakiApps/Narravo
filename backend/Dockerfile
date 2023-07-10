@@ -24,7 +24,7 @@ WORKDIR /app
 
 COPY --from=build /app/main /app/main
 
-RUN ls -alh
+RUN ls -alh /app
 
 EXPOSE 8080
 
