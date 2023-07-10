@@ -13,6 +13,8 @@ COPY . .
 # # RUN go build -o main .
 RUN GOARCH=amd64 GOOS=linux CGO_ENABLED=1 go build -ldflags "-s -w" -o main .
 
+RUN ls -alh
+
 FROM alpine
 
 # ENV TENCENT_CLOUD_SECRET_ID=
@@ -21,6 +23,8 @@ FROM alpine
 WORKDIR /app
 
 COPY --from=build /app/main /app/main
+
+RUN ls -alh
 
 EXPOSE 8080
 
