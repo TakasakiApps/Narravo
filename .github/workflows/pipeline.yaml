@@ -28,12 +28,13 @@ jobs:
       - name: Test
         run: make backend-test
 
+      - name: Build
+        run: cd backend && go build -o main .
+
   # integration:
   #   needs: test
   #   if: ${{ startsWith(github.event.head_commit.message, 'chore(release)') || contains(github.event.head_commit.message, '[deploy]') }}
   #   runs-on: ubuntu-latest
-  #   outputs:
-  #     latestVersion: ${{ steps.previousTag.outputs.tag }}
   #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@v2
@@ -64,19 +65,18 @@ jobs:
   #     - run: |
   #         TAG=${{ steps.previousTag.outputs.tag }}
   #         echo $TAG
-  #         sed -i -e "s/\:latest/\:${TAG}/g" ./deploy/cls-softfunny.yml
-  #         cat ./deploy/cls-softfunny.yml
+  #         sed -i -e "s/\:latest/\:${TAG}/g" ./deploy/backend.yaml
+  #         cat ./deploy/backend.yaml
 
   #     - uses: cschleiden/replace-tokens@v1
   #       with:
   #         files: '["deploy/*.yml"]'
   #       env:
-  #         JWT_SECRET: ${{ secrets.JWT_SECRET }}
-  #         WX_APP_ID: ${{ secrets.WX_APP_ID }}
-  #         WX_APP_SECRET: ${{ secrets.WX_APP_SECRET }}
+  #         TENCENT_CLOUD_SECRET_ID: ${{ secrets.TENCENT_CLOUD_SECRET_ID }}
+  #         TENCENT_CLOUD_SECRET_KEY: ${{ secrets.TENCENT_CLOUD_SECRET_KEY }}
 
   #     - uses: actions-hub/kubectl@v1.21.2
   #       env:
   #         KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
   #       with:
-  #         args: apply -f ./deploy/cls-softfunny.yml
+  #         args: apply -f ./deploy/backend.yaml
