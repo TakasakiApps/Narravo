@@ -1,4 +1,3 @@
-
 <template>
   <div class="common-layout">
     <el-container>
@@ -69,11 +68,13 @@
 
         <div class="user">
           <div v-if="!isAvatar">
-            <el-popover popper-style="display:flex; width:300px;height:130px;" placement="right" trigger="hover"
-              >
+            <el-popover popper-style="display:flex; width:300px;height:130px;" placement="right" trigger="hover">
               <div style="width: 64px; margin-right: 15px;
              display: flex; align-items: center; justify-content: center;">
-                <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
+                <el-upload action="" :before-upload="beforeAvatarUpload" :http-request="upLoad" :show-file-list="false">
+                  <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
+                </el-upload>
+
               </div>
               <div style=" width: 225px;">
                 <h3 style="font-size: 22px; margin: 0; color:#333333">{{ userinfo.username }}</h3>
@@ -91,13 +92,15 @@
                 </div>
               </div>
               <template #reference>
-                <el-avatar :src="circleUrl" />
+                <el-upload action="" :before-upload="beforeAvatarUpload" :http-request="upLoad" :show-file-list="false">
+                  <el-avatar :src="circleUrl" />
+                </el-upload>
+
               </template>
             </el-popover>
           </div>
           <div v-if="isAvatar">
-            <el-popover popper-style="display:flex; width:300px;height:130px;" placement="right" trigger="hover"
-              >
+            <el-popover popper-style="display:flex; width:300px;height:130px;" placement="right" trigger="hover">
               <div style="width: 64px; margin-right: 15px;
              display: flex; align-items: center; justify-content: center;">
                 <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
@@ -142,7 +145,7 @@
           <div class="setPwd">
             <el-dialog v-model="isSetPwd" align-center center :show-close="false" lock-scroll style="width:448px;  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.1);
               background:#F9F9F9; border-radius:15px;">
-<div style="display:flex; flex-direction:column; align-items:center
+              <div style="display:flex; flex-direction:column; align-items:center
            ">
                 <h2>设置新密码</h2>
 
@@ -215,15 +218,18 @@
 </template>
 <script setup lang='ts'>
 
-import { ref, inject, watch, reactive, onBeforeMount } from 'vue'
+import { ref, inject, watch, reactive, onMounted } from 'vue'
 import { client } from './http/client'
 import { useColorMode } from '@vueuse/core'
 import router from './router'
 import { ipcRenderer } from 'electron'
+import defaultImg from './assets/默认头像.png'
+
+
 
 
 //用户头像
-const circleUrl = ref('https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png')
+const circleUrl = ref(defaultImg)
 //图片点击高亮显示
 const btnmenu = ref(10)
 const btnmenuClick = (id: any, path: any) => {
@@ -270,11 +276,15 @@ const getDate = () => {
   return str
 }
 //检查本地是否存的有登录信息，有就显示（已登录），没有则显示（未登录）
-onBeforeMount(() => {
-  if(localStorage.token){
+onMounted(() => {
+  if (localStorage.token) {
     isAvatar.value = false
     userinfo.logintime = localStorage.logintime
     userinfo.username = localStorage.username
+
+  }
+  if (localStorage.imgUrl) {
+    circleUrl.value = localStorage.imgUrl
   }
 })
 //登录，注册功能实现
@@ -329,12 +339,12 @@ const loginUp = () => {
       ElNotification({ title: '登录成功！', message: '欢迎您', type: 'success' })
       localStorage.token = res.data.token
       localStorage.username = sign.username
-        userinfo.username = localStorage.username
-        //获取登录时间
-        userinfo.logintime = getDate()
-        localStorage.logintime = getDate()
-        //关闭登录框
-        isLogin.value = false
+      userinfo.username = localStorage.username
+      //获取登录时间
+      userinfo.logintime = getDate()
+      localStorage.logintime = getDate()
+      //关闭登录框
+      isLogin.value = false
     })
   } else {
     ElNotification({ message: '账号或密码不能为空！', type: 'warning' })
@@ -361,17 +371,17 @@ const guest = () => {
 //4.更改密码功能
 const isSetPwd = ref(false) //控制更改密码页面是否显示
 
-  const setPwd = reactive({
-    username: '',
-    password: '',
-    newPassword: ''
-  })
+const setPwd = reactive({
+  username: '',
+  password: '',
+  newPassword: ''
+})
 const setPwdUp = () => {
-  client.post('/api/v1/auth/reset/password',JSON.stringify(setPwd)).then(res => {
-    if(res.status == 200){
-      ElNotification.success({title:'密码修改成功'})
-    }else{
-      ElNotification.success({title:'密码修改失败'})
+  client.post('/api/v1/auth/reset/password', JSON.stringify(setPwd)).then(res => {
+    if (res.status == 200) {
+      ElNotification.success({ title: '密码修改成功' })
+    } else {
+      ElNotification.success({ title: '密码修改失败' })
     }
   }).catch(err => {
     console.log(err);
@@ -408,17 +418,94 @@ const checkRight = () => {
   } else
     globalVars.isRight = !globalVars.isRight
 }
+//获取头像图片所需参数
+
+//上传头像图片
+//上传头像所要的参数
+const date = {
+  token: localStorage.token,
+  type: 'avatar'
+}
+
+const upLoad = (param) => {
+  let formData = new FormData()
+  formData.append('file', param.file)
+
+  console.log(formData.get('file'));
+  if (date.token) {
+    client.post('/api/v1/assets/upload/image', formData, {
+      params: {
+        token: date.token,
+        type: date.type
+      }
+    }, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    }).then(res => {
+      if (res.status == 200) {
+        ElMessage.success('上传头像成功')
+        localStorage.imgId = res.data.id
+        
+
+        //上传完后加载图片
+        client.get('/api/v1/assets/fetch/image', {
+          params: {
+            token: date.token,
+            type: date.type,
+            id: localStorage.imgId
+          }
+        }).then(res => {
+          localStorage.imgUrl = res.request.responseURL
+          circleUrl.value = res.request.responseURL
+          
+
+        }).catch(err => {
+          console.log(err);
+
+        })
+      }
+      else {
+        ElMessage.error('头像上传失败')
+      }
+    }).catch(err => {
+      console.log(err);
+
+    })
+  } else {
+    ElNotification.error({ message: '登录状态已过期！请重新登录' })
+  }
+  console.log('触发上传事件');
+
+}
+
+//1.检查图片格式和大小符不符合要求
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (param) => {
+  if (param.type == 'image/jpeg' || param.type == 'image/png' || param.type == 'image/gif') {
+    
+    console.log(param.type);
+    return true
+  } else if (param.size / 1024 / 1024 > 2) {
+    ElNotification.error({ title: '头像太大了', message: '请上传小于2MB的头像' })
+    return false
+  }
+
+  ElNotification.error({ title: '上传头像不符合格式', message: '请上传jpeg,png或gif格式的头像' })
+
+  return false
+}
+
+
 </script>
   
 <style scoped lang="scss">
 $background-color: rgb(239, 122, 122);
 $icon-color: #ccc;
+$active-icon:rgba(191, 70, 113);
 
 .btn {
-
-  svg,
-  .asideFont {
-    color: rgba(191, 70, 113) !important;
+  svg,.asideFont {
+    color: $active-icon !important;
   }
 }
 
@@ -431,7 +518,7 @@ $icon-color: #ccc;
 
     display: flex;
     flex-direction: column;
-    background: #F2F2F2;
+    background: rgb(242, 242, 242);
     transition: 0.5s;
     border-radius: 0 8px 8px 0;
     width: 77px;
@@ -477,7 +564,7 @@ $icon-color: #ccc;
 
       svg,
       .asideFont {
-        color: rgba(191, 70, 113) !important;
+        color: $active-icon !important;
 
       }
     }
@@ -539,25 +626,12 @@ $icon-color: #ccc;
 
 .open {
   width: 0 !important;
-  // animation: close 1.5s !important;
 }
 
-//动画无效
-// @keyframes close{
-//   from{width:77px;}
-//   to{width: 1px;}
-// }
 .close {
   width: 77px !important;
-  // animation: open 1.5s !important; 
-
 }
 
-//动画无效
-// @keyframes open{
-//   from{width:1px;}
-//   to{width:77px;}
-// }
 .login {
   h2 {
     font-size: 24px;
@@ -613,7 +687,8 @@ $icon-color: #ccc;
     font-family: '更纱黑体';
   }
 }
-.setPwd{
+
+.setPwd {
   h2 {
     font-size: 24px;
     color: #333333;
@@ -640,6 +715,7 @@ $icon-color: #ccc;
     font-family: '更纱黑体';
   }
 }
+
 .switch {
   width: 68px;
   height: 68px;
