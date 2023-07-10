@@ -22,6 +22,8 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          submodules: recursive
 
       - name: Test
         run: make backend-test
