@@ -15,6 +15,7 @@ import (
 
 func toResponsibleNovelInfo(novel *entity.Novel) map[string]any {
 	return map[string]any{
+		"id":          novel.ID,
 		"name":        novel.Name,
 		"description": novel.Description,
 		"author":      dao.GetInstance().QueryAuthorById(novel.AuthorId),
