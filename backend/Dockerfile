@@ -1,30 +1,26 @@
-FROM golang:1.20 AS build
+FROM golang:1.20-alpine AS build
 
 WORKDIR /app
 
+# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+RUN apk add build-base
+
 COPY go.mod .
 COPY go.sum .
+
+# RUN go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/,direct
 
 RUN go mod download
 
 COPY . .
 
-# RUN apk add build-base
-# # RUN go build -o main .
-RUN GOARCH=amd64 GOOS=linux CGO_ENABLED=1 go build -ldflags "-s -w" -o main .
-
-RUN ls -alh
+RUN CGO_ENABLED=1 go build -o main .
 
 FROM alpine
-
-# ENV TENCENT_CLOUD_SECRET_ID=
-# ENV TENCENT_CLOUD_SECRET_KEY=
 
 WORKDIR /app
 
 COPY --from=build /app/main /app/main
-
-RUN ls -alh /app
 
 EXPOSE 8080
 
