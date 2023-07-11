@@ -14,6 +14,7 @@ import (
 
 func toResponsibleAuthorInfo(author *entity.Author) map[string]any {
 	return map[string]any{
+		"id":          author.ID,
 		"name":        author.Name,
 		"description": author.Description,
 		"avatarId":    author.AvatarId,
