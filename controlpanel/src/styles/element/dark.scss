@@ -1,0 +1,18 @@
+// only scss variables
+
+$--colors: (
+  "primary": (
+    "base": #589ef8,
+  ),
+);
+
+@forward "element-plus/theme-chalk/src/dark/var.scss" with (
+  $colors: $--colors
+);
+.dark body .back {
+  background: #1a1a1a;
+  color: #fdfdfd;
+}
+.dark body .box-card {
+  background: rgba(0, 0, 0, 0);
+}
