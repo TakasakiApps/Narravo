@@ -1,9 +1,9 @@
 <template>
   <div class="common-layout">
-    <el-container>
+    <el-container v-show="readin">
       <el-aside width="80px" :class="[globalVars.isRight == 1 ? 'close' : '', globalVars.isRight == 2 ? 'open' : '']">
         <div class="iconBox">
-          <div class="asideIcon" v-if="show" @click="back">
+          <div class="asideIcon" id="back" v-if="show" @click="back">
             <svg fill="currentColor" t="1688701539082" class="icon" viewBox="0 0 1025 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="3294" width="28" height="28">
               <path
@@ -29,31 +29,19 @@
             </svg>
             <p class="asideFont">书架</p>
           </div>
-          <div class="asideIcon" :class="[btnmenu == 1 ? 'btn' : '']" @click="btnmenuClick(1, '/writer')">
-            <svg fill="currentColor" t="1688650152027" viewBox="0 0 1024 1024" version="1.1"
-              xmlns="http://www.w3.org/2000/svg" p-id="44797" xmlns:xlink="http://www.w3.org/1999/xlink" width="32"
-              height="32">
+          <div class="asideIcon" :class="[btnmenu == 1 ? 'btn' : '']" @click="btnmenuClick(1, '/SearviemVue')">
+            <svg t="1699363339502" fill="currentColor" class="icon" viewBox="0 0 1024 1024" version="1.1"
+              xmlns="http://www.w3.org/2000/svg" p-id="8373" width="32" height="32">
               <path
-                d="M603.733333 181.333333L386.133333 401.066667c-6.4 6.4-10.666667 14.933333-12.8 25.6l-51.2 211.2c-8.533333 38.4 23.466667 74.666667 61.866667 64l200.533333-53.333334c8.533333-2.133333 17.066667-6.4 23.466667-14.933333l234.666667-236.8V853.333333c0 40.533333-32 72.533333-70.4 74.666667H170.666667c-40.533333 0-74.666667-34.133333-74.666667-74.666667V256c0-40.533333 34.133333-74.666667 74.666667-74.666667h433.066666z"
-                p-id="44798"></path>
+                d="M915.5 873L677.7 635.3c20.5-24.6 37.2-52 49.8-81.7 17-40.3 25.7-83.1 25.7-127.2s-8.6-86.9-25.7-127.2c-16.5-38.9-40-73.8-70-103.8s-64.9-53.5-103.8-70c-40.3-17-83.1-25.7-127.2-25.7s-86.9 8.6-127.2 25.7c-38.9 16.5-73.8 40-103.8 70s-53.5 64.9-70 103.8c-17 40.3-25.7 83.1-25.7 127.2s8.6 86.9 25.7 127.2c16.5 38.9 40 73.8 70 103.8s64.9 53.5 103.8 70c40.3 17 83.1 25.7 127.2 25.7s86.9-8.6 127.2-25.7c29.7-12.6 57-29.2 81.7-49.8L873 915.5c5.9 5.9 13.5 8.8 21.2 8.8s15.4-2.9 21.2-8.8c11.8-11.8 11.8-30.7 0.1-42.5z"
+                fill="#262626" p-id="8374"></path>
               <path
-                d="M738.133333 147.2L435.2 448c-4.266667 4.266667-6.4 8.533333-8.533333 14.933333l-32 125.866667c-6.4 23.466667 14.933333 44.8 38.4 38.4l128-29.866667c6.4-2.133333 10.666667-4.266667 14.933333-8.533333l300.8-302.933333c38.4-38.4 38.4-102.4 0-140.8s-100.266667-38.4-138.666667 2.133333z"
-                p-id="44799"></path>
+                d="M610.5 456.5c-16.6 0-30-13.4-30-30 0-84.9-69.1-154.1-154.1-154.1-16.6 0-30-13.4-30-30s13.4-30 30-30c57.2 0 110.9 22.3 151.4 62.7 40.4 40.4 62.7 94.2 62.7 151.4 0 16.5-13.4 30-30 30z"
+                fill="#FFFFFF" p-id="8375"></path>
             </svg>
-            <p class="asideFont">制作</p>
+            <p class="asideFont">搜索</p>
           </div>
-          <div class="asideIcon" :class="[btnmenu == 3 ? 'btn' : '']" @click="btnmenuClick(3, '/role')">
-            <svg fill="currentColor" t="1688631768366" viewBox="0 0 1024 1024" version="1.1"
-              xmlns="http://www.w3.org/2000/svg" p-id="25773" width="32" height="32">
-              <path
-                d="M902.4 635.1c-5.3-2.4-99.1-43.2-204.3-65.3 54.1-34.5 86.9-94.3 86.9-158.5v-112C785 195.5 700.7 111 597.1 111c-53.9 0-105.2 23.3-140.7 63.9-30.4 34.3-47.2 78.6-47.3 124.4v112c0 63.2 31.4 119.2 79.3 153.3-115.7 20-225.4 67.9-230.5 70.2-31.2 12.8-54.6 47.8-54.6 81.6v135.2h0.6c4.6 34.9 34.3 60.9 69.5 60.9h612.8c30.7 0 58.1-20 68.2-49.9l1.8-5.3V716.4c0-34-23.6-69.2-53.8-81.3"
-                p-id="25774"></path>
-              <path
-                d="M308.6 557.9c37.4-11.7 55.1-18.2 55.1-18.2s24.2-10.7 17.8-32.1c-15-28.5-25.7-50.6-25.7-134V265.2s6.4-52.7 26.7-57.7c1.6-1.7 1.9-4.3 1.2-7.2-5.3-12.6-17.7-20.9-31.5-20.9-78.3 0.1-141.8 63.6-141.8 142v90.1c0 35 13.2 66.7 34.3 91.5-67.1 20.6-125.7 53.1-136.4 59.3-24.4 11.6-41.9 39.3-41.9 66.8v98.3c0 18.9 15.3 34.2 34.2 34.2 17.3-0.1 31.7-13.2 33.5-30.4 0.1-1.3 0.8-2.4 0.8-3.8v-15.7c2.7-32.4 14.9-91.2 65.2-118.8 8-3.5 16.1-6.9 24.3-10.1 28.2-7.9 56.3-16.2 84.2-24.9"
-                p-id="25775"></path>
-            </svg>
-            <p class="asideFont">角色</p>
-          </div>
+
           <div class="asideIcon" :class="[btnmenu == 2 ? 'btn' : '']" @click="btnmenuClick(2, '/search')">
             <svg fill="currentColor" t="1688650220888" class="icon" viewBox="0 0 1024 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="47861" xmlns:xlink="http://www.w3.org/1999/xlink" width="32"
@@ -79,7 +67,7 @@
               <div style=" width: 225px;">
                 <h3 style="font-size: 22px; margin: 0; color:#333333">{{ userinfo.username }}</h3>
                 <div style="margin: 6px 0;">
-                  <p style="margin: 0; font-size: 12px; color: #7F7F7F ;">上次同步时间:</p>
+                  <p style="margin: 0; font-size: 12px; color: #7F7F7F ;">上次登录时间:</p>
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F;">{{ userinfo.logintime }}</p>
                 </div>
                 <div style="display: flex; margin-left: 36px;">
@@ -99,14 +87,15 @@
               </template>
             </el-popover>
           </div>
-          <div v-if="isAvatar">
+          <div v-else="isAvatar">
             <el-popover popper-style="display:flex; width:300px;height:130px;" placement="right" trigger="hover">
               <div style="width: 64px; margin-right: 15px;
              display: flex; align-items: center; justify-content: center;">
                 <el-avatar :src="circleUrl" style="width: 64px; height: 64px;" />
               </div>
               <div style=" width: 225px;">
-                <h3 style="font-size: 22px; margin: 0; color:#333333;">未登录</h3>
+                <h3 v-if="!isUser" style="font-size: 22px; margin: 0; color:#333333;">未登录</h3>
+                <h3 v-else style="font-size: 22px; margin: 0; color:#333333;">游客</h3>
                 <div style="margin: 6px 0;">
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F;">上次同步时间:</p>
                   <p style="margin: 0; font-size: 12px; color: #7F7F7F;;">登录后启用云同步功能</p>
@@ -151,7 +140,7 @@
 
                 <input type="text" placeholder="账号" v-model="sign.username" style="padding-left: 10px;" />
                 <input type="password" placeholder="旧密码" v-model="sign.password" style="padding-left: 10px;" />
-                <input type="password" placeholder="新密码" v-model="sign.password" style="padding-left: 10px;" />
+                <input type="password" placeholder="新密码" v-model="sign.oldpassword" style="padding-left: 10px;" />
                 <button @click="setPwdUp">确认</button>
               </div>
             </el-dialog>
@@ -170,6 +159,7 @@
 
             </el-dialog>
           </div>
+          <!-- 切换黑夜按钮 -->
           <div class="switch" @click="btnSwitch" :class="[isDark == true ? 'dark' : '']">
             <div class="sun" v-show="isDark == false">
               <svg fill="currentColor" t="1688632390516" viewBox="0 0 1024 1024" version="1.1"
@@ -188,14 +178,14 @@
               </svg>
             </div>
           </div>
-          <div class="asideIcon" :class="[btnmenu == 4 ? 'btn' : '']" @click="btnmenuClick(4, '/setting')">
+          <!-- <div class="asideIcon" :class="[btnmenu == 4 ? 'btn' : '']" @click="btnmenuClick(4, '/setting')">
             <svg fill="currentColor" t="1688633582143" viewBox="0 0 1024 1024" version="1.1"
               xmlns="http://www.w3.org/2000/svg" p-id="35296" width="30" height="30">
               <path
                 d="M885.196958 871.528145c-14.753141-5.464126-25.134981-8.742602-34.970408-12.56749-30.052695-11.474665-59.012564-24.588568-89.611671-34.970408-8.742602-2.732063-21.310093-1.639238-29.506282 2.732063-21.310093 10.38184-42.073773 22.402918-61.744627 36.063234-6.556952 4.371301-12.021078 14.206728-13.660316 22.402918-6.556952 36.063234-11.474665 72.67288-15.845966 109.282526-2.732063 20.76368-12.56749 30.052695-33.877583 29.506282-62.837452-0.546413-125.674905-0.546413-188.512357 0-20.76368 0-31.691933-8.196189-34.423996-28.959869-4.917714-36.609646-10.928253-72.67288-15.299554-109.282526-1.639238-12.56749-6.010539-20.217267-18.031617-26.227806-20.217267-9.835427-38.248884-23.495743-58.466151-33.33117-7.103364-3.824888-18.031617-5.464126-25.681394-2.732063-35.516821 12.56749-69.940817 26.774219-104.911225 40.434535-25.134981 9.835427-32.238345 7.649777-46.445074-16.392379-31.14552-53.002025-61.744627-106.00405-92.343735-159.006075-14.206728-24.588568-13.660316-30.599107 8.742602-48.084311 29.506282-23.495743 59.558977-45.898661 88.518846-69.940817 5.464126-4.371301 9.289015-14.206728 9.289015-21.310093 1.092825-20.217267-3.278476-41.52736 0-61.198215 3.824888-21.310093-4.917714-32.238345-20.217267-43.71301-27.320632-19.670855-52.455613-41.52736-79.229831-61.198215-15.845966-12.021078-19.670855-24.588568-9.289015-42.073773 33.33117-56.280501 66.115928-113.107414 98.900686-169.934328 9.289015-15.845966 21.310093-19.124442 38.248884-12.56749 36.063234 14.206728 72.126467 28.959869 108.736113 42.073773 7.649777 2.732063 19.670855 1.092825 27.320632-2.732063 20.76368-10.38184 39.341709-24.042156 60.105389-34.423996 10.928253-5.464126 14.753141-12.021078 15.845966-22.94933 4.917714-37.156059 10.928253-74.312118 15.845966-111.468177C386.322226 7.649777 397.796892 0 418.014159 0c62.837452 0.546413 125.674905 0.546413 188.512357 0 19.670855 0 30.599107 8.196189 32.784758 27.867044 4.917714 36.609646 10.928253 72.67288 15.299554 109.282526 1.639238 13.660316 6.556952 21.856505 19.670855 27.867044 19.124442 8.742602 37.156059 19.670855 54.641263 31.691933 11.474665 8.196189 21.310093 8.196189 33.877583 2.732063 33.877583-14.206728 68.301579-26.774219 102.725575-40.980947 19.124442-7.649777 32.238345-3.824888 42.620185 14.753141 31.14552 55.187676 63.930278 109.828939 95.62221 164.470202 12.56749 21.856505 10.928253 28.959869-9.289015 44.805836-28.959869 22.402918-57.919739 45.352248-87.426021 67.755166-9.835427 7.649777-12.56749 14.753141-11.474665 27.320632 2.185651 22.94933-0.546413 46.445074 0.546413 69.394404 0.546413 8.196189 4.371301 18.031617 10.38184 22.94933 28.959869 24.042156 59.012564 46.445074 88.518846 69.394404 20.217267 15.845966 21.310093 22.94933 8.742602 44.805836-32.238345 55.734088-64.47669 110.921764-97.261448 166.10944C901.042924 860.05348 891.753909 865.517606 885.196958 871.528145zM510.357893 692.304803c98.900686 0.546413 180.862581-79.776244 181.408993-177.584105 0.546413-100.539924-79.229831-181.955406-178.67693-182.501819-99.447099-0.546413-181.408993 80.322657-181.408993 179.769755C331.134551 610.342908 412.00362 691.75839 510.357893 692.304803z"
                 p-id="35297"></path>
             </svg>
-          </div>
+          </div> -->
         </div>
       </el-aside>
       <!-- 添加控制箭头是否显示 -->
@@ -214,6 +204,9 @@
         <router-view></router-view>
       </el-main>
     </el-container>
+    <div v-show="!readin">
+      <side-bar-nav @btnSwitch='btnSwitch' @isReading="isReading"></side-bar-nav>
+    </div>
   </div>
 </template>
 <script setup lang='ts'>
@@ -225,7 +218,8 @@ import router from './router'
 import { ipcRenderer } from 'electron'
 import defaultImg from './assets/默认头像.png'
 
-
+// import { el } from 'element-plus/es/locale/index.mjs'
+//阅读模式
 
 
 //用户头像
@@ -233,8 +227,17 @@ const circleUrl = ref(defaultImg)
 //图片点击高亮显示
 const btnmenu = ref(10)
 const btnmenuClick = (id: any, path: any) => {
+  //
   btnmenu.value = id
   router.push({ path })
+
+}
+let isUser = ref(false)
+// 是否阅读
+let readin = ref(true)
+// 切换阅读界面
+function isReading() {
+  readin.value = !readin.value
 }
 //切换暗——亮模式
 const isDark = ref(false)
@@ -278,6 +281,7 @@ const getDate = () => {
 //检查本地是否存的有登录信息，有就显示（已登录），没有则显示（未登录）
 onMounted(() => {
   if (localStorage.token) {
+    // isAvatar.value = true
     isAvatar.value = false
     userinfo.logintime = localStorage.logintime
     userinfo.username = localStorage.username
@@ -291,7 +295,7 @@ onMounted(() => {
 //1.注册
 const sign = reactive({
   username: '',
-  password: ''
+  password: '',
 })
 const signUp = () => {
   //需要转成字符串发送数据
@@ -345,6 +349,7 @@ const loginUp = () => {
       localStorage.logintime = getDate()
       //关闭登录框
       isLogin.value = false
+      isAvatar.value = false
     })
   } else {
     ElNotification({ message: '账号或密码不能为空！', type: 'warning' })
@@ -364,6 +369,8 @@ const guest = () => {
     localStorage.logintime = getDate()
     userinfo.logintime = localStorage.logintime
     isLogin.value = false
+    isUser.value = true
+    // console.log(isUser)
   }).catch(err => {
     console.log(err);
   })
@@ -391,7 +398,9 @@ const setPwdUp = () => {
 const loginOut = () => {
   ElNotification.success({ title: '退出账号成功' })
   localStorage.clear()
-  isAvatar.value = true
+  isAvatar.value = true,
+    circleUrl.value = true
+
 }
 //监听全局变量
 const globalVars = inject('globalVars')
@@ -399,6 +408,7 @@ const globalVars = inject('globalVars')
 const show = ref(false)
 //点击时返回上级目录
 const back = () => {
+  globalVars.isHidden = !globalVars.isHidden
   router.back()
 }
 watch(() => globalVars.isInfo, (newValue) => {
@@ -446,7 +456,7 @@ const upLoad = (param) => {
       if (res.status == 200) {
         ElMessage.success('上传头像成功')
         localStorage.imgId = res.data.id
-        
+
 
         //上传完后加载图片
         client.get('/api/v1/assets/fetch/image', {
@@ -458,7 +468,7 @@ const upLoad = (param) => {
         }).then(res => {
           localStorage.imgUrl = res.request.responseURL
           circleUrl.value = res.request.responseURL
-          
+
 
         }).catch(err => {
           console.log(err);
@@ -482,7 +492,7 @@ const upLoad = (param) => {
 //1.检查图片格式和大小符不符合要求
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (param) => {
   if (param.type == 'image/jpeg' || param.type == 'image/png' || param.type == 'image/gif') {
-    
+
     console.log(param.type);
     return true
   } else if (param.size / 1024 / 1024 > 2) {
@@ -501,10 +511,12 @@ const beforeAvatarUpload: UploadProps['beforeUpload'] = (param) => {
 <style scoped lang="scss">
 $background-color: rgb(239, 122, 122);
 $icon-color: #ccc;
-$active-icon:rgba(191, 70, 113);
+$active-icon: rgba(191, 70, 113);
 
 .btn {
-  svg,.asideFont {
+
+  svg,
+  .asideFont {
     color: $active-icon !important;
   }
 }
@@ -529,7 +541,7 @@ $active-icon:rgba(191, 70, 113);
 
 
     .iconBox {
-      margin-top: 49px;
+      margin-top: 20px;
       display: flex;
       width: 70px;
       height: 326px;
@@ -537,6 +549,8 @@ $active-icon:rgba(191, 70, 113);
       align-items: center;
       justify-content: center;
       flex-direction: column;
+
+      #back {}
 
       .asideIcon {
         display: flex;

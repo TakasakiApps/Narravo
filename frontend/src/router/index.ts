@@ -7,14 +7,21 @@
 //1.导入模块只有一个时不加括号
 import { createRouter, createWebHistory } from 'vue-router'
 
-
+// 书架
 import BookShelf from '../views/BookShelf.vue'
 import Writer from '../views/Writer.vue'
+// 设置
 import Setting from '../views/Setting.vue'
+// 搜索
 import Search from '../views/Search.vue'
+// import SearViem from '../views/Searviem.vue'
+import SearviemVue from '../views/Searviem.vue'
+// 书籍详情
 import Bookinfo from '../views/Bookinfo.vue'
-import Addrole from '../views/Addrole.vue'
+// import Addrole from '../views/Addrole.vue'
+// 阅读
 import Reading from '../views/Reading.vue'
+import BookLiemVue from '../components/BookLiem.vue'
 //2.
 const routes = [
     {
@@ -34,23 +41,32 @@ const routes = [
         component: Search
     },
     {
-        path: '/info',
+        path: '/info/:local/:name?/:author?/:coverId?/:mtime?/:noverid?',
+        name:"info",
         component: Bookinfo,
+        props: true,
         children: [
 
         ]
     },
     {
-        path: '/read',
-        name: 'read',
+        path: '/read/:local/:noverid?/:name?',
+        name: 'reading',
+        props: true,
         component: Reading
     },
+    // {
+    //     path: '/role',
+    //     component: Addrole
+    // },
     {
-        path: '/role',
-        component: Addrole
+        path:'/BookLiemVue',
+        component:BookLiemVue
+    },
+    {
+        path:'/SearviemVue',
+        component:SearviemVue
     }
-
-
 ]
 
 //3.

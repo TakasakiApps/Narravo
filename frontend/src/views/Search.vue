@@ -1,6 +1,6 @@
 <template>
-    <div class="header">
-        <div class="saixvan">
+    <!-- <div class="header"> -->
+    <!-- <div class="saixvan">
             <div class="titles">
                 <p style="  ">分类:</p>
                 <el-select v-model="value">
@@ -13,10 +13,10 @@
                     <el-option v-for="item in type" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
             </div>
-        </div>
+        </div> -->
 
 
-        <div class="search-box">
+    <!-- <div class="search-box">
             <input type="text" class="search-txt" placeholder="想搜啥？" @blur="rmFouce"
                 :class="[searchInput == true ? 'searchInput' : '']">
             <a class="search-btn" @click="toggleInput">
@@ -27,14 +27,12 @@
                         p-id="38229"></path>
                 </svg>
             </a>
-        </div>
-    </div>
+        </div> -->
+    <!-- </div> -->
     <ul class="box" v-infinite-scroll="load" infinite-scroll-immediate="false" style="overflow: auto; ">
         <el-scrollbar height="600px">
             <div class="box-item">
-                <div>
-                    <Story />
-                </div>
+                <Story v-for="(item, index) in bookliem.list " :key="index" :item="item" />
             </div>
         </el-scrollbar>
     </ul>
@@ -42,12 +40,42 @@
     
 <script setup lang='ts'>
 import Story from '../components/Story.vue'
+import { client } from '../http/client'
+import { ref, onMounted } from 'vue'
+import { ipcRenderer } from 'electron'
+onMounted(() => {
+    getAllBook(1)
 
-import { ref } from 'vue'
-//无线滚动条（未使用）
-const count = ref(2)
+})
+let bookliem = ref([])
+function getAllBook(index: number) {
+    client.get('/api/v1/novel/getAllInfo',
+        {
+            params: {
+                token: localStorage.token,
+                page: index,
+                count: 10
+            }
+        }).then(res => {
+            console.log(res.request)
+            bookliem.value = res.data
+        }).catch(err => {
+            console.log(err);
+            setTimeout(() => {
+                ElNotification.closeAll()
+                ElNotification.error({ title: '操作失败!', message: '请检查是否登录或网络' })
+            }, 100)
+        })
+
+}
+function a() {
+    console.log('11')
+}
+// 无线滚动条（未使用）
+const count = ref(1)
 const load = () => {
-    console.log(111);
+    getAllBook(count)
+    count.value++
 }
 //选择器值
 const options = [
@@ -85,6 +113,7 @@ const toggleInput = () => {
 const rmFouce = () => {
     searchInput.value = !searchInput.value
 }
+
 </script>
     
 <style scoped lang="scss">
@@ -94,12 +123,13 @@ const rmFouce = () => {
     align-items: center;
     justify-content: space-between;
 
-    .saixvan{
+    .saixvan {
         width: 350px;
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
+
     .titles {
         width: 150px;
         height: 51px;
@@ -164,6 +194,8 @@ const rmFouce = () => {
 }
 
 .search-box {
+    position: relative;
+    right: 1px;
     background: #eeecec;
     height: 40px;
     border-radius: 40px;

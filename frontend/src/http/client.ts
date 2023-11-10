@@ -10,14 +10,15 @@ const client = axios.create({
         'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
       },
 })
-client.interceptors.request.use(function(config) {
-  if (config.method === 'post' || config.method === 'put') {
-    config.data = Encrypt(config.data);
-  } else if (config.method === 'get' || config.method === 'delete') {
-    config.params = Encrypt(config.params);
-  }
-  return config;
-});
+//加密模块
+// client.interceptors.request.use(function(config) {
+//   if (config.method === 'post' || config.method === 'put') {
+//     config.data = Encrypt(config.data);
+//   } else if (config.method === 'get' || config.method === 'delete') {
+//     config.params = Encrypt(config.params);
+//   }
+//   return config;
+// });
 
 export {
     client

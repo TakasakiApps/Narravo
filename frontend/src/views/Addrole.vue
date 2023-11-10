@@ -51,6 +51,7 @@
 								indicator-position="none">
 								<el-carousel-item :key="2 - 1">
 									<el-avatar :size="160" class="avatar" />
+									<!-- <div style="position: a;">11111</div> -->
 									<div class="Roleinput">
 										<el-input v-model="Card.name" placeholder="请输入你想要创建的角色名" />
 										<div class="avatar-txt">
@@ -152,7 +153,6 @@ onMounted(() => {
 	// }
 	//获取全部角色卡
 	const token = localStorage.token
-	console.log(token)
 	if (token) {
 		axios.get('/api/v1/tts/models', {
 			params: {
@@ -162,7 +162,6 @@ onMounted(() => {
 			.then(
 				(e: any) => {
 					axgIlem.value = Object.entries(e.data)
-					console.log(axgIlem.value)
 				}
 			)
 
@@ -254,39 +253,47 @@ const makeRoleCard = () => {
 		Card.emotionlv = 100;
 		Card.modelId = ''
 	} else {
-		ElNotification({ message: '请选择一个模型', type: 'warning' })
+		if (localStorage.token == null) {
+			ElNotification({ message: '请先登录', type: 'warning' })
+		} else {
+			ElNotification({ message: '至少选择一个模型', type: 'warning' })
+		}
 	}
 }
 //试听
 const tryListen = () => {
-
-	const data = {
-		token: localStorage.token,
-		modelId: Card.modelId,
-		text: '我超，op！',
-		//音量
-		volume: Card.tone,
-		//语速
-		speed: Card.speed,
-		codec: 'mp3',
-		//使用那种模型
-		module: Card.useemot,
-		ttsEmotion: {
-			enabled: Card.isemotion,
-			category: Card.useemot,
-			intensity: Card.emotionlv,
+	if (localStorage.token == null) {
+		ElNotification({ message: '请先登录', type: 'warning' })
+	} else {
+		const data = {
+			token: localStorage.token,
+			modelId: Card.modelId,
+			text: '我超，op！',
+			//音量
+			volume: Card.tone,
+			//语速
+			speed: Card.speed,
+			codec: 'mp3',
+			//使用那种模型
+			module: Card.useemot,
+			ttsEmotion: {
+				enabled: Card.isemotion,
+				category: Card.useemot,
+				intensity: Card.emotionlv,
+			}
 		}
+		console.log(JSON.stringify(data))
+		axios.post('/api/v1/tts/createTask', JSON.stringify(data)).then(
+			(e: any) => {
+				console.log(e)
+			}
+		).catch(
+			(err: any) => {
+				console.log(err)
+			}
+		)
 	}
-	console.log(JSON.stringify(data))
-	axios.post('/api/v1/tts/createTask', JSON.stringify(data)).then(
-		(e: any) => {
-			console.log(e)
-		}
-	).catch(
-		(err: any) => {
-			console.log(err)
-		}
-	)
+
 }
 </script>
     
@@ -387,14 +394,14 @@ const tryListen = () => {
 	position: relative;
 	/* left: 15%; */
 	margin-left: calc(50% - 80px);
-	/* top: 50px; */
+	top: 4vh;
 }
 
 .Roleinput {
 	position: relative;
 	top: calc(65vh /3.5);
 	width: 18vw;
-	margin-left: 5%;
+	margin-left: 15%;
 }
 
 .avatar-txt {
@@ -466,6 +473,7 @@ const tryListen = () => {
 	color: white;
 	border-radius: 10px;
 	font-weight: bold;
+	top: 25px;
 }
 
 ::v-deep .el-card__body {

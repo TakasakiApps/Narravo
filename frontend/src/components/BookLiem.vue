@@ -1,7 +1,7 @@
 <template>
-  <div class="book-liem-main "  v-contextmenu:bookshelf>
+  <div class="book-liem-main " @click="goinfo(props)" v-if="props.id == undefined">
     <div class="book-img box-margin">
-      <img src="../assets/猫猫.png" alt="" class="book-img-main 
+      <img :src="bookcover" alt="" class="book-img-main 
       shadow-effect 
       no-select 
       no-drag
@@ -14,10 +14,10 @@
           <h5>{{ props.act }}</h5>
         </div>
         <div class="book-liem-inln">
-
+          <!-- 
           <el-tag v-for="(ilem, index ) in props.attr" :key="index" class="tag-box" effect="dark">
             {{ ilem }}
-          </el-tag>
+          </el-tag> -->
         </div>
       </div>
     </div>
@@ -27,22 +27,55 @@
       </el-button>
     </el-tooltip> -->
   </div>
-  <v-contextmenu ref="bookshelf" class="bookshelf">
+  <!-- <v-contextmenu ref="bookshelf" class="bookshelf">
     <v-contextmenu-item><span>加入书架</span></v-contextmenu-item>
-  </v-contextmenu>
+  </v-contextmenu> -->
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-
+// import { useRouter } from 'vue-router'
+import router from '../router'
+import { onMounted, defineProps } from 'vue';
 import { ref } from 'vue'
+import { client } from '../http/client';
 // import {Plus} from '@element-plus/icons-vue'
-const router: any = useRouter()
+// const router: any = useRouter()
+let bookcover = ref(null)
+
+onMounted(() => {
+  client.get('/api/v1/assets/fetch/image', {
+    params: {
+      token: localStorage.token,
+      type: 'cover',
+      id: props.coverid
+    }
+  }).then(
+    res => {
+      bookcover.value = res.request.responseURL
+    }
+  )
+})
+function goinfo(e: any) {
+
+  console.log(e.coverid)
+  router.push({
+    // path: ispath,
+    name: "info",
+    params: {
+      name: props.name,
+      local: props.local,
+      author: props.act,
+      coverId: props.coverid,
+      mtime: props.mtime,
+      noverid: props.bookid
+    }
+  })
+}
 const props = defineProps({
-  id: Number,
+  id: String,
   name: {
     type: String,
-    default: '佚名'
+    default: '作品'
   },
   act: {
     type: String,
@@ -60,14 +93,24 @@ const props = defineProps({
       1: '有声'
     }
   },
-
+  coverid: {
+    type: String,
+    default: '../assets/猫猫.png'
+  },
+  bookid: String,
+  mtime: {
+    type: String,
+    default: "null"
+  },
+  local: {
+    type: Number,
+    default: 0
+  }
 })
 
 </script>
 
 <style scoped>
-
-
 .box-margin {
   margin-top: 1.25rem;
   margin-left: 3rem;
@@ -100,12 +143,14 @@ const props = defineProps({
   float: left;
   max-height: 200px;
   /* box-shadow: 1px 1px 5px 5px #ccc; */
-  
-  
+
+
 }
 
 .book-img-main {
-  width: 150px;border-radius: 25px;
+  width: 150px;
+  border-radius: 25px;
+  height: 160px;
 }
 
 .book-main {

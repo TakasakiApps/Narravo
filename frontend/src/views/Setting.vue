@@ -9,10 +9,7 @@
         </div>
     </div>
     <el-dialog title="头像裁剪" v-model="isCaper">
-        <VueCropper
-        ref="cropper"
-        :img="options"
-        >
+        <VueCropper ref="cropper" :img="options">
 
         </VueCropper>
     </el-dialog>
@@ -43,8 +40,8 @@ const date = {
 }
 //裁剪图片参数
 const isCaper = ref(false)
-let options:any
-let outType:any
+let options: any
+let outType: any
 //上传图片函数
 const upLoad = (param) => {
     let formData = new FormData()
@@ -103,15 +100,15 @@ const upLoad = (param) => {
 
 //1.检查图片格式和大小符不符合要求 
 const beforeAvatarUpload: UploadProps['beforeUpload'] = (param) => {
-    
-     if (param.size / 1024 / 1024 > 2) {
+
+    if (param.size / 1024 / 1024 > 2) {
         ElNotification.error({ title: '头像太大了', message: '请上传小于2MB的头像' })
         return false
     }
     if (param.type == 'image/jpeg' || param.type == 'image/png' || param.type == 'image/gif') {
-    
-        return true  
-    } 
+
+        return true
+    }
     ElNotification.error({ title: '上传头像不符合格式', message: '请上传jpeg,png或gif格式的头像' })
     return false
 }
