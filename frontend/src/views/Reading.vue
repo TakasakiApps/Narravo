@@ -68,11 +68,13 @@ const props = defineProps({
 	},
 	noverid: {
 		type: String,
-		default: "null"
+		default: null
 	}
 })
+const isnoverid = ref(null)
 onMounted(() => {
 	console.log(props, typeof (props.local))
+
 	if (props.local == '0') {
 		client.get(`/api/v1/novel/get/` + props.noverid + `/catalog`, {
 			params: {
@@ -80,7 +82,7 @@ onMounted(() => {
 			}
 		}).then(
 			res => {
-				optison.value = res.data.chapters
+				optison.value = res.data.chapters;
 				console.log(optison.value, '121212')
 				changeper(props, 0)
 			}
@@ -107,8 +109,11 @@ const percentage = computed(() => {
 	return ((progressIndex.value + 1) / optison.value.length * 100).toFixed(2) + "%";
 });
 const progrdata = ref(null)
+// 切换章节
 function changeper(e, index) {
+	console.log('Recordindex', progressIndex.value, props.name, true)
 	progressIndex.value = index
+	// console.log(progressIndex.value, isnoverid.value, props.noverid)
 	if (props.local == 0) {
 		console.log(optison.value[progressIndex.value])
 		progressIndex.value = index
@@ -119,7 +124,8 @@ function changeper(e, index) {
 			}
 		}).then(
 			res => {
-				// console.log('成功', res.data)
+				console.log('成功', res.data)
+				ipcRenderer.send('Recordindex', props.name, progressIndex.value, true)
 				progrdata.value = processString(res.data)
 				// console.log(progrdata.value)
 				console.log(scrool.value.scrollTop)
@@ -135,6 +141,7 @@ function changeper(e, index) {
 	} else {
 		progressIndex.value = index
 		getchapter(props.name)
+		ipcRenderer.send('Recordindex', isnoverid.value, progressIndex.value, false)
 	}
 }
 //切割文本
@@ -159,15 +166,20 @@ function processString(str) {
 function removeExtension(filename) {
 	return filename.replace('.txt', '');
 }
+
 ipcRenderer.on('Getpassliem', (e, data) => [
 	console.log(data),
+	progressIndex.value = data.readindex,
 	optison.value = data.readin,
+	isnoverid.value = data.id,
+	console.log(isnoverid.value),
+	// changeper(data, isnoverid.value.readindex)
 	getchapter(props.name)
 ])
-function getchapter(bookname) {
-
+function getchapter(bookname: any) {
 	let data = {
 		name: bookname,
+		//章节
 		chaptername: optison.value[progressIndex.value].name
 	}
 	// console.log(data.chaptername.name, '212222222222222222222222222')

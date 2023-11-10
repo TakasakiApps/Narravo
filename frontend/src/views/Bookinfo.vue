@@ -38,7 +38,7 @@ import { ref, onMounted } from 'vue'
 import { ipcRenderer } from 'electron'
 import { client } from '../http/client'
 onMounted(() => {
-    console.log(props.noverid)
+    console.log(props)
     // 网络小说获取封面
     if (props.local == 0) {
         client.get('/api/v1/assets/fetch/image', {
@@ -129,7 +129,7 @@ function addbookliem(e) {
     let bookdata = {}
     bookdata = {
         name: e.name,
-        id: e.id,
+        id: e.noverid,
         coverId: e.coverId,
         author: e.author,
         jpg: bookcover.value,
@@ -170,7 +170,7 @@ function formatDate(dateString) {
 const goRead = (path: any) => {
     // console.log(props.noverid)
     let data = props
-    // console.log(data, 'data')
+    console.log(props, 'data')
     if (props.local == '0') {
         client.get(`/api/v1/novel/get/` + props.noverid + `/catalog`, {
             params: {

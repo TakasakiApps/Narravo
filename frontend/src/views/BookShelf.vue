@@ -61,6 +61,7 @@ import router from '../router'
 import { ref, onMounted, computed } from 'vue'
 import { ipcRenderer } from 'electron'
 import { messageConfig } from 'element-plus';
+import { dataType } from 'element-plus/es/components/table-v2/src/common.mjs';
 
 // import data from '../../electron/conslo'
 // import { nodeinit, cutFile } from '../node-api/cutFile.js'
@@ -180,6 +181,7 @@ ipcRenderer.on('GetBookliem', (event, message: Array) => {
 ipcRenderer.on('GetwebBook', (event, message: Array) => {
   // console.log(message)
   webbook.value = message
+  console.log(webbook)
 })
 // 过滤后缀
 function removeExtension(filename) {
@@ -197,9 +199,14 @@ function removebook(ref) {
   } else {
     //删除本地文件
     ipcRenderer.send('removelocalBook', cardValue.value.name)
-
+    setTimeout(() => {
+      date()
+    }, 150)
   }
 }
+ipcRenderer.on('okdel', (name) => {
+  // console.log(name)
+})
 ipcRenderer.on('okremove', (e, data) => {
   setTimeout(() => {
     ElNotification.closeAll()
@@ -261,7 +268,7 @@ function openbook(e: any) {
         local: e.local,
         size: e.size,
         author: convertToString(e.author),
-        mtime: e.modifiedTime
+        mtime: e.modifiedTime,
       }
     })
   } else {

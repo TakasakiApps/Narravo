@@ -14,6 +14,9 @@ const readAndSortTxtFiles = require('../src/node-api/readAndSort');
 const {addObject,deleteObjectById,readIndex,findObjectByName,readBookChapter} = require('../src/node-api/webbook');
 // 判断路径模块
 const checkFolderExistence = require('../src/node-api/textfiles');
+//更新阅读记录
+const updateReadIndex = require('../src/node-api/updataIndex');
+
 // The built directory structure
 //
 // ├─┬─┬ dist
@@ -68,6 +71,7 @@ function createWindow() {
       webSecurity: false
     },
   })
+   nativeTheme.themeSource = 'light';
   // 黑夜模式
   ipcMain.handle("dark", () => {
       //cutHile('11')
@@ -174,6 +178,9 @@ function createWindow() {
     
     // console.log('addObkjct')
   })
+  ipcMain.on('Recordindex',(e,id,index,a)=>{
+    updateReadIndex(id,index,a)
+  })
   //删除网络书本
   ipcMain.on('removewebBoke',(e,id)=>{
     try {
@@ -190,7 +197,7 @@ function createWindow() {
       // console.log(name)
     // console.log(delFile)
     delFile(name)
-     win?.webContents.send('okdel','ok')
+     win?.webContents.send('okdel',name)
     } catch (error) {
       win?.webContents.send('no','no')
     }
@@ -225,13 +232,13 @@ function createWindow() {
   }
 }
 // 隐藏菜单栏
-// app.on('ready', () => {
-//   // 创建一个空的菜单栏
-//   const menu = Menu.buildFromTemplate([]);
+app.on('ready', () => {
+  // 创建一个空的菜单栏
+  const menu = Menu.buildFromTemplate([]);
   
-//   // 隐藏菜单栏
-//   Menu.setApplicationMenu(menu);
-// });
+  // 隐藏菜单栏
+  Menu.setApplicationMenu(menu);
+});
 app.on('window-all-closed', () => {
   win = null
 })
