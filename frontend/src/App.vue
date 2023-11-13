@@ -137,10 +137,10 @@
               <div style="display:flex; flex-direction:column; align-items:center
            ">
                 <h2>设置新密码</h2>
-
-                <input type="text" placeholder="账号" v-model="sign.username" style="padding-left: 10px;" />
-                <input type="password" placeholder="旧密码" v-model="sign.password" style="padding-left: 10px;" />
-                <input type="password" placeholder="新密码" v-model="sign.oldpassword" style="padding-left: 10px;" />
+                <input type="text" placeholder="账号" v-model="setPwd.username" style="padding-left: 10px;" />
+                <input type="password" placeholder="旧密码" v-model="setPwd.password" style="padding-left: 10px;" />
+                <input type="password" placeholder="新密码" v-model="setPwd.oldpassword" style="padding-left: 10px;" />
+                <input type="password" placeholder="新密码" v-model="setPwd.newPassword" style="padding-left: 10px;" />
                 <button @click="setPwdUp">确认</button>
               </div>
             </el-dialog>
@@ -321,14 +321,15 @@ const signUp = () => {
       //显示登录头像
       isAvatar.value = false
     }
-    else if (res.status == 401) {
-      ElNotification.error({ title: '错误', message: '该用户已被注册' })
-    }
     else
       ElNotification.error({ title: '注册失败' })
 
   }).catch(err => {
-    console.log(err);
+    if (err.response.status == '401') {
+      ElNotification.warning({ title: '注册失败', message: '用户已被注册' })
+    } else {
+      ElNotification.error({ title: '注册失败', message: '请检查网络', type: 'error' })
+    }
   })
 
 }
@@ -350,7 +351,16 @@ const loginUp = () => {
       //关闭登录框
       isLogin.value = false
       isAvatar.value = false
-    })
+    }).catch(
+      err => {
+        if (err.response.status == '401') {
+          ElNotification({ title: '登录失败', message: '请检查账号密码是否正确', type: 'error' })
+        } else {
+          ElNotification({ title: '登录失败', message: '请检查网络', type: 'error' })
+        }
+
+      }
+    )
   } else {
     ElNotification({ message: '账号或密码不能为空！', type: 'warning' })
   }
@@ -378,21 +388,36 @@ const guest = () => {
 //4.更改密码功能
 const isSetPwd = ref(false) //控制更改密码页面是否显示
 
-const setPwd = reactive({
+const setPwd = ref({
   username: '',
   password: '',
+  oldpassword: '',
   newPassword: ''
 })
 const setPwdUp = () => {
-  client.post('/api/v1/auth/reset/password', JSON.stringify(setPwd)).then(res => {
-    if (res.status == 200) {
-      ElNotification.success({ title: '密码修改成功' })
-    } else {
-      ElNotification.success({ title: '密码修改失败' })
+  if (setPwd.value.oldpassword == setPwd.value.newPassword) {
+    let data = {
+      username: setPwd.value.username,
+      password: setPwd.value.password,
+      newPassword: setPwd.value.newPassword
     }
-  }).catch(err => {
-    console.log(err);
-  })
+    client.post('/api/v1/auth/reset/password', data, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then(res => {
+      if (res.status == 200) {
+        ElNotification.success({ title: '密码修改成功' })
+      } else {
+        ElNotification.success({ title: '密码修改失败' })
+      }
+    }).catch(err => {
+      if (err.response.status == '401')
+        ElNotification.error({ title: '修改失败', message: "请检查旧密码是否正确" })
+    })
+  } else {
+    ElNotification.error({ title: '修改失败', message: "请检查两次密码是否正确" })
+  }
 }
 //5.退出账号
 const loginOut = () => {

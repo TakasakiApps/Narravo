@@ -232,13 +232,13 @@ function createWindow() {
   }
 }
 // 隐藏菜单栏
-app.on('ready', () => {
-  // 创建一个空的菜单栏
-  const menu = Menu.buildFromTemplate([]);
+// app.on('ready', () => {
+//   // 创建一个空的菜单栏
+//   const menu = Menu.buildFromTemplate([]);
   
-  // 隐藏菜单栏
-  Menu.setApplicationMenu(menu);
-});
+//   // 隐藏菜单栏
+//   Menu.setApplicationMenu(menu);
+// });
 app.on('window-all-closed', () => {
   win = null
 })

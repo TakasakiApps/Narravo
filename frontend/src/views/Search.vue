@@ -61,10 +61,14 @@ function getAllBook(index: number) {
             bookliem.value = res.data
         }).catch(err => {
             console.log(err);
-            setTimeout(() => {
-                ElNotification.closeAll()
-                ElNotification.error({ title: '操作失败!', message: '请检查是否登录或网络' })
-            }, 100)
+            if (err.response.status == '401') {
+                setTimeout(() => {
+                    ElNotification.closeAll()
+                    ElNotification.error({ title: '操作失败!', message: '请检查是否登录' })
+                }, 100)
+            } else {
+                ElNotification.error({ title: '操作失败!', message: '请检查网络' })
+            }
         })
 
 }

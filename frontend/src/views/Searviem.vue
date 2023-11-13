@@ -63,7 +63,7 @@ function searchbook(pg, event) {
       console.log(err)
       setTimeout(() => {
         ElNotification.closeAll()
-        ElNotification.error({ title: '操作失败!', message: '请检查是否登录或网络' })
+        ElNotification.error({ title: '操作失败!', message: '请检查是否登录' })
       }, 100)
     }
   )

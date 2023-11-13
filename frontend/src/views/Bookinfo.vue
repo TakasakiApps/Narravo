@@ -64,7 +64,6 @@ onMounted(() => {
         }).then(
             res => {
                 chapters.value = res.data.chapters
-
             }
         ).catch(
             err => {
@@ -73,7 +72,7 @@ onMounted(() => {
         )
     } else if (props.local == '1') {
         console.log(props.name)
-        ipcRenderer.send('testliem', props.name)
+        ipcRenderer.send('6', props.name)
     }
 
 })
@@ -190,7 +189,7 @@ const goRead = (path: any) => {
             }
         ).catch(
             err => {
-                console.log(err)
+                ElNotification({ title: '获取失败', message: '书本可能不存在', type: 'error' })
             }
         )
 
